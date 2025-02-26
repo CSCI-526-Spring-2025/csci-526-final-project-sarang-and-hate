@@ -1,0 +1,22 @@
+# Unity generated folders
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+[Uu]ser[Ss]ettings/
+
+# Visual Studio / Rider files
+*.csproj
+*.sln
+*.suo
+*.vscode/
+*.vs/
+
+# MacOS
+.DS_Store
+
+# Ignore crashes, logs, and compiled code
+*.pidb
+*.unitypackage
