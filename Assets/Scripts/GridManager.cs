@@ -7,6 +7,9 @@ public class GridManager : MonoBehaviour
     public float tileSize = 1.1f; // Spacing between tiles
     public GameObject wallPrefab;  // Assign in Inspector
 
+    public Material startingMaterial;   // Assign in the Inspector
+    public Material destinationMaterial; // Assign in the Inspector
+
     private Tile[,] tiles;
 
     //Basically you have to read the maze from the top left to the bottom right 
@@ -48,15 +51,15 @@ public class GridManager : MonoBehaviour
         GenerateGrid();
     }
     // #if UNITY_EDITOR
-#if UNITY_EDITOR
-    private void OnValidate()
-    {
-        if (!Application.isPlaying)
-        {
-            GenerateGrid();
-        }
-    }
-#endif
+// #if UNITY_EDITOR
+//     private void OnValidate()
+//     {
+//         if (!Application.isPlaying)
+//         {
+//             GenerateGrid();
+//         }
+//     }
+// #endif
 
 
 
@@ -79,6 +82,19 @@ public class GridManager : MonoBehaviour
                 GameObject tileGO = Instantiate(tilePrefab, new Vector3(x, 0, y), Quaternion.identity, transform);
                 tileGO.name = $"Tile ({x}, {y})";
                 Tile tile = tileGO.AddComponent<Tile>();
+
+                Renderer renderer = tileGO.GetComponent<Renderer>();
+                if (renderer != null)
+                {
+                    if (x == 0 && y == 0)
+                    {
+                        renderer.material = destinationMaterial; // Set Destination
+                    }
+                    else if (x == 5 && y == 5)
+                    {
+                        renderer.material = startingMaterial; // Set Starting color
+                    }
+                }
 
                 // Set tile properties
                 tile.Initialize(new Vector2Int(x, y),
