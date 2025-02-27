@@ -35,9 +35,14 @@ public class PlayerController : MonoBehaviour
 
         if (moveX != 0f || moveZ != 0f)
         {
-            // Move the player based on the input
+            // Set velocity for physics-based movement, keeping y velocity unchanged
             Vector3 moveDirection = new Vector3(moveX, 0f, moveZ).normalized;
-            transform.Translate(moveDirection * moveSpeed * Time.deltaTime);
+            rb.velocity = new Vector3(moveDirection.x * moveSpeed, 0f, moveDirection.z * moveSpeed);
+        }
+        else
+        {
+            // Stop movement when no keys are pressed
+            rb.velocity = new Vector3(0f, rb.velocity.y, 0f);
         }
     }
 
@@ -50,4 +55,3 @@ public class PlayerController : MonoBehaviour
         }
     }
 }
-
