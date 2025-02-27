@@ -11,6 +11,9 @@ using System.Collections.Generic;
 /// - Moves and rotates selected walls in a loop every 5 seconds.
 /// - Implements smooth transitions for movement and rotation.
 /// </summary>
+
+/// Uncomment following line to open the maze in editable mode
+/// [ExecuteInEditMode]
 public class GridManager : MonoBehaviour
 {
     public GameObject tilePrefab; // Assign a basic cube in Unity
