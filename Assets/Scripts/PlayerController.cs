@@ -7,13 +7,14 @@ public class PlayerController : MonoBehaviour
     public float moveSpeed = 5f; // Speed of movement
     private float moveX = 0f;
     private float moveZ = 0f;
+    private Rigidbody rb;
 
-    // Start is called before the first frame update
     void Start()
     {
+        rb = GetComponent<Rigidbody>();
+        rb.freezeRotation = true; // Prevents external rotation changes
     }
 
-    // Update is called once per frame
     void Update()
     {
         // Reset movement direction at the start of each frame
@@ -32,8 +33,21 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKey(KeyCode.LeftArrow)) moveX = 1f;    // Move left (Left Arrow)
         if (Input.GetKey(KeyCode.RightArrow)) moveX = -1f;   // Move right (Right Arrow)
 
-        // Move the player based on the input
-        Vector3 moveDirection = new Vector3(moveX, 0f, moveZ);
-        transform.Translate(moveDirection * moveSpeed * Time.deltaTime);
+        if (moveX != 0f || moveZ != 0f)
+        {
+            // Move the player based on the input
+            Vector3 moveDirection = new Vector3(moveX, 0f, moveZ).normalized;
+            transform.Translate(moveDirection * moveSpeed * Time.deltaTime);
+        }
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Wall"))
+        {
+            // Maintain player's original rotation even if hit by rotating walls
+            transform.rotation = Quaternion.identity;
+        }
     }
 }
+
