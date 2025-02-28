@@ -9,14 +9,23 @@ public class PlayerController : MonoBehaviour
     private float moveZ = 0f;
     private Rigidbody rb;
 
+    private GridManager gridManager;
+
     void Start()
     {
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true; // Prevents external rotation changes
+        gridManager = FindObjectOfType<GridManager>(); // Find GridManager instance
     }
 
     void Update()
     {
+        // Prevent movement if walls are rotating
+        if (gridManager != null && gridManager.IsWallRotating)
+        {
+            rb.velocity = Vector3.zero; // Stop player movement while walls rotate
+            return;
+        }
         // Reset movement direction at the start of each frame
         moveX = 0f;
         moveZ = 0f;
