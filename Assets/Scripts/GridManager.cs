@@ -59,7 +59,9 @@ public class GridManager : MonoBehaviour
     void Start()
     {
         GenerateGrid();
-        StartRotatingWalls(); // NEW: Start automatic wall movement
+        //StartRotatingWalls(); // NEW: Start automatic wall movement
+        //I commented the random rotating walls for now so that walls only trigger at certain checkpoints 
+        SetupRotationSequences(); 
     }
     void Update(){
         CheckPlayerTile();
@@ -154,37 +156,38 @@ public class GridManager : MonoBehaviour
     /// <summary>
     /// Starts the coroutine to rotate and move walls every 5 seconds.
     /// </summary>
-    void StartRotatingWalls()
-    {
-        StartCoroutine(RotateWallsRoutine());
-    }
+    // void StartRotatingWalls()
+    // {
+    //     StartCoroutine(RotateWallsRoutine());
+    // }
 
     /// <summary>
     /// Rotates and moves all walls every 5 seconds in a loop.
     /// </summary>
-    IEnumerator RotateWallsRoutine()
-    {
-        // Define different rotation sequences (each contains a unique set of walls)
-        rotationSequencesDict = new Dictionary<int, List<string>>()
-    {
-        { 1, new List<string> { "Wall 1", "Wall 3", "Wall 5", "Wall 7" } }, // Sequence 1
-        { 2, new List<string> { "Wall 2", "Wall 4", "Wall 6", "Wall 8" } }, // Sequence 2
-        { 3, new List<string> { "Wall 9", "Wall 11", "Wall 13", "Wall 15" } }, // Sequence 3
-        { 4, new List<string> { "Wall 10", "Wall 12", "Wall 14", "Wall 16" } }, // Sequence 4
-        { 5, new List<string> { "Wall 17", "Wall 18", "Wall 19", "Wall 20" } }, // Sequence 5
-        { 6, new List<string> { "Wall 21", "Wall 22", "Wall 23", "Wall 24" } }  // Sequence 6
-    };
+    /// I COMMENTED THIS OUT OS THAT THERE ARE NO RANDOM ROTATING WALLS EVERY 5 SECONDS 
+    // IEnumerator RotateWallsRoutine()
+    // {
+    //     // Define different rotation sequences (each contains a unique set of walls)
+    //     rotationSequencesDict = new Dictionary<int, List<string>>()
+    // {
+    //     { 1, new List<string> { "Wall 1", "Wall 3", "Wall 5", "Wall 7" } }, // Sequence 1
+    //     { 2, new List<string> { "Wall 2", "Wall 4", "Wall 6", "Wall 8" } }, // Sequence 2
+    //     { 3, new List<string> { "Wall 9", "Wall 11", "Wall 13", "Wall 15" } }, // Sequence 3
+    //     { 4, new List<string> { "Wall 10", "Wall 12", "Wall 14", "Wall 16" } }, // Sequence 4
+    //     { 5, new List<string> { "Wall 17", "Wall 18", "Wall 19", "Wall 20" } }, // Sequence 5
+    //     { 6, new List<string> { "Wall 21", "Wall 22", "Wall 23", "Wall 24" } }  // Sequence 6
+    // };
 
-        int currentSequenceIndex = 1; // Track the current sequence, starts from 1
+    //     int currentSequenceIndex = 1; // Track the current sequence, starts from 1
 
-        while (true)
-        {
-            yield return new WaitForSeconds(5f); // Wait 5 seconds before switching sequences
-            TriggerRotationSequence(currentSequenceIndex); // Automatically trigger the sequence
+    //     while (true)
+    //     {
+    //         yield return new WaitForSeconds(5f); // Wait 5 seconds before switching sequences
+    //         TriggerRotationSequence(currentSequenceIndex); // Automatically trigger the sequence
 
-            currentSequenceIndex = (currentSequenceIndex % rotationSequencesDict.Count) + 1; // Move to the next sequence
-        }
-    }
+    //         currentSequenceIndex = (currentSequenceIndex % rotationSequencesDict.Count) + 1; // Move to the next sequence
+    //     }
+    // }
 
 
     /// <summary>
@@ -211,6 +214,17 @@ public class GridManager : MonoBehaviour
     //         }
     //     }
     // }
+
+    void SetupRotationSequences()
+    {
+        rotationSequencesDict = new Dictionary<int, List<string>>()
+        {
+            { 1, new List<string> { "Wall 3", "Wall 7" } }, // Tile (4,1) rotates walls blocking one path but opening another
+            { 2, new List<string> { "Wall 5", "Wall 9" } }, // Tile (4,4) forces a decision; one path opens while another closes
+            { 3, new List<string> { "Wall 11", "Wall 15" } } // Tile (5,5) is a late-game challenge affecting access to the exit
+        };
+    }
+
     void TriggerRotationSequence(int sequenceIndex)
     {
         if (!rotationSequencesDict.ContainsKey(sequenceIndex))
@@ -303,34 +317,34 @@ public class GridManager : MonoBehaviour
 
         Vector2Int currentTile = new Vector2Int(playerTileX, playerTileY);
 
-        // Define the tiles that should trigger rotation
-        // Vishal: This is where you will add the checkpoints for the specific tiles that will trigger rotation.
-        HashSet<Vector2Int> specificTiles = new HashSet<Vector2Int>
+        // Define tiles that trigger wall rotations
+        Dictionary<Vector2Int, int> tileRotationMapping = new Dictionary<Vector2Int, int>
         {
-            new Vector2Int(4, 4),
-            new Vector2Int(4, 1),
-            new Vector2Int(5, 5)
+            { new Vector2Int(4, 1), 1 }, // Triggers Rotation Sequence 1
+            { new Vector2Int(4, 4), 2 }, // Triggers Rotation Sequence 2
+            { new Vector2Int(5, 5), 3 }  // Triggers Rotation Sequence 3
         };
 
-        // Check if the player moved to a new tile
+        // If player moves to a new tile
         if (currentTile != lastPlayerTile)
         {
-            triggeredTiles.Remove(lastPlayerTile); // Allow retriggering of the last tile
+            triggeredTiles.Remove(lastPlayerTile); // Allow retriggering if they step off
 
-            // Check if the player is on a specific tile
-            if (specificTiles.Contains(currentTile))
+            if (tileRotationMapping.ContainsKey(currentTile))
             {
-                // Trigger rotation if not already triggered
-                if (!triggeredTiles.Contains(currentTile))
+                int sequenceIndex = tileRotationMapping[currentTile];
+
+                if (!triggeredTiles.Contains(currentTile)) // Prevent multiple triggers
                 {
-                    TriggerRotationSequence(GetSequenceIndex(currentTile));
+                    TriggerRotationSequence(sequenceIndex);
                     triggeredTiles.Add(currentTile);
                     Debug.Log($"Rotation triggered for tile: {currentTile}");
                 }
             }
-            
+
             lastPlayerTile = currentTile;
         }
     }
+
 
 }
