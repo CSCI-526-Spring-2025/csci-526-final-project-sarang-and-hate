@@ -218,11 +218,14 @@ public class GridManager : MonoBehaviour
     void SetupRotationSequences()
     {
         rotationSequencesDict = new Dictionary<int, List<string>>()
-        {
-            { 1, new List<string> { "Wall 3", "Wall 7" } }, // Tile (4,1) rotates walls blocking one path but opening another
-            { 2, new List<string> { "Wall 5", "Wall 9" } }, // Tile (4,4) forces a decision; one path opens while another closes
-            { 3, new List<string> { "Wall 11", "Wall 15" } } // Tile (5,5) is a late-game challenge affecting access to the exit
-        };
+    {
+        { 1, new List<string> { "Wall 12", "Wall 14" } }, // Tile (5,3) blocks an easy path, forcing detour.
+        { 2, new List<string> { "Wall 5", "Wall 9", "Wall 15" } }, // Tile (4,2) opens the next segment.
+        { 3, new List<string> { "Wall 6", "Wall 10" } }, // Tile (3,4) rotates mid-maze area.
+        { 4, new List<string> { "Wall 3", "Wall 7", "Wall 18" } }, // Tile (2,3) alters access further.
+        { 5, new List<string> { "Wall 2", "Wall 8" } }, // Tile (1,2) changes the last part of the maze.
+        { 6, new List<string> { "Wall 1", "Wall 4" } }  // Tile (0,0) allows access to the finish.
+    };
     }
 
     void TriggerRotationSequence(int sequenceIndex)
@@ -320,9 +323,12 @@ public class GridManager : MonoBehaviour
         // Define tiles that trigger wall rotations
         Dictionary<Vector2Int, int> tileRotationMapping = new Dictionary<Vector2Int, int>
         {
-            { new Vector2Int(4, 1), 1 }, // Triggers Rotation Sequence 1
-            { new Vector2Int(4, 4), 2 }, // Triggers Rotation Sequence 2
-            { new Vector2Int(5, 5), 3 }  // Triggers Rotation Sequence 3
+            { new Vector2Int(4,5), 1 }, // First major step forces a detour.
+            { new Vector2Int(4,2), 2 },
+            { new Vector2Int(3,4), 3 },
+            { new Vector2Int(2,3), 4 },
+            { new Vector2Int(1,2), 5 },
+            { new Vector2Int(1,0), 6 }  // Goal tile rotation.
         };
 
         // If player moves to a new tile
@@ -345,6 +351,5 @@ public class GridManager : MonoBehaviour
             lastPlayerTile = currentTile;
         }
     }
-
 
 }
