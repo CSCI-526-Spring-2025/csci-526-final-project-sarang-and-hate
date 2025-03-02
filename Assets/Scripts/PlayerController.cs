@@ -13,6 +13,9 @@ public class PlayerController : MonoBehaviour
     // Boundaries for movement within the maze
     private float minX, maxX, minZ, maxZ;
 
+    // reach the destination
+    private bool reachDest = false;
+
     void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -88,6 +91,22 @@ public class PlayerController : MonoBehaviour
         {
             rb.velocity = Vector3.zero; // Stop movement
             transform.rotation = Quaternion.identity; // Reset rotation to prevent unintended changes
+        }
+    }
+
+    public bool hasReachedDestination() {
+        return reachDest;
+    }
+
+    private void onTriggerEnter(Collider other) {
+        // If the player reaches the destination, then it will be true.
+        if (other.gameObject.CompareTag("Destination")) {
+               reachDest = true;
+
+               GameTimer gameTimer = FindObjectOfType<GameTimer>();
+               if (gameTimer != null) {
+                    gameTimer.checkWinCondition();
+               } 
         }
     }
 }
