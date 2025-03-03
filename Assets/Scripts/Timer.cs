@@ -16,6 +16,25 @@ public class GameTimer : MonoBehaviour
 
     void Start()
     {
+                // Ensure timerText is assigned
+        if (timerText != null)
+        {
+            RectTransform rectTransform = timerText.GetComponent<RectTransform>();
+
+            // Set anchor to Top Center
+            rectTransform.anchorMin = new Vector2(0.5f, 1f);
+            rectTransform.anchorMax = new Vector2(0.5f, 1f);
+            rectTransform.pivot = new Vector2(0.5f, 1f); // Keep the pivot at the top center
+
+            // Adjust position (move down from top)
+            rectTransform.anchoredPosition = new Vector2(0, -50); // Adjust this value if needed
+
+            Debug.Log("Timer UI anchored to the top center.");
+        }
+        else
+        {
+            Debug.LogError("timerText is not assigned in the Inspector!");
+        }
         timerIsRunning = true;
         UpdateTimeDisplay();
     }
