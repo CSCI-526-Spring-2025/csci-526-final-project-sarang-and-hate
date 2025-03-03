@@ -92,6 +92,7 @@ public class GridManager : MonoBehaviour
                     if (x == 0 && y == 0) // Start Tile (Bottom-Left)
                     {
                         renderer.material.color = Color.blue; // Set Blue for Start
+                        tileGO.tag = "Destination"; // Set tag for player destination
                     }
                     else if (x == gridSize - 1 && y == gridSize - 1) // Finish Tile (Top-Right)
                     {
