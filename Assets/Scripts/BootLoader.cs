@@ -1,25 +1,3 @@
-// using UnityEngine;
-// using UnityEngine.SceneManagement;
-
-// public class BootLoader : MonoBehaviour
-// {
-//     void Awake()
-//     {
-//         // If the game is starting directly in SampleScene (not from LoadingScene)
-//         if (SceneManager.GetActiveScene().name == "SampleScene" && !HasLoadingHappened())
-//         {
-//             SceneManager.LoadScene("LoadingScene");
-//         }
-//     }
-
-//     // Function to check if LoadingScene has already happened
-//     private bool HasLoadingHappened()
-//     {
-//         return PlayerPrefs.GetInt("LoadingCompleted", 0) == 1;
-//     }
-// }
-
-
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
