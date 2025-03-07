@@ -2815,7 +2815,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &624502577
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2988,8 +2988,8 @@ MonoBehaviour:
   dimBackground: {fileID: 0}
   victoryText: {fileID: 0}
   restartButton: {fileID: 0}
-  helpPanel: {fileID: 0}
-  helpButton: {fileID: 0}
+  helpPanel: {fileID: 624502576}
+  helpButton: {fileID: 1047170183}
 --- !u!4 &658973418
 Transform:
   m_ObjectHideFlags: 0
