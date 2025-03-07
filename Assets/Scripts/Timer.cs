@@ -14,9 +14,14 @@ public class GameTimer : MonoBehaviour
     public Button restartButton;
     private bool playerWon = false;
 
+    // Help button and panel
+    public GameObject helpPanel;
+    public Button helpButton;
+    // public Button closeHelpButton;
+
     void Start()
     {
-                // Ensure timerText is assigned
+        // Ensure timerText is assigned
         if (timerText != null)
         {
             RectTransform rectTransform = timerText.GetComponent<RectTransform>();
@@ -35,8 +40,25 @@ public class GameTimer : MonoBehaviour
         {
             Debug.LogError("timerText is not assigned in the Inspector!");
         }
+
         timerIsRunning = true;
         UpdateTimeDisplay();
+
+        // Help button setup
+        if (helpButton != null)
+        {
+            helpButton.onClick.AddListener(OpenHelp);
+        }
+
+        // if (closeHelpButton != null)
+        // {
+        //     closeHelpButton.onClick.AddListener(CloseHelp);
+        // }
+
+        if (helpPanel != null)
+        {
+            helpPanel.SetActive(false); // Hide help panel initially
+        }
     }
 
     void Update()
@@ -132,4 +154,21 @@ public class GameTimer : MonoBehaviour
         Time.timeScale = 1;
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
+
+    // Help panel methods
+    public void OpenHelp()
+    {
+        if (helpPanel != null)
+        {
+            helpPanel.SetActive(true);
+        }
+    }
+
+    // public void CloseHelp()
+    // {
+    //     if (helpPanel != null)
+    //     {
+    //         helpPanel.SetActive(false);
+    //     }
+    // }
 }
