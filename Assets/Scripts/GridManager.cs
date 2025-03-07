@@ -47,13 +47,14 @@ public class GridManager : MonoBehaviour
 
 
     // Maze layout: Specifies which walls exist for each tile.
+    // N, W, E, S
     private bool[,,] gridWalls = new bool[6, 6, 4] {
-        { { false, false, true,false}, { false, false, true, true }, { true, false, false, false }, { false, false, false, true }, { false, false, true, false }, { false, true, false, true } },
-        { { false, true, false, true }, { false, false, false, false }, { false, false, false, false }, { true, true, true, false }, { false, false, false, true }, {false, false, false, false } },
-        { { true, false, false, false }, { true, false, true, false }, { false, false, true, true }, { false, false, true, false }, { false, false, false, false }, { false, false, false, true } },
-        { { true, false, true, false }, { false, false, false, true }, { false, false, false, false }, { false, false, true, true }, { false, false, false, false }, { true, true, false,true } },
-        { { false, false, false, true }, { false, false, true, false }, { false, false, false, true }, { false, false, true, false }, { false, false, false, true }, { false, false, true, false } },
-        { { true, false, true, false }, { false, false, false, false }, { false, false, false, false }, { false, true, false, false }, { false, false, false, false }, { false, true, false, false } }
+        { { false, false, false,false}, { false, true, false, true }, { false, false, true, true}, { false, false, false,false }, { false, false,false, false }, { false, true, false, true } },
+        { { false, true, false, true }, { false, false, false, false }, { false, false, false, false }, {false, false, true, true}, { false, true, false,true }, {false, false, false, false } },
+        { { false, false, false, false }, { false, true, false, true }, { false, false, false, false }, { false, true, false, true }, { false, false, false, false }, {true, false, true,false } },
+        { { false, true, false,true}, { false, false, false,false }, { false,true, false,true }, { false, false,false,false }, {true,false,true, false }, {false,false, false,false } },
+        { { true,true, false,false}, { false, false,false, false }, { false, false, false,false }, { false, true, false,true}, { false, false, false,false}, { false, true, false,true} },
+        { {false, false,false, false }, {true,true, false, false }, { false, true, false,true }, { false, false, false, false }, { false,true, false,true }, { false,false, false, false } }
     };
 
     void Start()
