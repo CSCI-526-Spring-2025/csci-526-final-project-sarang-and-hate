@@ -17,7 +17,7 @@ public class GameTimer : MonoBehaviour
     // Help button and panel
     public GameObject helpPanel;
     public Button helpButton;
-    // public Button closeHelpButton;
+    public Button exitHelpButton; // Exit button for loading scene
 
     void Start()
     {
@@ -50,10 +50,10 @@ public class GameTimer : MonoBehaviour
             helpButton.onClick.AddListener(OpenHelp);
         }
 
-        // if (closeHelpButton != null)
-        // {
-        //     closeHelpButton.onClick.AddListener(CloseHelp);
-        // }
+        if (exitHelpButton != null)
+        {
+            exitHelpButton.onClick.AddListener(ExitToLoadingScene);
+        }
 
         if (helpPanel != null)
         {
@@ -164,11 +164,9 @@ public class GameTimer : MonoBehaviour
         }
     }
 
-    // public void CloseHelp()
-    // {
-    //     if (helpPanel != null)
-    //     {
-    //         helpPanel.SetActive(false);
-    //     }
-    // }
+    public void ExitToLoadingScene()
+    {
+        Debug.Log("🔄 Switching to Loading Screen...");
+        SceneManager.LoadScene("LoadingScene"); // Ensure this scene name is correct
+    }
 }
