@@ -124,6 +124,8 @@ public class GameTimer : MonoBehaviour
             restartButton.gameObject.SetActive(true);
         }
         Time.timeScale = 0;
+        // Add only when you are on Level1
+        // SceneManager.LoadScene("Level2");
     }
 
     private void ShowRestartPanel()
