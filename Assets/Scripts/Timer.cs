@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using System.Collections;
 
 public class GameTimer : MonoBehaviour
 {
@@ -124,8 +125,6 @@ public class GameTimer : MonoBehaviour
             restartButton.gameObject.SetActive(true);
         }
         Time.timeScale = 0;
-        // Add only when you are on Level1
-        // SceneManager.LoadScene("Level2");
     }
 
     private void ShowRestartPanel()
@@ -170,5 +169,11 @@ public class GameTimer : MonoBehaviour
     {
         Debug.Log("🔄 Switching to Loading Screen...");
         SceneManager.LoadScene("LoadingScene"); // Ensure this scene name is correct
+    }
+
+    public void PromoteToNextLevel()
+    {
+        Time.timeScale = 1;
+        SceneManager.LoadScene("Scene2"); // Ensure this scene name is correct
     }
 }
