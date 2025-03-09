@@ -21,10 +21,13 @@ public class GridManager : MonoBehaviour
     public float tileSize = 1.1f; // Spacing between tiles
     public GameObject wallPrefab;  // Assign in Inspector
 
+    private Tile[,] tiles;
+    private Dictionary<Vector2Int, int> tileZones = new Dictionary<Vector2Int, int>(); // NEW: Store tile zone mapping
+    
+    private int lastPlayerZone = -1; // Track player's last zone
+    public GameObject player; // Assign in Inspector
     public Material startingMaterial;   // Assign in the Inspector
     public Material destinationMaterial; // Assign in the Inspector
-
-    private Tile[,] tiles;
 
     // NEW: List to store all wall objects for tracking
     private List<GameObject> wallList = new List<GameObject>();
@@ -36,7 +39,6 @@ public class GridManager : MonoBehaviour
 
     private Dictionary<int, List<string>> rotationSequencesDict; // declaring dict for rotation sequences\
 
-    public GameObject player; // Assign the player GameObject in the Inspector
 
     private Vector2Int lastPlayerTile = new Vector2Int(-1, -1); // Stores last tile position
     private HashSet<Vector2Int> triggeredTiles = new HashSet<Vector2Int>(); // Stores triggered tiles
@@ -65,7 +67,7 @@ public class GridManager : MonoBehaviour
         SetupRotationSequences(); 
     }
     void Update(){
-        CheckPlayerTile();
+        CheckPlayerZone();
     }
 
     /// <summary>
@@ -75,6 +77,8 @@ public class GridManager : MonoBehaviour
     {
         ClearGrid();
         tiles = new Tile[gridSize, gridSize];
+        AssignZones();
+
 
         for (int x = 0; x < gridSize; x++)
         {
@@ -82,8 +86,9 @@ public class GridManager : MonoBehaviour
             {
                 // Instantiate Tile
                 GameObject tileGO = Instantiate(tilePrefab, new Vector3(x, 0, y), Quaternion.identity, transform);
-                tileGO.name = $"Tile ({x}, {y})";
+                tileGO.name = $"Tile ({x}, {y}) - Zone {tileZones[new Vector2Int(x, y)]}";
                 Tile tile = tileGO.AddComponent<Tile>();
+                tiles[x, y] = tile;
 
                 Renderer renderer = tileGO.GetComponent<Renderer>();
 
@@ -112,6 +117,23 @@ public class GridManager : MonoBehaviour
         }
     }
 
+    void AssignZones()
+    {
+        // Define 9 zones as 2x2 tile groups
+        int zoneCounter = 1;
+        for (int x = 0; x < gridSize; x += 2)
+        {
+            for (int y = 0; y < gridSize; y += 2)
+            {
+                tileZones[new Vector2Int(x, y)] = zoneCounter;
+                tileZones[new Vector2Int(x, y + 1)] = zoneCounter;
+                tileZones[new Vector2Int(x + 1, y)] = zoneCounter;
+                tileZones[new Vector2Int(x + 1, y + 1)] = zoneCounter;
+                zoneCounter++;
+            }
+        }
+    }
+
     void ClearGrid()
     {
         Debug.Log("Clearing old grid...");
@@ -134,7 +156,7 @@ public class GridManager : MonoBehaviour
                 DestroyImmediate(child);  // Required for Edit Mode
             }
         }
-
+        tileZones.Clear(); // Clear previous zone data
         Debug.Log("Grid cleared.");
     }
 
@@ -155,68 +177,6 @@ public class GridManager : MonoBehaviour
         Debug.Log($"Created {wall.name} at {wall.transform.position}");
     }
 
-    /// <summary>
-    /// Starts the coroutine to rotate and move walls every 5 seconds.
-    /// </summary>
-    // void StartRotatingWalls()
-    // {
-    //     StartCoroutine(RotateWallsRoutine());
-    // }
-
-    /// <summary>
-    /// Rotates and moves all walls every 5 seconds in a loop.
-    /// </summary>
-    /// I COMMENTED THIS OUT OS THAT THERE ARE NO RANDOM ROTATING WALLS EVERY 5 SECONDS 
-    // IEnumerator RotateWallsRoutine()
-    // {
-    //     // Define different rotation sequences (each contains a unique set of walls)
-    //     rotationSequencesDict = new Dictionary<int, List<string>>()
-    // {
-    //     { 1, new List<string> { "Wall 1", "Wall 3", "Wall 5", "Wall 7" } }, // Sequence 1
-    //     { 2, new List<string> { "Wall 2", "Wall 4", "Wall 6", "Wall 8" } }, // Sequence 2
-    //     { 3, new List<string> { "Wall 9", "Wall 11", "Wall 13", "Wall 15" } }, // Sequence 3
-    //     { 4, new List<string> { "Wall 10", "Wall 12", "Wall 14", "Wall 16" } }, // Sequence 4
-    //     { 5, new List<string> { "Wall 17", "Wall 18", "Wall 19", "Wall 20" } }, // Sequence 5
-    //     { 6, new List<string> { "Wall 21", "Wall 22", "Wall 23", "Wall 24" } }  // Sequence 6
-    // };
-
-    //     int currentSequenceIndex = 1; // Track the current sequence, starts from 1
-
-    //     while (true)
-    //     {
-    //         yield return new WaitForSeconds(5f); // Wait 5 seconds before switching sequences
-    //         TriggerRotationSequence(currentSequenceIndex); // Automatically trigger the sequence
-
-    //         currentSequenceIndex = (currentSequenceIndex % rotationSequencesDict.Count) + 1; // Move to the next sequence
-    //     }
-    // }
-
-
-    /// <summary>
-    /// Triggers a specific rotation sequence manually.
-    /// </summary>
-    // /// <param name="sequenceIndex">The sequence number to activate.</param>
-    // public void TriggerRotationSequence(int sequenceIndex)
-    // {
-    //     if (!rotationSequencesDict.ContainsKey(sequenceIndex))
-    //     {
-    //         Debug.LogWarning($"Rotation sequence {sequenceIndex} does not exist!");
-    //         return;
-    //     }
-
-    //     List<string> selectedWalls = rotationSequencesDict[sequenceIndex]; // Get the selected sequence
-    //     Debug.Log($"Triggering Rotation Sequence {sequenceIndex}");
-
-    //     foreach (GameObject wall in wallList)
-    //     {
-    //         if (selectedWalls.Contains(wall.name)) // Rotate only walls in the selected sequence
-    //         {
-    //             RotateAndMoveWall(wall);
-    //             Debug.Log($"Rotating {wall.name} in sequence {sequenceIndex}");
-    //         }
-    //     }
-    // }
-
     void SetupRotationSequences()
     {
         rotationSequencesDict = new Dictionary<int, List<string>>()
@@ -226,7 +186,10 @@ public class GridManager : MonoBehaviour
         { 3, new List<string> { "Wall 6", "Wall 10", "Wall 26" } }, // Tile (3,4) rotates mid-maze area.
         { 4, new List<string> { "Wall 3", "Wall 7", "Wall 18" } }, // Tile (2,3) alters access further.
         { 5, new List<string> { "Wall 2", "Wall 8" } }, // Tile (1,2) changes the last part of the maze.
-        { 6, new List<string> { "Wall 1",} }  // Tile (0,0) allows access to the finish.
+        { 6, new List<string> { "Wall 1",} },  // Tile (0,0) allows access to the finish.
+        { 7, new List<string> { "Wall 20", "Wall 22" } },
+        { 8, new List<string> { "Wall 25", "Wall 30" } },
+        { 9, new List<string> { "Wall 35", "Wall 40" } }
     };
     }
 
@@ -312,6 +275,24 @@ public class GridManager : MonoBehaviour
     int GetSequenceIndex(Vector2Int tilePosition)
     {
         return (tilePosition.x + tilePosition.y) % rotationSequencesDict.Count + 1;
+    }
+    void CheckPlayerZone()
+    {
+        Vector3 playerPos = player.transform.position;
+        int playerTileX = Mathf.RoundToInt(playerPos.x);
+        int playerTileY = Mathf.RoundToInt(playerPos.z);
+        Vector2Int currentTile = new Vector2Int(playerTileX, playerTileY);
+
+        if (tileZones.ContainsKey(currentTile))
+        {
+            int currentZone = tileZones[currentTile];
+            if (currentZone != lastPlayerZone)
+            {
+                lastPlayerZone = currentZone;
+                TriggerRotationSequence(currentZone);
+                Debug.Log($"Player moved to Zone {currentZone}. Triggering wall movement.");
+            }
+        }
     }
 
     void CheckPlayerTile()
