@@ -181,7 +181,7 @@ public class GridManager : MonoBehaviour
     {
         rotationSequencesDict = new Dictionary<int, List<string>>()
     {
-        { 1, new List<string> { "Wall 12", "Wall 14", "Wall 39" } }, // Tile (5,3) blocks an easy path, forcing detour.
+        { 1, new List<string> { "Wall 1", "Wall 2", "Wall 3", "Wall 39" } }, // Tile (5,3) blocks an easy path, forcing detour.
         { 2, new List<string> { "Wall 5", "Wall 9", "Wall 15" } }, // Tile (4,2) opens the next segment.
         { 3, new List<string> { "Wall 6", "Wall 10", "Wall 26" } }, // Tile (3,4) rotates mid-maze area.
         { 4, new List<string> { "Wall 3", "Wall 7", "Wall 18" } }, // Tile (2,3) alters access further.
@@ -254,6 +254,13 @@ public class GridManager : MonoBehaviour
     {
         isWallRotating = true; // Prevent player movement during wall rotation
 
+        // Disable the wall's collider so it doesn't interact with the player
+        Collider wallCollider = wall.GetComponent<Collider>();
+        if (wallCollider != null)
+        {
+            wallCollider.enabled = false;
+        }
+
         float elapsedTime = 0;
         Vector3 startPos = wall.transform.localPosition;
         Quaternion startRot = wall.transform.localRotation;
@@ -269,8 +276,15 @@ public class GridManager : MonoBehaviour
         wall.transform.localPosition = targetPos;
         wall.transform.localRotation = targetRot;
 
+        // Re-enable the collider once the rotation is complete
+        if (wallCollider != null)
+        {
+            wallCollider.enabled = true;
+        }
+
         isWallRotating = false; // Re-enable player movement
     }
+
 
     int GetSequenceIndex(Vector2Int tilePosition)
     {
