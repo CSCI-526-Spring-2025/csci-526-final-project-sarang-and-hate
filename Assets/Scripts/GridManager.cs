@@ -49,8 +49,6 @@ public class GridManager : MonoBehaviour
 
 
 
-
-
     // Maze layout: Specifies which walls exist for each tile.
     // N, W, E, S
     private bool[,,] gridWalls = new bool[6, 6, 4] {
