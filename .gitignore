@@ -20,3 +20,9 @@
 # Ignore crashes, logs, and compiled code
 *.pidb
 *.unitypackage
+
+# secret key 
+Analysis/*.json
+
+# environment variable
+.env
