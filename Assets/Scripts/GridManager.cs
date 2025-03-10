@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 
 /// <summary>
 /// Manages the creation of a 6x6 grid-based maze. 
@@ -362,6 +363,30 @@ public class GridManager : MonoBehaviour
                 StartCoroutine(DelayedRotationSequence(dictionaryKey, 0.5f));
                 Debug.Log($"Player moved to Zone {currentZone} (Dictionary Key = {dictionaryKey}). Triggering wall movement.");
             }
+        }
+
+        if (SceneManager.GetActiveScene().name == "Scene2")
+        {
+            if ((playerTileX == 3 && playerTileY == 3) || (playerTileX == 1 && playerTileY == 0))
+            {
+                HandleTrap(currentTile);
+            }
+        }
+    }
+
+    private void HandleTrap(Vector2Int currentTile)
+    {
+        // Move player back to start
+        player.transform.position = new Vector3(5, 0, 5);
+        int currentZone = tileZones[currentTile];
+
+        // Change the color of the tile at (3,3) to red
+        GameObject trapTile = GameObject.Find("Tile " + currentTile + " - Zone " + currentZone); // Ensure this tile has a unique name
+
+        if (trapTile != null)
+        {
+            Renderer sr = trapTile.GetComponent<Renderer>();
+            sr.material.color = Color.red;
         }
     }
 
