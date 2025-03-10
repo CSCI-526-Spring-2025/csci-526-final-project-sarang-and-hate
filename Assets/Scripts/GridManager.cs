@@ -47,11 +47,16 @@ public class GridManager : MonoBehaviour
     private bool isWallRotating = false; // Track if walls are currently rotating
     public bool IsWallRotating => isWallRotating; // Public getter for player script
 
+    //ENUM for levels
+    public enum MazeLevel
+    {
+        Level1 = 1,
+        Level2 = 2
+    }
+    public MazeLevel currentMazeLevel = MazeLevel.Level1;
 
-
-    // Maze layout: Specifies which walls exist for each tile.
-    // N, W, E, S
-    private bool[,,] gridWalls = new bool[6, 6, 4] {
+    [SerializeField] private bool[,,] gridWallsLevel1 = new bool[6,6,4]
+    {
         { { false, false, false,false}, { false, true, false, true }, { false, false, true, true}, { false, false, false,false }, { false, false,false, false }, { false, true, false, true } },
         { { false, true, false, true }, { false, false, false, false }, { false, false, false, false }, {false, false, true, true}, { false, true, false,true }, {false, false, false, false } },
         { { false, false, false, false }, { false, true, false, true }, { false, false, false, false }, { false, true, false, true }, { false, false, false, false }, {true, false, true,false } },
@@ -60,8 +65,44 @@ public class GridManager : MonoBehaviour
         { {false, false,false, false }, {true,true, false, false }, { false, true, false,true }, { false, false, false, false }, { false,true, false,true }, { false,false, false, false } }
     };
 
+
+    [SerializeField] private bool[,,] gridWallsLevel2 = new bool[6,6,4]
+    {
+        // This is an example layout – feel free to change it for your new maze.
+        { { true, false, false,false}, { false, true, false, true }, { false, false, true, true}, { false, false, false,false }, { false, false,false, false }, { false, true, false, true } },
+        { { false, true, false, true }, { true, false, false, false }, { true, false, false, false }, {false, false, true, true}, { false, true, false,true }, {false, false, false, false } },
+        { { false, false, false, false }, { false, true, false, true }, { false, false, false, false }, { false, true, false, true }, { false, false, false, false }, {true, false, true,false } },
+        { { false, true, false,true}, { false, false, false,false }, { false,true, false,true }, { false, false,false,false }, {true,false,true, false }, {false,false, false,false } },
+        { { true,true, false,false}, { false, false,false, false }, { false, false, false,false }, { false, true, false,true}, { false, false, false,false}, { false, true, false,true} },
+        { {false, false,false, false }, {true,true, false, false }, { false, true, false,true }, { false, false, false, false }, { false,true, false,true }, { false,false, false, false } }
+    };
+
+
+    private bool[,,] gridWalls; // this was your internal “active” array
+
+    // Maze layout: Specifies which walls exist for each tile.
+    // N, W, E, S
+    // private bool[,,] gridWalls = new bool[6, 6, 4] {
+    //     { { false, false, false,false}, { false, true, false, true }, { false, false, true, true}, { false, false, false,false }, { false, false,false, false }, { false, true, false, true } },
+    //     { { false, true, false, true }, { false, false, false, false }, { false, false, false, false }, {false, false, true, true}, { false, true, false,true }, {false, false, false, false } },
+    //     { { false, false, false, false }, { false, true, false, true }, { false, false, false, false }, { false, true, false, true }, { false, false, false, false }, {true, false, true,false } },
+    //     { { false, true, false,true}, { false, false, false,false }, { false,true, false,true }, { false, false,false,false }, {true,false,true, false }, {false,false, false,false } },
+    //     { { true,true, false,false}, { false, false,false, false }, { false, false, false,false }, { false, true, false,true}, { false, false, false,false}, { false, true, false,true} },
+    //     { {false, false,false, false }, {true,true, false, false }, { false, true, false,true }, { false, false, false, false }, { false,true, false,true }, { false,false, false, false } }
+    // };
+
     void Start()
     {
+        //this checks what maze leveel and which walls set up to use 
+        switch (currentMazeLevel)
+        {
+            case MazeLevel.Level1:
+                gridWalls = gridWallsLevel1;
+                break;
+            case MazeLevel.Level2:
+                gridWalls = gridWallsLevel2;
+                break;
+        }
         GenerateGrid();
         //StartRotatingWalls(); // NEW: Start automatic wall movement
         //I commented the random rotating walls for now so that walls only trigger at certain checkpoints 
