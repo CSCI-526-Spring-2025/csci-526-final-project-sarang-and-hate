@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class LoadingScreen : MonoBehaviour
 {
-    public Slider progressBar; // Assign Slider in Inspector
+    public Slider progressBar;
     public float loadSpeed = 0.2f; // Adjust for smoother/slower effect
 
     void Start()
@@ -34,15 +34,10 @@ public class LoadingScreen : MonoBehaviour
                 yield return null;
             }
 
-            // Ensure progress reaches 100% before activating the Instructions Scene
+            // Ensure progress reaches 100% before activating Instructions Scene
             if (progressValue >= 1f && operation.progress >= 0.9f)
             {
                 yield return new WaitForSeconds(1f);
-
-                // Store that loading has been completed
-                PlayerPrefs.SetInt("LoadingCompleted", 1);
-                PlayerPrefs.Save();
-
                 operation.allowSceneActivation = true; // Now activate InstructionsScene
             }
 

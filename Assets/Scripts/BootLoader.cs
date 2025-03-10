@@ -1,32 +1,31 @@
-// using UnityEngine;
-// using UnityEngine.SceneManagement;
+// // using UnityEngine;
+// // using UnityEngine.SceneManagement;
 
-// public class BootLoader : MonoBehaviour
-// {
-//     void Awake()
-//     {
-//         // Reset the loading state when the game starts
-//         if (!PlayerPrefs.HasKey("GameStarted"))
-//         {
-//             PlayerPrefs.DeleteKey("LoadingCompleted"); // Reset the loading state
-//             PlayerPrefs.SetInt("GameStarted", 1); // Mark that the game has started
-//             PlayerPrefs.Save();
-//         }
+// // public class BootLoader : MonoBehaviour
+// // {
+// //     void Awake()
+// //     {
+// //         // Reset the loading state when the game starts
+// //         if (!PlayerPrefs.HasKey("GameStarted"))
+// //         {
+// //             PlayerPrefs.DeleteKey("LoadingCompleted"); // Reset the loading state
+// //             PlayerPrefs.SetInt("GameStarted", 1); // Mark that the game has started
+// //             PlayerPrefs.Save();
+// //         }
 
-//         // If we are in SampleScene and loading hasn't been done, go to LoadingScene
-//         if (SceneManager.GetActiveScene().name == "SampleScene" && !HasLoadingHappened())
-//         {
-//             SceneManager.LoadScene("LoadingScene");
-//         }
-//     }
+// //         // If we are in SampleScene and loading hasn't been done, go to LoadingScene
+// //         if (SceneManager.GetActiveScene().name == "SampleScene" && !HasLoadingHappened())
+// //         {
+// //             SceneManager.LoadScene("LoadingScene");
+// //         }
+// //     }
 
-//     // Function to check if LoadingScene has already happened
-//     private bool HasLoadingHappened()
-//     {
-//         return PlayerPrefs.GetInt("LoadingCompleted", 0) == 1;
-//     }
-// }
-
+// //     // Function to check if LoadingScene has already happened
+// //     private bool HasLoadingHappened()
+// //     {
+// //         return PlayerPrefs.GetInt("LoadingCompleted", 0) == 1;
+// //     }
+// // }
 
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -35,29 +34,19 @@ public class BootLoader : MonoBehaviour
 {
     void Awake()
     {
-        // Reset the loading state when the game starts
-        if (!PlayerPrefs.HasKey("GameStarted"))
+        // If the game is already in LoadingScene, do nothing
+        if (SceneManager.GetActiveScene().name == "LoadingScene")
         {
-            PlayerPrefs.DeleteKey("LoadingCompleted"); // Reset the loading state
-            PlayerPrefs.SetInt("GameStarted", 1); // Mark that the game has started
-            PlayerPrefs.Save();
+            return;
         }
 
-        // If we are in SampleScene and loading hasn't been done, go to LoadingScene
-        if (SceneManager.GetActiveScene().name == "SampleScene" && !HasLoadingHappened())
+        // If the game is already in InstructionsScene or SampleScene, do nothing
+        if (SceneManager.GetActiveScene().name == "InstructionsScene" || SceneManager.GetActiveScene().name == "SampleScene")
         {
-            SceneManager.LoadScene("LoadingScene");
+            return;
         }
-        // If we are in InstructionsScene and loading hasn't been done, go to LoadingScene
-        else if (SceneManager.GetActiveScene().name == "InstructionsScene" && !HasLoadingHappened())
-        {
-            SceneManager.LoadScene("LoadingScene");
-        }
-    }
 
-    // Function to check if LoadingScene has already happened
-    private bool HasLoadingHappened()
-    {
-        return PlayerPrefs.GetInt("LoadingCompleted", 0) == 1;
+        // Otherwise, force-load the LoadingScene at the beginning
+        SceneManager.LoadScene("LoadingScene");
     }
 }
