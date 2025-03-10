@@ -303,7 +303,9 @@ public class GridManager : MonoBehaviour
             if (currentZone != lastPlayerZone)
             {
                 lastPlayerZone = currentZone;
-                TriggerRotationSequence(currentZone);
+                //TriggerRotationSequence(currentZone);
+                // Start coroutine with a delay of 1 second (adjust as needed)
+                StartCoroutine(DelayedRotationSequence(currentZone, 0.5f));
                 Debug.Log($"Player moved to Zone {currentZone}. Triggering wall movement.");
             }
         }
@@ -348,5 +350,12 @@ public class GridManager : MonoBehaviour
             lastPlayerTile = currentTile;
         }
     }
+
+    IEnumerator DelayedRotationSequence(int sequenceIndex, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        TriggerRotationSequence(sequenceIndex);
+    }
+
 
 }
