@@ -2,9 +2,18 @@ import firebase_admin
 from firebase_admin import credentials, db
 import matplotlib.pyplot as plt
 import matplotlib.ticker as mtick
+import os
+from dotenv import load_dotenv
+
+# read the variable from .env
+load_dotenv()
+cred_path = os.getenv("GOOGLE_APPLICATION_CREDENTIALS")
+
+if cred_path is None:
+    raise ValueError("GOOGLE_APPLICATION_CREDENTIALS environment variable is not set!")
 
 # initialize my own firebase
-cred = credentials.Certificate("./csci526playertrack-firebase-adminsdk-fbsvc-b21787ed3b.json")
+cred = credentials.Certificate(cred_path)
 firebase_admin.initialize_app(cred, {
     'databaseURL': 'https://csci526playertrack-default-rtdb.firebaseio.com/'
 })
