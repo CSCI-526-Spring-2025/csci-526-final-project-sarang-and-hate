@@ -20,3 +20,6 @@
 # Ignore crashes, logs, and compiled code
 *.pidb
 *.unitypackage
+
+# secret key 
+Analysis/csci526playertrack-firebase-adminsdk-fbsvc-b21787ed3b.json
