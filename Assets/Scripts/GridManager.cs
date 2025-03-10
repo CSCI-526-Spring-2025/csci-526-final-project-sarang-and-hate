@@ -19,6 +19,7 @@ public class GridManager : MonoBehaviour
     public GameObject tilePrefab; // Assign a basic cube in Unity
     public int gridSize = 6;
     public float tileSize = 1.1f; // Spacing between tiles
+
     public GameObject wallPrefab;  // Assign in Inspector
 
     private Tile[,] tiles;
@@ -45,6 +46,8 @@ public class GridManager : MonoBehaviour
 
     private bool isWallRotating = false; // Track if walls are currently rotating
     public bool IsWallRotating => isWallRotating; // Public getter for player script
+
+
 
 
 
@@ -157,6 +160,7 @@ public class GridManager : MonoBehaviour
             }
         }
         tileZones.Clear(); // Clear previous zone data
+
         Debug.Log("Grid cleared.");
     }
 
@@ -180,18 +184,28 @@ public class GridManager : MonoBehaviour
     void SetupRotationSequences()
     {
         rotationSequencesDict = new Dictionary<int, List<string>>()
-    {
-        { 1, new List<string> { "Wall 1", "Wall 2", "Wall 3", "Wall 39" } }, // Tile (5,3) blocks an easy path, forcing detour.
-        { 2, new List<string> { "Wall 5", "Wall 9", "Wall 15" } }, // Tile (4,2) opens the next segment.
-        { 3, new List<string> { "Wall 6", "Wall 10", "Wall 26" } }, // Tile (3,4) rotates mid-maze area.
-        { 4, new List<string> { "Wall 3", "Wall 7", "Wall 18" } }, // Tile (2,3) alters access further.
-        { 5, new List<string> { "Wall 2", "Wall 8" } }, // Tile (1,2) changes the last part of the maze.
-        { 6, new List<string> { "Wall 1",} },  // Tile (0,0) allows access to the finish.
-        { 7, new List<string> { "Wall 20", "Wall 22" } },
-        { 8, new List<string> { "Wall 25", "Wall 30" } },
-        { 9, new List<string> { "Wall 35", "Wall 40" } }
-    };
+        {
+            // Key = 1 => The “odd zone” group
+            { 1, new List<string>
+                {
+                    "Wall 1", "Wall 2", "Wall 5", "Wall 6", "Wall 7", "Wall 8",
+                    "Wall 11", "Wall 12", "Wall 15", "Wall 16", "Wall 21", "Wall 22",
+                    "Wall 25", "Wall 26", "Wall 29", "Wall 30", "Wall 31", "Wall 32",
+                    "Wall 35", "Wall 36"
+                }
+            },
+
+            // Key = 2 => The “even zone” group
+            { 2, new List<string>
+                {
+                    "Wall 3", "Wall 4", "Wall 9", "Wall 10", "Wall 13", "Wall 14",
+                    "Wall 17", "Wall 18", "Wall 19", "Wall 20", "Wall 23", "Wall 24",
+                    "Wall 27", "Wall 28", "Wall 33", "Wall 34"
+                }
+            }
+        };
     }
+
 
     void TriggerRotationSequence(int sequenceIndex)
     {
@@ -303,10 +317,13 @@ public class GridManager : MonoBehaviour
             if (currentZone != lastPlayerZone)
             {
                 lastPlayerZone = currentZone;
+
+                // Decide which dictionary key to use: 1 for odds, 2 for evens
+                int dictionaryKey = (currentZone % 2 == 1) ? 1 : 2;
                 //TriggerRotationSequence(currentZone);
                 // Start coroutine with a delay of 1 second (adjust as needed)
-                StartCoroutine(DelayedRotationSequence(currentZone, 0.5f));
-                Debug.Log($"Player moved to Zone {currentZone}. Triggering wall movement.");
+                StartCoroutine(DelayedRotationSequence(dictionaryKey, 0.5f));
+                Debug.Log($"Player moved to Zone {currentZone} (Dictionary Key = {dictionaryKey}). Triggering wall movement.");
             }
         }
     }
@@ -358,4 +375,5 @@ public class GridManager : MonoBehaviour
     }
 
 
+        // Draw gridlines to help visualize the grid
 }
