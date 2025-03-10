@@ -18,7 +18,7 @@ public class GridManager : MonoBehaviour
 {
     public GameObject tilePrefab; // Assign a basic cube in Unity
     public int gridSize = 6;
-    public float tileSize = 1.1f; // Spacing between tiles
+    public float tileSize = 1.0f; // Spacing between tiles
 
     public GameObject wallPrefab;  // Assign in Inspector
 
