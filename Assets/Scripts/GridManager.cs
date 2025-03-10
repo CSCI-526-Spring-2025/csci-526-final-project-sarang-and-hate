@@ -65,18 +65,16 @@ public class GridManager : MonoBehaviour
         { {false, false,false, false }, {true,true, false, false }, { false, true, false,true }, { false, false, false, false }, { false,true, false,true }, { false,false, false, false } }
     };
 
-
+    //N, W, E, S
     [SerializeField] private bool[,,] gridWallsLevel2 = new bool[6,6,4]
     {
-        // This is an example layout – feel free to change it for your new maze.
-        { { true, false, false,false}, { false, true, false, true }, { false, false, true, true}, { false, false, false,false }, { false, false,false, false }, { false, true, false, true } },
-        { { false, true, false, true }, { true, false, false, false }, { true, false, false, false }, {false, false, true, true}, { false, true, false,true }, {false, false, false, false } },
-        { { false, false, false, false }, { false, true, false, true }, { false, false, false, false }, { false, true, false, true }, { false, false, false, false }, {true, false, true,false } },
-        { { false, true, false,true}, { false, false, false,false }, { false,true, false,true }, { false, false,false,false }, {true,false,true, false }, {false,false, false,false } },
-        { { true,true, false,false}, { false, false,false, false }, { false, false, false,false }, { false, true, false,true}, { false, false, false,false}, { false, true, false,true} },
-        { {false, false,false, false }, {true,true, false, false }, { false, true, false,true }, { false, false, false, false }, { false,true, false,true }, { false,false, false, false } }
+        { { false, false, false,false}, { false, true, false, true }, { false, false, true, true}, { false, false, false,false }, {true,true,false, false }, { false,false, false,false } },
+        { { false, true, false, true }, { false, false, false, false }, { false, false, false, false }, {false, false, true, true}, { false,false, false,false }, {true, true, false, false } },
+        { { false, false, false, false }, { true, false,true,false}, { false, false, false, false }, { false, true, false, true }, { false, false, false, false }, {true, false, true,false } },
+        { { true,false,true,false}, { false, false, false,false }, { false,true, false,true }, { false, false,false,false }, {true,false,true, false }, {false,false, false,false } },
+        { {false,false,true,true}, { false, false,false, false },  { false,false,false, false }, { true,false,true,false}, { false, false, false,false}, {true,false,true,false} },
+        { {false, false,false, false }, {false,false,true,true}, { true,false,true,false}, { false, false, false, false }, {true,false,true,false}, { false,false, false, false} }
     };
-
 
     private bool[,,] gridWalls; // this was your internal “active” array
 
