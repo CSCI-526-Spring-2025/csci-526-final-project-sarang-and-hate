@@ -7404,7 +7404,7 @@ Transform:
   m_GameObject: {fileID: 1347411593}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 2.5, z: 0.5}
+  m_LocalPosition: {x: 0.05, y: 2.5, z: 0.5}
   m_LocalScale: {x: 0.15, y: 5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -8956,9 +8956,9 @@ MonoBehaviour:
   gridSize: 6
   tileSize: 1.1
   wallPrefab: {fileID: 5233444293985566254, guid: 07ba3b151072cb64096f9ce6363cdaaa, type: 3}
+  player: {fileID: 2126435524}
   startingMaterial: {fileID: 2100000, guid: 9d43d39803eba0b4283a5bae17b16726, type: 2}
   destinationMaterial: {fileID: 2100000, guid: 9bb855fa6e15ec94dbc49cd300815590, type: 2}
-  player: {fileID: 2126435524}
 --- !u!4 &1611343523
 Transform:
   m_ObjectHideFlags: 0
