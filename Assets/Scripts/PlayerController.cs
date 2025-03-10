@@ -10,6 +10,8 @@ public class PlayerController : MonoBehaviour
     private Rigidbody rb;
     private GridManager gridManager;
 
+    public float rotationSpeed = 5f;  // Add this public variable for rotation speed
+
     private float minX, maxX, minZ, maxZ;
     // private bool reachDest = false;
 
@@ -55,6 +57,12 @@ public class PlayerController : MonoBehaviour
         if (moveX != 0f || moveZ != 0f)
         {
             Vector3 moveDirection = new Vector3(moveX, 0f, moveZ).normalized;
+
+            transform.rotation = Quaternion.Slerp(
+            transform.rotation,  // Current rotation
+            Quaternion.LookRotation(moveDirection),  // Target rotation
+            rotationSpeed * Time.deltaTime  // The rotation speed, scaled by deltaTime
+            );
             rb.velocity = new Vector3(moveDirection.x * moveSpeed, rb.velocity.y, moveDirection.z * moveSpeed);
         }
         else
