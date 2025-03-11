@@ -39,54 +39,73 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        // If the walls are rotating and the player has not picked up the invisible power-up, stop movement
+        // 1. If walls are rotating and the player has not picked up invisibility, stop movement.
         if (gridManager != null && gridManager.IsWallRotating && !canPassThroughWalls)
         {
             rb.velocity = Vector3.zero;
             return;
         }
 
+        // 2. Reset movement inputs every frame.
         moveX = 0f;
         moveZ = 0f;
 
+        // -- WASD Keys --
         if (Input.GetKey(KeyCode.W)) moveZ = -1f;
         if (Input.GetKey(KeyCode.S)) moveZ = 1f;
         if (Input.GetKey(KeyCode.A)) moveX = 1f;
         if (Input.GetKey(KeyCode.D)) moveX = -1f;
 
-        // Handle movement input (Arrow keys)
-        if (Input.GetKey(KeyCode.UpArrow)) moveZ = -1f;    // Move forward (Up Arrow)
-        if (Input.GetKey(KeyCode.DownArrow)) moveZ = 1f;   // Move backward (Down Arrow)
-        if (Input.GetKey(KeyCode.LeftArrow)) moveX = 1f;   // Move left (Left Arrow)
-        if (Input.GetKey(KeyCode.RightArrow)) moveX = -1f; // Move right (Right Arrow)
+        // -- Arrow Keys --
+        if (Input.GetKey(KeyCode.UpArrow)) moveZ = -1f;    
+        if (Input.GetKey(KeyCode.DownArrow)) moveZ = 1f;   
+        if (Input.GetKey(KeyCode.LeftArrow)) moveX = 1f;   
+        if (Input.GetKey(KeyCode.RightArrow)) moveX = -1f; 
 
+        // 3. If we have any movement input, handle rotation and velocity.
         if (moveX != 0f || moveZ != 0f)
         {
             Vector3 moveDirection = new Vector3(moveX, 0f, moveZ).normalized;
 
+            // Smoothly rotate the player to face the movement direction
             transform.rotation = Quaternion.Slerp(
-            transform.rotation,  // Current rotation
-            Quaternion.LookRotation(moveDirection),  // Target rotation
-            rotationSpeed * Time.deltaTime  // The rotation speed, scaled by deltaTime
+                transform.rotation,
+                Quaternion.LookRotation(moveDirection),
+                rotationSpeed * Time.deltaTime
             );
-            //This is checking whether player can pass through walls due to the collectible pickup 
-            // also checking if the tiles moved is under 2
-            // If invisibility is active, the player can move through walls
+
+            // 4. Now handle whether we can pass through walls or not, and the tile limit
             if (canPassThroughWalls && tilesMoved < 500)
             {
+                // Invisible + Under the move limit
                 rb.velocity = new Vector3(moveDirection.x * moveSpeed, rb.velocity.y, moveDirection.z * moveSpeed);
-                tilesMoved++; // Increment movements moved instead of tiles.. it doesnt accuractely count tiles so I set initial amount to 500
+                tilesMoved++;
             }
-            else if (!canPassThroughWalls)
+            else if (canPassThroughWalls && tilesMoved >= 500)
             {
+                // Invisible but tile limit has been reached
+                // Decide how you want to handle this scenario:
+                //  - You could forcibly turn off invisibility here
+                //  - You could reduce moveSpeed or do something else
+
+                canPassThroughWalls = false; 
+                // Potentially re-enable colliders, or do it wherever else you'd prefer:
+
+                rb.velocity = new Vector3(moveDirection.x * moveSpeed, rb.velocity.y, moveDirection.z * moveSpeed);
+            }
+            else // !canPassThroughWalls
+            {
+                // Normal movement if we are not invisible
                 rb.velocity = new Vector3(moveDirection.x * moveSpeed, rb.velocity.y, moveDirection.z * moveSpeed);
             }
         }
         else
         {
+            // If no input, keep vertical velocity (e.g., gravity) but zero out horizontal movement
             rb.velocity = new Vector3(0f, rb.velocity.y, 0f);
         }
     }
+
 
     void FixedUpdate()
     {
