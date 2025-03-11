@@ -50,6 +50,9 @@ public class GridManager : MonoBehaviour
 
     public GameObject collectibleInvisible; // Assign your collectible prefab in the inspector
 
+    private bool hasSpawnedCollectibleAtStart = false;
+
+
     //ENUM for levels
     public enum MazeLevel
     {
@@ -167,10 +170,18 @@ public class GridManager : MonoBehaviour
                 if (gridWalls[x, y, 2]) AddWall(tileGO, new Vector3(0, 2.5f, 0.5f), Quaternion.Euler(0, 90, 0));
 
                 // For Level 2, add the collectible at a specific tile location (3,3)
-                if (currentMazeLevel == MazeLevel.Level2 && x == 4 && y == 5)
+                if (currentMazeLevel == MazeLevel.Level2)
                 {
-                    Instantiate(collectibleInvisible, new Vector3(x, 0.25f, y), Quaternion.identity, transform);
+                    // If the tile is one of these (4,5), (5,4), or (3,2)
+                    if ((x == 4 && y == 5) ||
+                        (x == 5 && y == 4) ||
+                        (x == 3 && y == 2))
+                    {
+                        Instantiate(collectibleInvisible, new Vector3(x, 0.25f, y), Quaternion.identity, transform);
+                    }
                 }
+
+
             }
         }
     }
@@ -373,16 +384,29 @@ public class GridManager : MonoBehaviour
             }
         }
     }
-
+    private IEnumerator SpawnCollectibleAtStartWithDelay(float delay)
+    {
+        // 1. Wait for the delay so the player can be reset first
+        Debug.Log("SpawnCollectibleAtStartWithDelay called... waiting " + delay + " seconds.");
+        yield return new WaitForSeconds(delay);
+        // 2. Spawn the collectible at (0,0)
+        // spawn again *every* time they trigger a trap,
+        Debug.Log("Spawning collectibleInvisible now...");
+        Instantiate(collectibleInvisible, new Vector3(5.5f, 0.25f, 4.75f), Quaternion.identity, transform);
+        hasSpawnedCollectibleAtStart = true;
+    }
     private void HandleTrap(Vector2Int currentTile)
     {
         // Move player back to start
         player.transform.position = new Vector3(5, 0, 5);
         int currentZone = tileZones[currentTile];
 
+        // Example: you only want to spawn the collectible the *first* time they hit a trap
+        StartCoroutine(SpawnCollectibleAtStartWithDelay(1.0f)); 
+        // 1 second delay 
+
         // Change the color of the tile at (3,3) to red
         GameObject trapTile = GameObject.Find("Tile " + currentTile + " - Zone " + currentZone); // Ensure this tile has a unique name
-
         if (trapTile != null)
         {
             Renderer sr = trapTile.GetComponent<Renderer>();
@@ -437,5 +461,6 @@ public class GridManager : MonoBehaviour
     }
 
 
-        // Draw gridlines to help visualize the grid
+
+
 }
