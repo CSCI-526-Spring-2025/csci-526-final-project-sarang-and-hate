@@ -226,7 +226,9 @@ public class GameTimer : MonoBehaviour
     {
         "Welcome to Level 2!",
         "",
-        "There can be trap tiles, so be careful!"
+        "There can be trap tiles, so be careful!",
+        "",
+        "Capture capsule to gain Special Powers [Go Through the walls]!"
     };
 
     void Start()
@@ -249,18 +251,6 @@ public class GameTimer : MonoBehaviour
             instructions = new string[] { "Default Instructions: Good luck!" }; // Fallback
         }
 
-        // ✅ Display Instructions Before Starting the Game
-        // if (instructionPanel != null && instructionText != null && nextInstructionButton != null)
-        // {
-        //     instructionPanel.SetActive(true); // Show the instruction panel
-        //     instructionText.text = instructions[instructionIndex]; // Display first instruction
-        //     nextInstructionButton.onClick.AddListener(ShowNextInstruction);
-        //     Time.timeScale = 0; // Pause game while instructions are displayed
-        // }
-        // else
-        // {
-        //     Debug.LogError("Instruction panel, text, or button is not assigned in the Inspector!");
-        // }
         if (instructionPanel != null && instructionText != null && nextInstructionButton != null)
         {
             instructionPanel.SetActive(true); // Show the instruction panel
