@@ -9069,6 +9069,7 @@ MonoBehaviour:
   player: {fileID: 745977087}
   startingMaterial: {fileID: 2100000, guid: 9d43d39803eba0b4283a5bae17b16726, type: 2}
   destinationMaterial: {fileID: 2100000, guid: 9bb855fa6e15ec94dbc49cd300815590, type: 2}
+  collectibleInvisible: {fileID: 3529927858449244120, guid: 62b77d2c1204fcc46bae21bd5bd15b0c, type: 3}
   currentMazeLevel: 2
 --- !u!4 &1611343523
 Transform:
@@ -10356,6 +10357,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: bb69c84fd3705413995fe1cf7cc97bb1, type: 3}
       propertyPath: m_Name
+      value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: bb69c84fd3705413995fe1cf7cc97bb1, type: 3}
+      propertyPath: m_TagString
       value: Player
       objectReference: {fileID: 0}
     m_RemovedComponents: []

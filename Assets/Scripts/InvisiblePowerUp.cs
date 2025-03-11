@@ -4,13 +4,15 @@ using UnityEngine;
 
 public class InvisiblePowerUp : MonoBehaviour
 {
-    public float powerUpDuration = 3f; // Duration the player can go through walls
+    public float powerUpDuration = 30f; // Duration the player can go through walls
 
     void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
-            //other.GetComponent<PlayerController>().ActivateInvisibility(powerUpDuration);
+            // Activate invisibility power-up on the player
+            // This will allow the player to move across tiles freely up to only 2 tiles 
+            other.GetComponent<PlayerController>().ActivateInvisibility(powerUpDuration);
             Destroy(gameObject); // Destroy the power-up after being collected
         }
     }

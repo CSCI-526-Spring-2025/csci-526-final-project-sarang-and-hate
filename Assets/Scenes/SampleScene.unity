@@ -3123,7 +3123,6 @@ MonoBehaviour:
   dimBackground: {fileID: 0}
   victoryText: {fileID: 0}
   restartButton: {fileID: 795084254}
-  nextLevelButton: {fileID: 1659493156}
   helpPanel: {fileID: 624502576}
   helpButton: {fileID: 1047170183}
   exitHelpButton: {fileID: 2038818024}
@@ -7863,6 +7862,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 1
+  rotationSpeed: 5
 --- !u!136 &1413911102
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -9078,6 +9078,8 @@ MonoBehaviour:
   player: {fileID: 1413911100}
   startingMaterial: {fileID: 2100000, guid: 9d43d39803eba0b4283a5bae17b16726, type: 2}
   destinationMaterial: {fileID: 2100000, guid: 9bb855fa6e15ec94dbc49cd300815590, type: 2}
+  collectibleInvisible: {fileID: 3529927858449244120, guid: 62b77d2c1204fcc46bae21bd5bd15b0c, type: 3}
+  currentMazeLevel: 1
 --- !u!4 &1611343523
 Transform:
   m_ObjectHideFlags: 0

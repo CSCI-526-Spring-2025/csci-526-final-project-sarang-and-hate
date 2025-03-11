@@ -32,7 +32,7 @@ public class GridManager : MonoBehaviour
     public Material destinationMaterial; // Assign in the Inspector
 
     // NEW: List to store all wall objects for tracking
-    private List<GameObject> wallList = new List<GameObject>();
+    public List<GameObject> wallList = new List<GameObject>();
 
     // NEW: Dictionary to track each wall's rotation state
     private Dictionary<GameObject, int> wallRotationState = new Dictionary<GameObject, int>();
@@ -47,6 +47,8 @@ public class GridManager : MonoBehaviour
 
     private bool isWallRotating = false; // Track if walls are currently rotating
     public bool IsWallRotating => isWallRotating; // Public getter for player script
+
+    public GameObject collectibleInvisible; // Assign your collectible prefab in the inspector
 
     //ENUM for levels
     public enum MazeLevel
@@ -154,6 +156,12 @@ public class GridManager : MonoBehaviour
                 if (gridWalls[x, y, 3]) AddWall(tileGO, new Vector3(0.5f, 2.5f, 0), Quaternion.identity);
                 if (gridWalls[x, y, 1]) AddWall(tileGO, new Vector3(0, 2.5f, -0.5f), Quaternion.Euler(0, 90, 0));
                 if (gridWalls[x, y, 2]) AddWall(tileGO, new Vector3(0, 2.5f, 0.5f), Quaternion.Euler(0, 90, 0));
+
+                // For Level 2, add the collectible at a specific tile location (3,3)
+                if (currentMazeLevel == MazeLevel.Level2 && x == 4 && y == 5)
+                {
+                    Instantiate(collectibleInvisible, new Vector3(x, 0.25f, y), Quaternion.identity, transform);
+                }
             }
         }
     }
@@ -360,7 +368,7 @@ public class GridManager : MonoBehaviour
                 int dictionaryKey = (currentZone % 2 == 1) ? 1 : 2;
                 //TriggerRotationSequence(currentZone);
                 // Start coroutine with a delay of 1 second (adjust as needed)
-                StartCoroutine(DelayedRotationSequence(dictionaryKey, 0.5f));
+                StartCoroutine(DelayedRotationSequence(dictionaryKey, 0.25f));
                 Debug.Log($"Player moved to Zone {currentZone} (Dictionary Key = {dictionaryKey}). Triggering wall movement.");
             }
         }
