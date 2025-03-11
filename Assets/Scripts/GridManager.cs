@@ -105,6 +105,15 @@ public class GridManager : MonoBehaviour
                 break;
         }
         GenerateGrid();
+
+        Vector3 playerPos = player.transform.position;
+        int playerTileX = Mathf.RoundToInt(playerPos.x);
+        int playerTileY = Mathf.RoundToInt(playerPos.z);
+        Vector2Int startTile = new Vector2Int(playerTileX, playerTileY);
+        if (tileZones.ContainsKey(startTile))
+        {
+            lastPlayerZone = tileZones[startTile];
+        }
         //StartRotatingWalls(); // NEW: Start automatic wall movement
         //I commented the random rotating walls for now so that walls only trigger at certain checkpoints 
         SetupRotationSequences(); 
@@ -279,34 +288,17 @@ public class GridManager : MonoBehaviour
     /// </summary>
     void RotateAndMoveWall(GameObject wall)
     {
-        int currentState = wallRotationState[wall]; // Get current rotation state
-        Vector3 newPosition = wall.transform.localPosition;
-
-        // Get current rotation and calculate the next rotation (relative)
-        Quaternion currentRotation = wall.transform.localRotation;
-        Quaternion newRotation = currentRotation * Quaternion.Euler(0, 90, 0); // Rotate 90° right
-
-        // Define movement based on the new direction (Imaginary box cycle)
-        switch (currentState)
-        {
-            case 0: // Move to top-right corner (B)
-                newPosition += new Vector3(tileSize / 2, 0, tileSize / 2);
-                break;
-            case 1: // Move to bottom-right corner (C)
-                newPosition += new Vector3(-tileSize / 2, 0, tileSize / 2);
-                break;
-            case 2: // Move to bottom-left corner (D)
-                newPosition += new Vector3(-tileSize / 2, 0, -tileSize / 2);
-                break;
-            case 3: // Move back to top-left corner (A)
-                newPosition += new Vector3(tileSize / 2, 0, -tileSize / 2);
-                break;
-        }
-
-        wallRotationState[wall] = (currentState + 1) % 4; // Update rotation state
-
-        // Apply smooth movement and rotation
-        StartCoroutine(SmoothMoveWall(wall, newPosition, newRotation));
+        // Get the current local position relative to the tile's center (parent's origin).
+    Vector3 currentLocalPos = wall.transform.localPosition;
+    
+    // Calculate the new local position by rotating the current position 90° around the Y-axis.
+    Vector3 newLocalPos = Quaternion.Euler(0, 90, 0) * currentLocalPos;
+    
+    // Update the wall's local rotation by adding a 90° rotation.
+    Quaternion newLocalRot = wall.transform.localRotation * Quaternion.Euler(0, 90, 0);
+    
+    // Smoothly interpolate to the new local position and rotation.
+    StartCoroutine(SmoothMoveWall(wall, newLocalPos, newLocalRot));
     }
 
 
