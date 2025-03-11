@@ -13,7 +13,7 @@ public class PlayerController : MonoBehaviour
     public float rotationSpeed = 5f;  // Add this public variable for rotation speed
 
 
-    private bool canPassThroughWalls = true; // Whether the player can pass through walls
+    private bool canPassThroughWalls = false; // Whether the player can pass through walls
     private float invisibilityTime = 30f; // Time remaining for the invisibility power-up
     private int tilesMoved = 0; // Keep track of how many tiles the player has moved through
 
