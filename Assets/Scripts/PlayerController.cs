@@ -67,6 +67,24 @@ public class PlayerController : MonoBehaviour
         {
             Vector3 moveDirection = new Vector3(moveX, 0f, moveZ).normalized;
 
+        // Only adjust movement direction in Level 3
+        if (gridManager != null && gridManager.currentMazeLevel == GridManager.MazeLevel.Level3)
+        {
+            Vector3 camForward = Camera.main.transform.forward;
+            Vector3 camRight = Camera.main.transform.right;
+
+            camForward.y = 0f;
+            camRight.y = 0f;
+
+            camForward.Normalize();
+            camRight.Normalize();
+
+            moveDirection = (camForward * -moveZ + camRight * -moveX).normalized;
+
+
+        }
+
+
             // Smoothly rotate the player to face the movement direction
             transform.rotation = Quaternion.Slerp(
                 transform.rotation,
