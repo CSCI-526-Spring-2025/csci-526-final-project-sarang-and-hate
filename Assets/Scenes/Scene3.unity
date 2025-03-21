@@ -5807,8 +5807,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.0713282, y: 0.90522194, z: -0.38358766, w: -0.1683631}
-  m_LocalPosition: {x: 4.941621, y: 6.6176085, z: 9.303899}
+  m_LocalRotation: {x: -0.3284881, y: 0.619987, z: -0.3198757, w: -0.6367034}
+  m_LocalPosition: {x: 8.501337, y: 7.3333435, z: 3.278687}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -9468,7 +9468,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tilePrefab: {fileID: 613115640612862635, guid: 2b1611565e00286409cdc73ddcd95af8, type: 3}
-  gridSize: 6
+  gridSize: 8
   tileSize: 1.1
   wallPrefab: {fileID: 5233444293985566254, guid: 07ba3b151072cb64096f9ce6363cdaaa, type: 3}
   player: {fileID: 745977087}
@@ -9476,7 +9476,7 @@ MonoBehaviour:
   destinationMaterial: {fileID: 2100000, guid: 9bb855fa6e15ec94dbc49cd300815590, type: 2}
   wallList: []
   collectibleInvisible: {fileID: 3529927858449244120, guid: 62b77d2c1204fcc46bae21bd5bd15b0c, type: 3}
-  currentMazeLevel: 2
+  currentMazeLevel: 3
 --- !u!4 &1611343523
 Transform:
   m_ObjectHideFlags: 0

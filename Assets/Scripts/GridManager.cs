@@ -140,6 +140,10 @@ public class GridManager : MonoBehaviour
             case MazeLevel.Level3:
                 gridSize = 8;
                 gridWalls = gridWallsLevel3;
+
+                //Set position to 7,0,0 to bottom right of the grid
+                player.transform.position = new Vector3(7f, 0f, 7f);
+
                 break;
         }
         GenerateGrid();
