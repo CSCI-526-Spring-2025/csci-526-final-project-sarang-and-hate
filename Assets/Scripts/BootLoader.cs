@@ -18,6 +18,6 @@ public class BootLoader : MonoBehaviour
         }
 
         // Otherwise, force-load the LoadingScene at the beginning
-        SceneManager.LoadScene("LoadingScene");
+        //SceneManager.LoadScene("LoadingScene");
     }
 }

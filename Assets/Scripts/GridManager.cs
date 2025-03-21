@@ -57,7 +57,9 @@ public class GridManager : MonoBehaviour
     public enum MazeLevel
     {
         Level1 = 1,
-        Level2 = 2
+        Level2 = 2,
+
+        Level3 = 3
     }
     public MazeLevel currentMazeLevel = MazeLevel.Level1;
 
@@ -82,6 +84,35 @@ public class GridManager : MonoBehaviour
         { {false, false,false, false }, {false,false,true,true}, { true,false,true,false}, { false, false, false, false }, {true,false,true,false}, { false,false, false, false} }
     };
 
+    // N W E S 
+    [SerializeField] private bool[,,] gridWallsLevel3 = new bool[8,8,4]
+    {
+        { { false, false, true, true }, { false, false, false, false }, { false, false, false, false }, { false, true, false,true},
+        {true,true, false, false }, { false, false, false, false }, { false, true, false,true}, { false, false, false, false } },
+        
+        { { false, false, false, false }, { false, false, true, true }, { false, true, false,true}, { false, false, false, false },
+        { false, false, false, false }, { true,true, false, false }, { false, false, false, false }, { false,true, false,true} },
+
+        { {true,true, false, false }, { false, false, false, false }, { false,true, false,true}, { false, false, false, false },
+        { false, false, false, false }, {true, false,true, false }, {false, false,true,true}, { false, false, false, false } },
+
+        { { false, false, false, false }, {true,true, false, false }, { false, false, false, false }, { false,true, false,true},
+        {true, false,true, false }, { false, false, false, false }, { false, false, false, false }, { false, false,true,true} },
+
+        { { false, false, false, false }, { false,true, false,true}, {true, false,true, false }, { false, false, false, false },
+        { false, false, false, false }, {true, false,true, false }, { false,true, false,true}, { false, false, false, false } },
+
+        { { false,true, false,true}, { false, false, false, false }, { false, false, false, false }, {true, false,true, false },
+        { true, false,true, false }, { false, false, false, false }, { false, false, false, false }, { false,true, false,true } },
+
+        { {true, false,true, false }, { false, false, false, false }, { false, false,true,true}, { false, false, false, false },
+        { false, false, false, false }, {true, false,true, false }, { false, false, false, false }, {true, false,true, false } },
+
+        { { false, false, false, false }, {true, false,true, false }, { false, false, false, false }, { false, false,true,true },
+        {true, false,true, false }, { false, false, false, false }, {true, false,true, false }, { false, false, false, false } }
+    };
+
+
     private bool[,,] gridWalls; // this was your internal “active” array
 
     // Maze layout: Specifies which walls exist for each tile.
@@ -105,6 +136,10 @@ public class GridManager : MonoBehaviour
                 break;
             case MazeLevel.Level2:
                 gridWalls = gridWallsLevel2;
+                break;
+            case MazeLevel.Level3:
+                gridSize = 8;
+                gridWalls = gridWallsLevel3;
                 break;
         }
         GenerateGrid();
@@ -247,30 +282,61 @@ public class GridManager : MonoBehaviour
         Debug.Log($"Created {wall.name} at {wall.transform.position}");
     }
 
-    void SetupRotationSequences()
+void SetupRotationSequences()
     {
-        rotationSequencesDict = new Dictionary<int, List<string>>()
-        {
-            // Key = 1 => The “odd zone” group
-            { 1, new List<string>
-                {
-                    "Wall 1", "Wall 2", "Wall 5", "Wall 6", "Wall 7", "Wall 8",
-                    "Wall 11", "Wall 12", "Wall 15", "Wall 16", "Wall 21", "Wall 22",
-                    "Wall 25", "Wall 26", "Wall 29", "Wall 30", "Wall 31", "Wall 32",
-                    "Wall 35", "Wall 36"
-                }
-            },
+        rotationSequencesDict = new Dictionary<int, List<string>>();
 
-            // Key = 2 => The “even zone” group
-            { 2, new List<string>
-                {
-                    "Wall 3", "Wall 4", "Wall 9", "Wall 10", "Wall 13", "Wall 14",
-                    "Wall 17", "Wall 18", "Wall 19", "Wall 20", "Wall 23", "Wall 24",
-                    "Wall 27", "Wall 28", "Wall 33", "Wall 34"
+        if (currentMazeLevel == MazeLevel.Level1 || currentMazeLevel == MazeLevel.Level2)
+        {
+            // Shared rotation setup for Level 1 and Level 2
+            rotationSequencesDict = new Dictionary<int, List<string>>()
+            {
+                { 1, new List<string>
+                    {
+                        "Wall 1", "Wall 2", "Wall 5", "Wall 6", "Wall 7", "Wall 8",
+                        "Wall 11", "Wall 12", "Wall 15", "Wall 16", "Wall 21", "Wall 22",
+                        "Wall 25", "Wall 26", "Wall 29", "Wall 30", "Wall 31", "Wall 32",
+                        "Wall 35", "Wall 36"
+                    }
+                },
+                { 2, new List<string>
+                    {
+                        "Wall 3", "Wall 4", "Wall 9", "Wall 10", "Wall 13", "Wall 14",
+                        "Wall 17", "Wall 18", "Wall 19", "Wall 20", "Wall 23", "Wall 24",
+                        "Wall 27", "Wall 28", "Wall 33", "Wall 34"
+                    }
                 }
-            }
-        };
+            };
+        }
+        else if (currentMazeLevel == MazeLevel.Level3)
+        {
+            // Custom sequences for Level 3
+            rotationSequencesDict = new Dictionary<int, List<string>>()
+            {
+                { 1, new List<string>
+                    {
+                        "Wall 1", "Wall 2", "Wall 9", "Wall 10", "Wall 5", "Wall 6",
+                        "Wall 13", "Wall 14", "Wall 19", "Wall 20", "Wall 27", "Wall 28",
+                        "Wall 23", "Wall 24", "Wall 31", "Wall 32", "Wall 33", "Wall 34",
+                        "Wall 41", "Wall 42", "Wall 37", "Wall 38", "Wall 45", "Wall 46",
+                        "Wall 51", "Wall 52", "Wall 59", "Wall 60", "Wall 55", "Wall 56",
+                        "Wall 63", "Wall 64"
+                    }
+                },
+                { 2, new List<string>
+                    {
+                        "Wall 3", "Wall 4", "Wall 11", "Wall 12", "Wall 7", "Wall 8",
+                        "Wall 15", "Wall 16", "Wall 17", "Wall 18", "Wall 25", "Wall 26",
+                        "Wall 21", "Wall 22", "Wall 29", "Wall 30", "Wall 35", "Wall 36",
+                        "Wall 43", "Wall 44", "Wall 39", "Wall 40", "Wall 47", "Wall 48",
+                        "Wall 49", "Wall 50", "Wall 57", "Wall 58", "Wall 53", "Wall 54",
+                        "Wall 61", "Wall 62"
+                    }
+                }
+            };
+        }
     }
+
 
 
     void TriggerRotationSequence(int sequenceIndex)
@@ -367,12 +433,28 @@ public class GridManager : MonoBehaviour
             {
                 lastPlayerZone = currentZone;
 
-                // Decide which dictionary key to use: 1 for odds, 2 for evens
-                int dictionaryKey = (currentZone % 2 == 1) ? 1 : 2;
-                //TriggerRotationSequence(currentZone);
-                // Start coroutine with a delay of 1 second (adjust as needed)
-                StartCoroutine(DelayedRotationSequence(dictionaryKey, 0.25f));
-                Debug.Log($"Player moved to Zone {currentZone} (Dictionary Key = {dictionaryKey}). Triggering wall movement.");
+                int dictionaryKey = 0;
+
+                if (currentMazeLevel == MazeLevel.Level3)
+                {
+                    // Custom grouping for Level 3
+                    HashSet<int> group1Zones = new HashSet<int> { 1, 3, 6, 8, 9, 11, 14, 16 };
+                    HashSet<int> group2Zones = new HashSet<int> { 2, 4, 5, 7, 10, 12, 13, 15 };
+
+                    if (group1Zones.Contains(currentZone)) dictionaryKey = 1;
+                    else if (group2Zones.Contains(currentZone)) dictionaryKey = 2;
+                }
+                else
+                {
+                    // Default odd/even logic for Level 1 and 2
+                    dictionaryKey = (currentZone % 2 == 1) ? 1 : 2;
+                }
+
+                if (rotationSequencesDict.ContainsKey(dictionaryKey))
+                {
+                    StartCoroutine(DelayedRotationSequence(dictionaryKey, 0.25f));
+                    Debug.Log($"Player moved to Zone {currentZone} (Dictionary Key = {dictionaryKey}). Triggering wall movement.");
+                }
             }
         }
 
@@ -384,6 +466,7 @@ public class GridManager : MonoBehaviour
             }
         }
     }
+
     private IEnumerator SpawnCollectibleAtStartWithDelay(float delay)
     {
         // 1. Wait for the delay so the player can be reset first
