@@ -183,8 +183,13 @@ public class GridManager : MonoBehaviour
                 tileGO.name = $"Tile ({x}, {y}) - Zone {tileZones[new Vector2Int(x, y)]}";
                 Tile tile = tileGO.AddComponent<Tile>();
                 tiles[x, y] = tile;
-
                 Renderer renderer = tileGO.GetComponent<Renderer>();
+                //For flashing animation
+                tile.tileRenderer = renderer; // Give it the renderer reference
+                tile.originalColor = renderer.material.color; // Store original color
+
+
+                
 
                 // Apply color: Start tile (Blue), Finish tile (Green)
                 if (renderer != null)
@@ -353,6 +358,27 @@ void SetupRotationSequences()
 
         List<string> selectedWalls = rotationSequencesDict[sequenceIndex];
         Debug.Log($"Triggering Rotation Sequence {sequenceIndex} due to player stepping on a tile.");
+
+        //Flash the zone tiles before rotation
+        if (currentMazeLevel == MazeLevel.Level1)
+        {
+            Color zoneFlashColor = (sequenceIndex == 1) ? new Color(1f, 0.95f, 0.5f) : new Color(1f, 0.75f, 0.4f);
+
+            // Flash ALL matching zones
+            List<int> zonesToFlash = new List<int>();
+            foreach (var kvp in tileZones)
+            {
+                int zoneId = kvp.Value;
+                if ((sequenceIndex == 1 && zoneId % 2 == 1) || (sequenceIndex == 2 && zoneId % 2 == 0))
+                {
+                    if (!zonesToFlash.Contains(zoneId))
+                        zonesToFlash.Add(zoneId);
+                }
+            }
+
+            StartCoroutine(FlashZones(zonesToFlash, zoneFlashColor));
+        }
+
 
         foreach (GameObject wall in wallList)
         {
@@ -545,6 +571,53 @@ void SetupRotationSequences()
     {
         yield return new WaitForSeconds(delay);
         TriggerRotationSequence(sequenceIndex);
+    }
+
+
+    IEnumerator FlashZones(List<int> zoneIds, Color flashColor, float flashDuration = 0.6f)
+    {
+        List<Tile> tilesToFlash = new List<Tile>();
+
+        foreach (var kvp in tileZones)
+        {
+            if (zoneIds.Contains(kvp.Value))
+            {
+                Vector2Int pos = kvp.Key;
+                Tile tile = tiles[pos.x, pos.y];
+                tilesToFlash.Add(tile);
+
+                // Ensure each tile has its own material instance
+                tile.tileRenderer.material = new Material(tile.tileRenderer.material);
+            }
+        }
+
+        // Flash color
+        foreach (Tile tile in tilesToFlash)
+        {
+            tile.tileRenderer.material.color = flashColor;
+        }
+
+        yield return new WaitForSeconds(flashDuration);
+
+        // Fade back
+        float fadeTime = 1.0f;
+        float elapsed = 0f;
+        while (elapsed < fadeTime)
+        {
+            foreach (Tile tile in tilesToFlash)
+            {
+                Color current = tile.tileRenderer.material.color;
+                tile.tileRenderer.material.color = Color.Lerp(current, tile.originalColor, elapsed / fadeTime);
+            }
+
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        foreach (Tile tile in tilesToFlash)
+        {
+            tile.tileRenderer.material.color = tile.originalColor;
+        }
     }
 
 

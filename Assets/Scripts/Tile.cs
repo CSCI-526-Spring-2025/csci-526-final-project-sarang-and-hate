@@ -13,8 +13,22 @@ public class Tile : MonoBehaviour
     public bool hasEastWall;
     public bool hasSouthWall;
 
+    //for flashing animation for level 1 
+    public Color originalColor;
+    public Renderer tileRenderer;
+
     // Stores the tile's position in the grid (X, Y coordinates).
     public Vector2Int gridPosition;
+
+
+        void Start()
+    {
+        tileRenderer = GetComponent<Renderer>();
+        if (tileRenderer != null)
+        {
+            originalColor = tileRenderer.material.color;
+        }
+    }
 
     /// <summary>
     /// Initializes the tile with a specific position in the grid and its wall placements.
