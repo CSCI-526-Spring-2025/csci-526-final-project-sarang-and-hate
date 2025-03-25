@@ -3,18 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 
-/// <summary>
-/// Manages the creation of a 6x6 grid-based maze. 
-/// Handles tile instantiation, wall placements, and automated wall movement.
-/// 
-/// NEW FEATURES ADDED:
-/// - Tracks all walls in a list with unique IDs.
-/// - Moves and rotates selected walls in a loop every 5 seconds.
-/// - Implements smooth transitions for movement and rotation.
-/// </summary>
-
-/// Uncomment following line to open the maze in editable mode
-/// [ExecuteInEditMode]
 public class GridManager : MonoBehaviour
 {
     public GameObject tilePrefab; // Assign a basic cube in Unity
@@ -574,7 +562,7 @@ void SetupRotationSequences()
     }
 
 
-    IEnumerator FlashZones(List<int> zoneIds, Color flashColor, float flashDuration = 0.6f)
+    IEnumerator FlashZones(List<int> zoneIds, Color flashColor, float flashDuration = 0.9f)
     {
         List<Tile> tilesToFlash = new List<Tile>();
 
