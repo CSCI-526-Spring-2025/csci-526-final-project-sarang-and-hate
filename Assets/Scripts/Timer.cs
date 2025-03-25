@@ -51,6 +51,8 @@ public class GameTimer : MonoBehaviour
 
     void Start()
     {
+        //Ensures that each level will have 3 resets remaining
+         GameSession.helpUsesRemaining = 3; // Reset Help for each level
         // ✅ Stop the timer initially
         timerIsRunning = false;
 
@@ -171,16 +173,38 @@ public class GameTimer : MonoBehaviour
     // Help panel methods
     public void OpenHelp()
     {
-        if (helpPanel != null)
+        if (GameSession.helpUsesRemaining > 0)
         {
-            helpPanel.SetActive(true);
+            GameSession.helpUsesRemaining--;
+
+            Debug.Log("Help used. Remaining: " + GameSession.helpUsesRemaining);
+
+            if (helpPanel != null)
+            {
+                helpPanel.SetActive(true);
+            }
+        }
+        else
+        {
+            Debug.Log("No Help uses remaining!");
+            helpButton.interactable = false;
+
+            // Show a warning popup
+            if (instructionText != null)
+            {
+                instructionPanel.SetActive(true);
+                instructionText.text = "You've used all your Help attempts!";
+                nextInstructionButton.gameObject.SetActive(false); // Hide continue if needed
+                Time.timeScale = 0;
+            }
         }
     }
 
+
     public void ExitToLoadingScene()
     {
-        Debug.Log("🔄 Switching to Loading Screen...");
-        SceneManager.LoadScene("LoadingScene"); // Ensure this scene name is correct
+        Debug.Log("Switching to Loading Screen...");
+        SceneManager.LoadScene("LoadingScene");
     }
 
     public void PromoteToNextLevel()
