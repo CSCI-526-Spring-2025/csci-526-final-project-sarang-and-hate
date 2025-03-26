@@ -53,10 +53,10 @@ public class GameTimer : MonoBehaviour
     {
         //Ensures that each level will have 3 resets remaining
          GameSession.helpUsesRemaining = 3; // Reset Help for each level
-        // ✅ Stop the timer initially
+        //Stop the timer initially
         timerIsRunning = false;
 
-        // ✅ Select Instructions Based on the Scene
+        // Select Instructions Based on the Scene
         string sceneName = SceneManager.GetActiveScene().name;
         if (sceneName == "SampleScene")
         {
@@ -71,16 +71,25 @@ public class GameTimer : MonoBehaviour
             instructions = new string[] { "Default Instructions: Good luck!" }; // Fallback
         }
 
+        // Skip Game 
+        if (GameSession.skipInstructions)
+        {
+            instructionPanel?.SetActive(false);
+            Time.timeScale = 1;
+            timerIsRunning = true;
+            GameSession.skipInstructions = false; // Reset for next level
+            return;
+        }
+
+        //show instructions normally
         if (instructionPanel != null && instructionText != null && nextInstructionButton != null)
         {
-            instructionPanel.SetActive(true); // Show the instruction panel
-            instructionText.text = instructions[instructionIndex]; // Display first instruction
+            instructionIndex = 0;
+            instructionPanel.SetActive(true);
+            instructionText.text = instructions[instructionIndex];
+            nextInstructionButton.onClick.RemoveAllListeners(); // Prevent double listeners
             nextInstructionButton.onClick.AddListener(ShowNextInstruction);
-            Time.timeScale = 0; // Pause game while instructions are displayed
-        }
-        else
-        {
-            Debug.LogError("Instruction panel, text, or button is not assigned in the Inspector!");
+            Time.timeScale = 0;
         }
 
         UpdateTimeDisplay();
@@ -166,7 +175,14 @@ public class GameTimer : MonoBehaviour
 
     public void RestartGame()
     {
+        Debug.Log("RestartGame was triggered.");
         Time.timeScale = 1;
+        GameSession.skipInstructions = true; // Skip instructions if user clicks restart 
+        if (helpPanel != null){
+            helpPanel.SetActive(false);
+        }
+        
+        
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
