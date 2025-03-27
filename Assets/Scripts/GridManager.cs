@@ -216,6 +216,7 @@ public class GridManager : MonoBehaviour
 
             }
         }
+        DrawGridLines();
     }
 
     void AssignZones()
@@ -608,6 +609,48 @@ void SetupRotationSequences()
         }
     }
 
+    void DrawGridLines()
+    {
+        GameObject gridLineParent = new GameObject("GridLines");
+        gridLineParent.transform.parent = transform;
+
+        float offset = -0.5f; // Align lines to tile edges
+        float lineHeight = 0.051f; // Slightly above tile surface
+
+        // Draw vertical lines
+        for (int x = 0; x <= gridSize; x++)
+        {
+            GameObject lineObj = new GameObject($"VerticalLine_{x}");
+            lineObj.transform.parent = gridLineParent.transform;
+
+            LineRenderer lr = lineObj.AddComponent<LineRenderer>();
+            lr.positionCount = 2;
+            lr.SetPosition(0, new Vector3(x + offset, lineHeight, offset));
+            lr.SetPosition(1, new Vector3(x + offset, lineHeight, gridSize + offset));
+            lr.startWidth = 0.03f;
+            lr.endWidth = 0.03f;
+            lr.material = new Material(Shader.Find("Sprites/Default"));
+            lr.startColor = Color.black;
+            lr.endColor = Color.black;
+        }
+
+        // Draw horizontal lines
+        for (int z = 0; z <= gridSize; z++)
+        {
+            GameObject lineObj = new GameObject($"HorizontalLine_{z}");
+            lineObj.transform.parent = gridLineParent.transform;
+
+            LineRenderer lr = lineObj.AddComponent<LineRenderer>();
+            lr.positionCount = 2;
+            lr.SetPosition(0, new Vector3(offset, lineHeight, z + offset));
+            lr.SetPosition(1, new Vector3(gridSize + offset, lineHeight, z + offset));
+            lr.startWidth = 0.03f;
+            lr.endWidth = 0.03f;
+            lr.material = new Material(Shader.Find("Sprites/Default"));
+            lr.startColor = Color.black;
+            lr.endColor = Color.black;
+        }
+    }
 
 
 
