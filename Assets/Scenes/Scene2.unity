@@ -489,6 +489,8 @@ MonoBehaviour:
   hasWestWall: 0
   hasEastWall: 0
   hasSouthWall: 0
+  originalColor: {r: 0, g: 0, b: 0, a: 0}
+  tileRenderer: {fileID: 0}
   gridPosition: {x: 0, y: 0}
 --- !u!65 &135513683
 BoxCollider:
@@ -719,6 +721,8 @@ MonoBehaviour:
   hasWestWall: 0
   hasEastWall: 0
   hasSouthWall: 0
+  originalColor: {r: 0, g: 0, b: 0, a: 0}
+  tileRenderer: {fileID: 0}
   gridPosition: {x: 0, y: 0}
 --- !u!65 &184819168
 BoxCollider:
@@ -843,6 +847,8 @@ MonoBehaviour:
   hasWestWall: 0
   hasEastWall: 0
   hasSouthWall: 0
+  originalColor: {r: 0, g: 0, b: 0, a: 0}
+  tileRenderer: {fileID: 0}
   gridPosition: {x: 0, y: 0}
 --- !u!65 &209360528
 BoxCollider:
@@ -1312,6 +1318,8 @@ MonoBehaviour:
   hasWestWall: 0
   hasEastWall: 0
   hasSouthWall: 0
+  originalColor: {r: 0, g: 0, b: 0, a: 0}
+  tileRenderer: {fileID: 0}
   gridPosition: {x: 0, y: 0}
 --- !u!65 &257455612
 BoxCollider:
@@ -1570,6 +1578,8 @@ MonoBehaviour:
   hasWestWall: 0
   hasEastWall: 0
   hasSouthWall: 0
+  originalColor: {r: 0, g: 0, b: 0, a: 0}
+  tileRenderer: {fileID: 0}
   gridPosition: {x: 0, y: 0}
 --- !u!65 &287399635
 BoxCollider:
@@ -1694,6 +1704,8 @@ MonoBehaviour:
   hasWestWall: 0
   hasEastWall: 0
   hasSouthWall: 0
+  originalColor: {r: 0, g: 0, b: 0, a: 0}
+  tileRenderer: {fileID: 0}
   gridPosition: {x: 0, y: 0}
 --- !u!65 &301441867
 BoxCollider:
@@ -2149,6 +2161,8 @@ MonoBehaviour:
   hasWestWall: 0
   hasEastWall: 0
   hasSouthWall: 0
+  originalColor: {r: 0, g: 0, b: 0, a: 0}
+  tileRenderer: {fileID: 0}
   gridPosition: {x: 0, y: 0}
 --- !u!65 &384820060
 BoxCollider:
@@ -2377,6 +2391,8 @@ MonoBehaviour:
   hasWestWall: 0
   hasEastWall: 0
   hasSouthWall: 0
+  originalColor: {r: 0, g: 0, b: 0, a: 0}
+  tileRenderer: {fileID: 0}
   gridPosition: {x: 0, y: 0}
 --- !u!65 &434094350
 BoxCollider:
@@ -2606,6 +2622,8 @@ MonoBehaviour:
   hasWestWall: 0
   hasEastWall: 0
   hasSouthWall: 0
+  originalColor: {r: 0, g: 0, b: 0, a: 0}
+  tileRenderer: {fileID: 0}
   gridPosition: {x: 0, y: 0}
 --- !u!65 &447997425
 BoxCollider:
@@ -3010,6 +3028,8 @@ MonoBehaviour:
   hasWestWall: 0
   hasEastWall: 0
   hasSouthWall: 0
+  originalColor: {r: 0, g: 0, b: 0, a: 0}
+  tileRenderer: {fileID: 0}
   gridPosition: {x: 0, y: 0}
 --- !u!65 &563680560
 BoxCollider:
@@ -3481,6 +3501,8 @@ MonoBehaviour:
   hasWestWall: 0
   hasEastWall: 0
   hasSouthWall: 0
+  originalColor: {r: 0, g: 0, b: 0, a: 0}
+  tileRenderer: {fileID: 0}
   gridPosition: {x: 0, y: 0}
 --- !u!65 &683180563
 BoxCollider:
@@ -3709,6 +3731,8 @@ MonoBehaviour:
   hasWestWall: 0
   hasEastWall: 0
   hasSouthWall: 0
+  originalColor: {r: 0, g: 0, b: 0, a: 0}
+  tileRenderer: {fileID: 0}
   gridPosition: {x: 0, y: 0}
 --- !u!65 &696403922
 BoxCollider:
@@ -3834,6 +3858,8 @@ MonoBehaviour:
   hasWestWall: 0
   hasEastWall: 0
   hasSouthWall: 0
+  originalColor: {r: 0, g: 0, b: 0, a: 0}
+  tileRenderer: {fileID: 0}
   gridPosition: {x: 0, y: 0}
 --- !u!65 &696456738
 BoxCollider:
@@ -4052,6 +4078,8 @@ MonoBehaviour:
   hasWestWall: 0
   hasEastWall: 0
   hasSouthWall: 0
+  originalColor: {r: 0, g: 0, b: 0, a: 0}
+  tileRenderer: {fileID: 0}
   gridPosition: {x: 0, y: 0}
 --- !u!65 &713076274
 BoxCollider:
@@ -4827,6 +4855,8 @@ MonoBehaviour:
   hasWestWall: 0
   hasEastWall: 0
   hasSouthWall: 0
+  originalColor: {r: 0, g: 0, b: 0, a: 0}
+  tileRenderer: {fileID: 0}
   gridPosition: {x: 0, y: 0}
 --- !u!65 &857821547
 BoxCollider:
@@ -4951,6 +4981,8 @@ MonoBehaviour:
   hasWestWall: 0
   hasEastWall: 0
   hasSouthWall: 0
+  originalColor: {r: 0, g: 0, b: 0, a: 0}
+  tileRenderer: {fileID: 0}
   gridPosition: {x: 0, y: 0}
 --- !u!65 &863296708
 BoxCollider:
@@ -5210,6 +5242,8 @@ MonoBehaviour:
   hasWestWall: 0
   hasEastWall: 0
   hasSouthWall: 0
+  originalColor: {r: 0, g: 0, b: 0, a: 0}
+  tileRenderer: {fileID: 0}
   gridPosition: {x: 0, y: 0}
 --- !u!65 &868796644
 BoxCollider:
@@ -5335,6 +5369,8 @@ MonoBehaviour:
   hasWestWall: 0
   hasEastWall: 0
   hasSouthWall: 0
+  originalColor: {r: 0, g: 0, b: 0, a: 0}
+  tileRenderer: {fileID: 0}
   gridPosition: {x: 0, y: 0}
 --- !u!65 &895257615
 BoxCollider:
@@ -5868,6 +5904,8 @@ MonoBehaviour:
   hasWestWall: 0
   hasEastWall: 0
   hasSouthWall: 0
+  originalColor: {r: 0, g: 0, b: 0, a: 0}
+  tileRenderer: {fileID: 0}
   gridPosition: {x: 0, y: 0}
 --- !u!65 &963645718
 BoxCollider:
@@ -5993,6 +6031,8 @@ MonoBehaviour:
   hasWestWall: 0
   hasEastWall: 0
   hasSouthWall: 0
+  originalColor: {r: 0, g: 0, b: 0, a: 0}
+  tileRenderer: {fileID: 0}
   gridPosition: {x: 0, y: 0}
 --- !u!65 &1041826584
 BoxCollider:
@@ -6116,6 +6156,8 @@ MonoBehaviour:
   hasWestWall: 0
   hasEastWall: 0
   hasSouthWall: 0
+  originalColor: {r: 0, g: 0, b: 0, a: 0}
+  tileRenderer: {fileID: 0}
   gridPosition: {x: 0, y: 0}
 --- !u!65 &1042384185
 BoxCollider:
@@ -6793,6 +6835,8 @@ MonoBehaviour:
   hasWestWall: 0
   hasEastWall: 0
   hasSouthWall: 0
+  originalColor: {r: 0, g: 0, b: 0, a: 0}
+  tileRenderer: {fileID: 0}
   gridPosition: {x: 0, y: 0}
 --- !u!65 &1103174519
 BoxCollider:
@@ -7186,6 +7230,8 @@ MonoBehaviour:
   hasWestWall: 0
   hasEastWall: 0
   hasSouthWall: 0
+  originalColor: {r: 0, g: 0, b: 0, a: 0}
+  tileRenderer: {fileID: 0}
   gridPosition: {x: 0, y: 0}
 --- !u!65 &1256672312
 BoxCollider:
@@ -7582,6 +7628,8 @@ MonoBehaviour:
   hasWestWall: 0
   hasEastWall: 0
   hasSouthWall: 0
+  originalColor: {r: 0, g: 0, b: 0, a: 0}
+  tileRenderer: {fileID: 0}
   gridPosition: {x: 0, y: 0}
 --- !u!65 &1322183399
 BoxCollider:
@@ -7916,6 +7964,8 @@ MonoBehaviour:
   hasWestWall: 0
   hasEastWall: 0
   hasSouthWall: 0
+  originalColor: {r: 0, g: 0, b: 0, a: 0}
+  tileRenderer: {fileID: 0}
   gridPosition: {x: 0, y: 0}
 --- !u!65 &1355460026
 BoxCollider:
@@ -8045,7 +8095,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Help
+  m_text: Stuck?
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -8356,6 +8406,8 @@ MonoBehaviour:
   hasWestWall: 0
   hasEastWall: 0
   hasSouthWall: 0
+  originalColor: {r: 0, g: 0, b: 0, a: 0}
+  tileRenderer: {fileID: 0}
   gridPosition: {x: 0, y: 0}
 --- !u!65 &1478500648
 BoxCollider:
@@ -8479,6 +8531,8 @@ MonoBehaviour:
   hasWestWall: 0
   hasEastWall: 0
   hasSouthWall: 0
+  originalColor: {r: 0, g: 0, b: 0, a: 0}
+  tileRenderer: {fileID: 0}
   gridPosition: {x: 0, y: 0}
 --- !u!65 &1483011538
 BoxCollider:
@@ -9261,6 +9315,8 @@ MonoBehaviour:
   hasWestWall: 0
   hasEastWall: 0
   hasSouthWall: 0
+  originalColor: {r: 0, g: 0, b: 0, a: 0}
+  tileRenderer: {fileID: 0}
   gridPosition: {x: 0, y: 0}
 --- !u!65 &1544841053
 BoxCollider:
@@ -9714,6 +9770,8 @@ MonoBehaviour:
   hasWestWall: 0
   hasEastWall: 0
   hasSouthWall: 0
+  originalColor: {r: 0, g: 0, b: 0, a: 0}
+  tileRenderer: {fileID: 0}
   gridPosition: {x: 0, y: 0}
 --- !u!65 &1645217124
 BoxCollider:
@@ -10048,6 +10106,8 @@ MonoBehaviour:
   hasWestWall: 0
   hasEastWall: 0
   hasSouthWall: 0
+  originalColor: {r: 0, g: 0, b: 0, a: 0}
+  tileRenderer: {fileID: 0}
   gridPosition: {x: 0, y: 0}
 --- !u!65 &1752287952
 BoxCollider:
@@ -10267,6 +10327,8 @@ MonoBehaviour:
   hasWestWall: 0
   hasEastWall: 0
   hasSouthWall: 0
+  originalColor: {r: 0, g: 0, b: 0, a: 0}
+  tileRenderer: {fileID: 0}
   gridPosition: {x: 0, y: 0}
 --- !u!65 &1852824011
 BoxCollider:
@@ -10495,6 +10557,8 @@ MonoBehaviour:
   hasWestWall: 0
   hasEastWall: 0
   hasSouthWall: 0
+  originalColor: {r: 0, g: 0, b: 0, a: 0}
+  tileRenderer: {fileID: 0}
   gridPosition: {x: 0, y: 0}
 --- !u!65 &1894052949
 BoxCollider:
@@ -10968,6 +11032,8 @@ MonoBehaviour:
   hasWestWall: 0
   hasEastWall: 0
   hasSouthWall: 0
+  originalColor: {r: 0, g: 0, b: 0, a: 0}
+  tileRenderer: {fileID: 0}
   gridPosition: {x: 0, y: 0}
 --- !u!65 &1957780482
 BoxCollider:
@@ -11562,6 +11628,8 @@ MonoBehaviour:
   hasWestWall: 0
   hasEastWall: 0
   hasSouthWall: 0
+  originalColor: {r: 0, g: 0, b: 0, a: 0}
+  tileRenderer: {fileID: 0}
   gridPosition: {x: 0, y: 0}
 --- !u!65 &2062931900
 BoxCollider:
@@ -11687,6 +11755,8 @@ MonoBehaviour:
   hasWestWall: 0
   hasEastWall: 0
   hasSouthWall: 0
+  originalColor: {r: 0, g: 0, b: 0, a: 0}
+  tileRenderer: {fileID: 0}
   gridPosition: {x: 0, y: 0}
 --- !u!65 &2068384731
 BoxCollider:
@@ -12099,6 +12169,8 @@ MonoBehaviour:
   hasWestWall: 0
   hasEastWall: 0
   hasSouthWall: 0
+  originalColor: {r: 0, g: 0, b: 0, a: 0}
+  tileRenderer: {fileID: 0}
   gridPosition: {x: 0, y: 0}
 --- !u!65 &2136685797
 BoxCollider:
