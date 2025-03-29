@@ -40,6 +40,10 @@ public class GridManager : MonoBehaviour
 
     private bool hasSpawnedCollectibleAtStart = false;
 
+    //For directional arrows 
+    public GameObject arrowPrefab; // assign in Inspector
+    private List<GameObject> tutorialArrows = new List<GameObject>();
+
 
     //ENUM for levels
     public enum MazeLevel
@@ -121,12 +125,6 @@ public class GridManager : MonoBehaviour
         {
             case MazeLevel.Level1:
                 gridWalls = gridWallsLevel1;
-                List<Vector2Int> tutorialPath = new List<Vector2Int>
-                    {
-                        new Vector2Int(5,5), new Vector2Int(4,5), new Vector2Int(4,4), // Zone 8
-                        new Vector2Int(5,4), new Vector2Int(5,5)  // Back to Zone 9
-                    };
-                StartCoroutine(HighlightPathTiles(tutorialPath, Color.cyan, 2.5f));
                 break;
             case MazeLevel.Level2:
                 gridWalls = gridWallsLevel2;
@@ -141,6 +139,13 @@ public class GridManager : MonoBehaviour
                 break;
         }
         GenerateGrid();
+
+        // List<Vector2Int> tutorialPath = new List<Vector2Int>
+        // {
+        //     new Vector2Int(5,5), new Vector2Int(4,5), new Vector2Int(4,4), // Zone 8
+        //     new Vector2Int(5,4), new Vector2Int(5,5)  // Back to Zone 9
+        // };
+        // StartCoroutine(HighlightPathTiles(tutorialPath, Color.cyan, 2.5f));
 
         Vector3 playerPos = player.transform.position;
         int playerTileX = Mathf.RoundToInt(playerPos.x);
