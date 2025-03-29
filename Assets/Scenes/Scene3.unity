@@ -3326,6 +3326,7 @@ MonoBehaviour:
   instructionPanel: {fileID: 2003971762}
   instructionText: {fileID: 233609578}
   nextInstructionButton: {fileID: 1134082784}
+  helpPanelText: {fileID: 1122148503}
 --- !u!4 &658973418
 Transform:
   m_ObjectHideFlags: 0
@@ -6921,7 +6922,7 @@ GameObject:
   - component: {fileID: 1122148504}
   - component: {fileID: 1122148503}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: helpPanelText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9532,6 +9533,7 @@ MonoBehaviour:
   destinationMaterial: {fileID: 2100000, guid: 9bb855fa6e15ec94dbc49cd300815590, type: 2}
   wallList: []
   collectibleInvisible: {fileID: 3529927858449244120, guid: 62b77d2c1204fcc46bae21bd5bd15b0c, type: 3}
+  arrowPrefab: {fileID: 0}
   currentMazeLevel: 3
 --- !u!4 &1611343523
 Transform:
@@ -11264,7 +11266,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.392}
+  m_Color: {r: 0.836478, g: 0.65552473, b: 0.39719543, a: 0.392}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1

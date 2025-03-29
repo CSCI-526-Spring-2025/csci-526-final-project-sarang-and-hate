@@ -27,6 +27,10 @@ public class GameTimer : MonoBehaviour
     public Button nextInstructionButton; // "Continue" button
     private int instructionIndex = 0;
 
+    //to change the text of the helpPanel 
+    public TMP_Text helpPanelText;
+
+
     // ✅ Different Instructions for Each Scene
     private string[] instructions;
 
@@ -197,6 +201,7 @@ public class GameTimer : MonoBehaviour
 
             if (helpPanel != null)
             {
+                helpPanelText.color = Color.black;
                 helpPanel.SetActive(true);
             }
         }
