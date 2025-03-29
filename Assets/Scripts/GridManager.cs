@@ -121,6 +121,12 @@ public class GridManager : MonoBehaviour
         {
             case MazeLevel.Level1:
                 gridWalls = gridWallsLevel1;
+                List<Vector2Int> tutorialPath = new List<Vector2Int>
+                    {
+                        new Vector2Int(5,5), new Vector2Int(4,5), new Vector2Int(4,4), // Zone 8
+                        new Vector2Int(5,4), new Vector2Int(5,5)  // Back to Zone 9
+                    };
+                StartCoroutine(HighlightPathTiles(tutorialPath, Color.cyan, 2.5f));
                 break;
             case MazeLevel.Level2:
                 gridWalls = gridWallsLevel2;
@@ -649,6 +655,41 @@ void SetupRotationSequences()
             lr.material = new Material(Shader.Find("Sprites/Default"));
             lr.startColor = Color.black;
             lr.endColor = Color.black;
+        }
+    }
+
+
+//This is to better tutorialize the level 1 game and how walls rotate... 
+//Trying to create a path where it shows how it will trigger wall rotation based off of zones 
+    IEnumerator HighlightPathTiles(List<Vector2Int> pathTiles, Color color, float fadeDuration)
+    {
+        List<Tile> highlightedTiles = new List<Tile>();
+        foreach (var pos in pathTiles)
+        {
+            Tile tile = tiles[pos.x, pos.y];
+            tile.tileRenderer.material = new Material(tile.tileRenderer.material);
+            tile.tileRenderer.material.color = color;
+            highlightedTiles.Add(tile);
+        }
+
+        yield return new WaitForSeconds(fadeDuration);
+
+        float fadeTime = 1.0f;
+        float elapsed = 0f;
+        while (elapsed < fadeTime)
+        {
+            foreach (var tile in highlightedTiles)
+            {
+                Color current = tile.tileRenderer.material.color;
+                tile.tileRenderer.material.color = Color.Lerp(current, tile.originalColor, elapsed / fadeTime);
+            }
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        foreach (var tile in highlightedTiles)
+        {
+            tile.tileRenderer.material.color = tile.originalColor;
         }
     }
 
