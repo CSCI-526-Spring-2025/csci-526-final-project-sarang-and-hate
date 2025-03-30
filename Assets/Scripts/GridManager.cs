@@ -44,7 +44,8 @@ public class GridManager : MonoBehaviour
     public GameObject arrowPrefab; // assign in Inspector
     private List<GameObject> tutorialArrows = new List<GameObject>();
 
-
+    //For tracking flashed zones 
+     private HashSet<int> flashedZones = new HashSet<int>(); // 🔹 Track which zones have flashed
     //ENUM for levels
     public enum MazeLevel
     {
@@ -359,26 +360,42 @@ void SetupRotationSequences()
         List<string> selectedWalls = rotationSequencesDict[sequenceIndex];
         Debug.Log($"Triggering Rotation Sequence {sequenceIndex} due to player stepping on a tile.");
 
-        //Flash the zone tiles before rotation
-        if (currentMazeLevel == MazeLevel.Level1)
-        {
-            Color zoneFlashColor = (sequenceIndex == 1) ? new Color(1f, 0.95f, 0.5f) : new Color(1f, 0.75f, 0.4f);
+        // Determine if we should flash for Levels 2 or 3
+        bool shouldFlash = false;
+        Color zoneFlashColor = (sequenceIndex == 1) ? new Color(1f, 0.95f, 0.5f) : new Color(1f, 0.75f, 0.4f);
+        List<int> zonesToFlash = new List<int>();
 
-            // Flash ALL matching zones
-            List<int> zonesToFlash = new List<int>();
-            foreach (var kvp in tileZones)
+        //Flash the zone tiles before rotation
+        foreach (var kvp in tileZones)
+        {
+            int zoneId = kvp.Value;
+            bool isMatching = false;
+            if (currentMazeLevel == MazeLevel.Level3)
             {
-                int zoneId = kvp.Value;
-                if ((sequenceIndex == 1 && zoneId % 2 == 1) || (sequenceIndex == 2 && zoneId % 2 == 0))
-                {
-                    if (!zonesToFlash.Contains(zoneId))
-                        zonesToFlash.Add(zoneId);
-                }
+                HashSet<int> group1Zones = new HashSet<int> { 1, 3, 6, 8, 9, 11, 14, 16 };
+                HashSet<int> group2Zones = new HashSet<int> { 2, 4, 5, 7, 10, 12, 13, 15 };
+
+                isMatching = (sequenceIndex == 1 && group1Zones.Contains(zoneId)) ||
+                            (sequenceIndex == 2 && group2Zones.Contains(zoneId));
+            }
+            else
+            {
+                isMatching = (sequenceIndex == 1 && zoneId % 2 == 1) ||
+                            (sequenceIndex == 2 && zoneId % 2 == 0);
             }
 
-            StartCoroutine(FlashZones(zonesToFlash, zoneFlashColor));
+            if (isMatching && !flashedZones.Contains(zoneId))
+            {
+                zonesToFlash.Add(zoneId);
+                flashedZones.Add(zoneId); // Mark zone as flashed
+                shouldFlash = true;
+            }
         }
 
+        if ((currentMazeLevel == MazeLevel.Level1 || currentMazeLevel == MazeLevel.Level2 || currentMazeLevel == MazeLevel.Level3) && shouldFlash)
+        {
+            StartCoroutine(FlashZones(zonesToFlash, zoneFlashColor));
+        }
 
         foreach (GameObject wall in wallList)
         {
@@ -524,6 +541,11 @@ void SetupRotationSequences()
         {
             Renderer sr = trapTile.GetComponent<Renderer>();
             sr.material.color = Color.red;
+            Tile tile = sr.GetComponent<Tile>();
+            if (tile != null) {
+                tile.originalColor = Color.red; // 🔹 Store red as original
+            }
+
         }
     }
 
