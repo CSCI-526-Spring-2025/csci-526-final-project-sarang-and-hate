@@ -551,10 +551,14 @@ void SetupRotationSequences()
         {
             if ((playerTileX == 3 && playerTileY == 3) || (playerTileX == 1 && playerTileY == 0))
             {
-                HandleTrap(currentTile);
+                HandleTrap(currentTile, playerTileX, playerTileY);
             }
         }
         if (SceneManager.GetActiveScene().name == "Scene3"){
+            if ((playerTileX == 5 && playerTileY == 4) || (playerTileX == 4 && playerTileY == 5) || (playerTileX == 1 && playerTileY == 2))
+            {
+                HandleTrap(currentTile, playerTileX, playerTileY);
+            }
             if ((playerTileX == 6 && playerTileY == 5) || (playerTileX == 3 && playerTileY == 6) || (playerTileX == 2 && playerTileY == 2))
             {
                 HandleMagicTile(currentTile);
@@ -573,10 +577,12 @@ void SetupRotationSequences()
         Instantiate(collectibleInvisible, new Vector3(5.5f, 0.25f, 4.75f), Quaternion.identity, transform);
         hasSpawnedCollectibleAtStart = true;
     }
-    private void HandleTrap(Vector2Int currentTile)
+    private void HandleTrap(Vector2Int currentTile, int xTile, int yTile)
     {
-        // Move player back to start
-        player.transform.position = new Vector3(5, 0, 5);
+        // Move player back a few tiles
+        int replaceXTile = xTile + 1;
+        int replaceYTile = yTile + 2;
+        player.transform.position = new Vector3(replaceXTile, 0, replaceYTile);
         int currentZone = tileZones[currentTile];
 
         // Example: you only want to spawn the collectible the *first* time they hit a trap
