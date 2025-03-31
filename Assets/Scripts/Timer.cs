@@ -21,7 +21,7 @@ public class GameTimer : MonoBehaviour
     public Button helpButton;
     public Button exitHelpButton; // Exit button for loading scene
 
-    // ✅ Instruction Panel Elements
+    // Instruction Panel Elements
     public GameObject instructionPanel; // Instruction popup
     public TMP_Text instructionText; // TextMeshPro for instructions
     public Button nextInstructionButton; // "Continue" button
@@ -31,10 +31,10 @@ public class GameTimer : MonoBehaviour
     public TMP_Text helpPanelText;
 
 
-    // ✅ Different Instructions for Each Scene
+    // Different Instructions for Each Scene
     private string[] instructions;
 
-    // ✅ Instructions for Each Level
+    // Instructions for Each Level
     private string[] sampleSceneInstructions = new string[]
     {
         "Welcome to Level 1!",
@@ -234,7 +234,13 @@ public class GameTimer : MonoBehaviour
         SceneManager.LoadScene("Scene2"); // Ensure this scene name is correct
     }
 
-    // ✅ Show Next Instruction When "Continue" is Clicked
+    public void PromoteToLevelThree()
+    {
+        Time.timeScale = 1;
+        SceneManager.LoadScene("Scene3"); // Ensure this scene name is correct
+    }
+
+    // Show Next Instruction When "Continue" is Clicked
     public void ShowNextInstruction()
     {
         instructionIndex++; // Increment to next instruction
