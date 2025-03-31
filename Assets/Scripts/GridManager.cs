@@ -46,6 +46,16 @@ public class GridManager : MonoBehaviour
 
     //For tracking flashed zones 
      private HashSet<int> flashedZones = new HashSet<int>(); // 🔹 Track which zones have flashed
+     //Boolean
+     private bool zone8ArrowTriggered = false;
+
+     //Arrows for zone 8 and zone 9 
+     private GameObject arrowToZone8;
+    private GameObject arrowToZone9;
+
+    private Vector3 zone9Center;
+
+
     //ENUM for levels
     public enum MazeLevel
     {
@@ -140,6 +150,13 @@ public class GridManager : MonoBehaviour
                 break;
         }
         GenerateGrid();
+        if (currentMazeLevel == MazeLevel.Level1)
+        {
+            Vector3 zone8Center = new Vector3(4.5f, 0.2f, 2.5f); // ✔️ actual Zone 8 center
+            zone9Center = new Vector3(4.5f, 0.2f, 4.5f);          // ✔️ promote to class level
+            arrowToZone8 = CreateTutorialArrow(zone8Center);
+            StartCoroutine(BounceArrow(arrowToZone8));
+        }
 
         // List<Vector2Int> tutorialPath = new List<Vector2Int>
         // {
@@ -392,10 +409,17 @@ void SetupRotationSequences()
             }
         }
 
-        if ((currentMazeLevel == MazeLevel.Level1 || currentMazeLevel == MazeLevel.Level2 || currentMazeLevel == MazeLevel.Level3) && shouldFlash)
+        if (currentMazeLevel == MazeLevel.Level1)
         {
+            // always flash zones on Level 1 (for tutorial)
             StartCoroutine(FlashZones(zonesToFlash, zoneFlashColor));
         }
+        else if ((currentMazeLevel == MazeLevel.Level2 || currentMazeLevel == MazeLevel.Level3) && shouldFlash)
+        {
+            // Flash only the first time in Level 2 or 3
+            StartCoroutine(FlashZones(zonesToFlash, zoneFlashColor));
+        }
+
 
         foreach (GameObject wall in wallList)
         {
@@ -476,6 +500,24 @@ void SetupRotationSequences()
         if (tileZones.ContainsKey(currentTile))
         {
             int currentZone = tileZones[currentTile];
+            if (currentMazeLevel == MazeLevel.Level1 && currentZone == 8 && !zone8ArrowTriggered)
+            {
+                zone8ArrowTriggered = true;
+
+                if (arrowToZone8 != null)
+                    Destroy(arrowToZone8); // 🧹 Remove arrow to zone 8
+
+                arrowToZone9 = CreateTutorialArrow(zone9Center);
+                StartCoroutine(BounceArrow(arrowToZone9));
+            }
+            if (currentMazeLevel == MazeLevel.Level1 && currentZone == 9)
+            {
+                if (arrowToZone9 != null)
+                    Destroy(arrowToZone9);
+            }
+
+
+
             if (currentZone != lastPlayerZone)
             {
                 lastPlayerZone = currentZone;
@@ -721,5 +763,28 @@ void SetupRotationSequences()
     }
 
 
+//Trying to do some arrow guiding for how the walls rotate for level 1 
+
+GameObject CreateTutorialArrow(Vector3 position)
+{
+    GameObject arrow = Instantiate(arrowPrefab, position, Quaternion.identity);
+    tutorialArrows.Add(arrow);
+    return arrow;
+}
+
+
+IEnumerator BounceArrow(GameObject arrow)
+{
+    float bounceHeight = 0.25f;
+    float bounceSpeed = 2f;
+    Vector3 startPos = arrow.transform.position;
+
+    while (arrow != null)
+    {
+        float yOffset = Mathf.Sin(Time.time * bounceSpeed) * bounceHeight;
+        arrow.transform.position = new Vector3(startPos.x, startPos.y + yOffset, startPos.z);
+        yield return null;
+    }
+}
 
 }
