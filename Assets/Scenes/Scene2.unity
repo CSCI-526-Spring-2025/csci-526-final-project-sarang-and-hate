@@ -9459,12 +9459,12 @@ MonoBehaviour:
   gridSize: 6
   tileSize: 1.1
   wallPrefab: {fileID: 5233444293985566254, guid: 07ba3b151072cb64096f9ce6363cdaaa, type: 3}
-  player: {fileID: 0}
+  player: {fileID: 1824285794}
   startingMaterial: {fileID: 2100000, guid: 9d43d39803eba0b4283a5bae17b16726, type: 2}
   destinationMaterial: {fileID: 2100000, guid: 9bb855fa6e15ec94dbc49cd300815590, type: 2}
   wallList: []
   collectibleInvisible: {fileID: 3529927858449244120, guid: 62b77d2c1204fcc46bae21bd5bd15b0c, type: 3}
-  arrowPrefab: {fileID: 0}
+  arrowPrefab: {fileID: 464750281498380233, guid: b7c2ee61a846388458b1f849d8f1f9ba, type: 3}
   currentMazeLevel: 2
 --- !u!4 &1611343523
 Transform:
