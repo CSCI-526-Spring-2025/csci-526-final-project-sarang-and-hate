@@ -554,6 +554,12 @@ void SetupRotationSequences()
                 HandleTrap(currentTile);
             }
         }
+        if (SceneManager.GetActiveScene().name == "Scene3"){
+            if ((playerTileX == 6 && playerTileY == 5) || (playerTileX == 3 && playerTileY == 6) || (playerTileX == 2 && playerTileY == 2))
+            {
+                HandleMagicTile(currentTile);
+            }
+        }
     }
 
     private IEnumerator SpawnCollectibleAtStartWithDelay(float delay)
@@ -589,6 +595,44 @@ void SetupRotationSequences()
             }
 
         }
+    }
+
+    private void HandleMagicTile(Vector2Int currentTile)
+    {
+        Vector2Int teleportTile = GetMagicTileDestination(currentTile);
+        player.transform.position = new Vector3(teleportTile.x, 0, teleportTile.y);
+        Debug.Log("Magic tile triggered! Teleporting player to: " + teleportTile);
+
+        int currentZone = tileZones[currentTile];
+
+        // Highlight the tile with a special color to show it was activated
+        GameObject magicTile = GameObject.Find("Tile " + currentTile + " - Zone " + currentZone);
+        if (magicTile != null)
+        {
+            Renderer sr = magicTile.GetComponent<Renderer>();
+            sr.material.color = new Color(0.5f, 0f, 1f); // Purple/magenta glow
+        }
+    }
+
+    private Vector2Int GetMagicTileDestination(Vector2Int currentTile)
+    {
+        // Define fixed teleport destinations
+        Dictionary<Vector2Int, Vector2Int> fixedTeleports = new Dictionary<Vector2Int, Vector2Int>
+        {
+            { new Vector2Int(6, 5), new Vector2Int(4, 3) },
+            { new Vector2Int(3, 6), new Vector2Int(0, 4) },
+            { new Vector2Int(2, 2), new Vector2Int(0, 1) }
+        };
+
+        if (fixedTeleports.ContainsKey(currentTile))
+        {
+            return fixedTeleports[currentTile];
+        }
+
+        // Default behavior: move one row ahead (or stay)
+        int currentX = currentTile.x;
+        int endX = gridSize - 1;
+        return new Vector2Int(Mathf.Min(currentX + 1, endX - 1), currentTile.y);
     }
 
     void CheckPlayerTile()
