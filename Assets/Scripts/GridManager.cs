@@ -2,6 +2,8 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
+using TMPro; 
+
 
 public class GridManager : MonoBehaviour
 {
@@ -53,8 +55,13 @@ public class GridManager : MonoBehaviour
      private GameObject arrowToZone8;
     private GameObject arrowToZone9;
 
+    private GameObject arrowToDestination; // Final arrow to destination
+    private bool destinationArrowInitialized = false; // 🟢 Flag to prevent early arrow activation
+
     private Vector3 zone9Center;
 
+    //Provide text for zone entering 
+    public TMP_Text zoneMessageText; // Assign in inspector
 
     //ENUM for levels
     public enum MazeLevel
@@ -152,8 +159,9 @@ public class GridManager : MonoBehaviour
         GenerateGrid();
         if (currentMazeLevel == MazeLevel.Level1)
         {
-            Vector3 zone8Center = new Vector3(4.5f, 0.2f, 2.5f); // ✔️ actual Zone 8 center
-            zone9Center = new Vector3(4.5f, 0.2f, 4.5f);          // ✔️ promote to class level
+            //Vector3 zone8Center = new Vector3(4.5f, 0.2f, 2.5f); // actual Zone 8 center
+            Vector3 zone8Center = new Vector3(4f, 0.2f, 3f); // ✔️ actual Zone 8 center
+            zone9Center = new Vector3(4f, 0.2f, 4f);          // ✔️ promote to class level
             arrowToZone8 = CreateTutorialArrow(zone8Center);
             StartCoroutine(BounceArrow(arrowToZone8));
         }
@@ -289,6 +297,12 @@ public class GridManager : MonoBehaviour
         }
         tileZones.Clear(); // Clear previous zone data
 
+        if (arrowToDestination != null)
+        {
+            Destroy(arrowToDestination);
+        }
+
+
         Debug.Log("Grid cleared.");
     }
 
@@ -387,6 +401,7 @@ void SetupRotationSequences()
         {
             int zoneId = kvp.Value;
             bool isMatching = false;
+
             if (currentMazeLevel == MazeLevel.Level3)
             {
                 HashSet<int> group1Zones = new HashSet<int> { 1, 3, 6, 8, 9, 11, 14, 16 };
@@ -401,13 +416,23 @@ void SetupRotationSequences()
                             (sequenceIndex == 2 && zoneId % 2 == 0);
             }
 
-            if (isMatching && !flashedZones.Contains(zoneId))
+            // 💡 For Level 1, always flash matching zones (no tracking)
+            if (isMatching)
             {
-                zonesToFlash.Add(zoneId);
-                flashedZones.Add(zoneId); // Mark zone as flashed
-                shouldFlash = true;
+                if (currentMazeLevel == MazeLevel.Level1)
+                {
+                    zonesToFlash.Add(zoneId);
+                    shouldFlash = true;
+                }
+                else if (!flashedZones.Contains(zoneId)) // ✅ For Level 2 & 3 only
+                {
+                    zonesToFlash.Add(zoneId);
+                    flashedZones.Add(zoneId);
+                    shouldFlash = true;
+                }
             }
         }
+
 
         if (currentMazeLevel == MazeLevel.Level1)
         {
@@ -509,12 +534,38 @@ void SetupRotationSequences()
 
                 arrowToZone9 = CreateTutorialArrow(zone9Center);
                 StartCoroutine(BounceArrow(arrowToZone9));
+
+                // 👇 Show tutorial message
+                if (zoneMessageText != null)
+                {
+                    zoneMessageText.text = "Tip: Entering or re-entering zones triggers wall rotations!";
+                    zoneMessageText.gameObject.SetActive(true);
+                    StartCoroutine(HideZoneMessageAfterDelay(4f));
+                }
             }
             if (currentMazeLevel == MazeLevel.Level1 && currentZone == 9)
             {
                 if (arrowToZone9 != null)
+                {
                     Destroy(arrowToZone9);
+                    if (!destinationArrowInitialized)
+                    {
+                        arrowToDestination = CreateTutorialArrow(new Vector3(0f, 0.2f, 0f));
+                        destinationArrowInitialized = true;
+                        StartCoroutine(BounceArrow(arrowToDestination));
+                    }
+                }
+
+
             }
+            if (currentMazeLevel == MazeLevel.Level1 && playerTileX == 0 && playerTileY == 0)
+            {
+                if (arrowToDestination != null)
+                {
+                    Destroy(arrowToDestination); // or arrowToDestination.SetActive(false);
+                }
+            }
+
 
 
 
@@ -830,5 +881,16 @@ IEnumerator BounceArrow(GameObject arrow)
         yield return null;
     }
 }
+
+//Delete message after displaying it
+IEnumerator HideZoneMessageAfterDelay(float delay)
+{
+    yield return new WaitForSeconds(delay);
+    if (zoneMessageText != null)
+    {
+        zoneMessageText.gameObject.SetActive(false);
+    }
+}
+
 
 }
