@@ -73,6 +73,11 @@ public class GridManager : MonoBehaviour
     bool returnedToZone9 = false;
     bool trapTileArmed = false;
 
+    bool powerUpAvailable = false;
+    bool powerUpCollected = false;
+    GameObject arrowToPowerUp;
+    GameObject powerUpObject; // Optional reference if you want to deactivate it later
+
 
     //ENUM for levels
     public enum MazeLevel
