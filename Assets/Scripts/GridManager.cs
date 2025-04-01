@@ -707,9 +707,9 @@ void SetupRotationSequences()
 
                 if (zoneMessageText != null)
                 {
-                    zoneMessageText.text = "You found a hidden power-up!";
+                    zoneMessageText.text = "Press C to go inivisible (:";
                     zoneMessageText.gameObject.SetActive(true);
-                    StartCoroutine(HideZoneMessageAfterDelay(3f));
+                    StartCoroutine(HideZoneMessageAfterDelay(2f));
                 }
 
                 if (powerUpObject != null)
@@ -720,6 +720,14 @@ void SetupRotationSequences()
                 // ✅ Actually grant the power-up to the player
                 player.GetComponent<PlayerController>().CollectPowerUp();
 
+                //Display the green arrow towards the final destination
+
+                if (arrowToDestination == null)
+                {
+                    Vector3 finalTilePos = new Vector3(0f, 0.2f, 0f); // Adjust height as needed
+                    arrowToDestination = CreateTutorialArrow(finalTilePos);
+                    StartCoroutine(BounceArrow(arrowToDestination));
+                }
             }
 
 
