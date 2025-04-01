@@ -48,6 +48,13 @@ public class Tile : MonoBehaviour
         hasEastWall = east;
         hasSouthWall = south;
 
+        tileRenderer = GetComponent<Renderer>();
+        if (tileRenderer != null)
+        {
+            // Cache the original color as early as possible
+            originalColor = tileRenderer.material.color;
+        }
+
         // Debugging: Print tile info to ensure correct wall setup
         Debug.Log($"Tile {gridPosition}: North-{hasNorthWall}, West-{hasWestWall}, East-{hasEastWall}, South-{hasSouthWall}");
     }

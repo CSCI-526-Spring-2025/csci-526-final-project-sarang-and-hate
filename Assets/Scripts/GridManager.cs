@@ -245,6 +245,7 @@ public class GridManager : MonoBehaviour
 
         yield return new WaitForSeconds(5f);
 
+
         // Reset tile colors to original
         foreach (Tile tile in tilesToFlash)
         {
@@ -282,7 +283,7 @@ public class GridManager : MonoBehaviour
                 Renderer renderer = tileGO.GetComponent<Renderer>();
                 //For flashing animation
                 tile.tileRenderer = renderer; // Give it the renderer reference
-                tile.originalColor = renderer.material.color; // Store original color
+                
 
 
                 
@@ -300,6 +301,7 @@ public class GridManager : MonoBehaviour
                         renderer.material.color = Color.green; // Set Green for Finish
                     }
                 }
+                tile.originalColor = renderer.material.color; // Store original color
 
                 tiles[x, y] = tile;
 
