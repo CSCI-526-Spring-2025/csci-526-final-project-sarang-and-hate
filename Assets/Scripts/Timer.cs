@@ -46,8 +46,6 @@ public class GameTimer : MonoBehaviour
 
     private string[] scene2Instructions = new string[]
     {
-        "Welcome to Level 2!",
-        "",
         "There can be trap tiles, so be careful!",
         "",
         "Capture capsule to gain Special Powers [Go Through the walls]!"
