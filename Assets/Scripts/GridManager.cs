@@ -22,6 +22,8 @@ public class GridManager : MonoBehaviour
     public Material startingMaterial;   // Assign in the Inspector
     public Material destinationMaterial; // Assign in the Inspector
 
+    public Material defaultTileMaterial; //default color of tiles 
+
     // NEW: List to store all wall objects for tracking
     public List<GameObject> wallList = new List<GameObject>();
 
@@ -249,7 +251,7 @@ public class GridManager : MonoBehaviour
         // Reset tile colors to original
         foreach (Tile tile in tilesToFlash)
         {
-            tile.tileRenderer.material.color = tile.originalColor;
+            tile.tileRenderer.material.color = defaultTileMaterial.color;
         }
 
         // Hide message

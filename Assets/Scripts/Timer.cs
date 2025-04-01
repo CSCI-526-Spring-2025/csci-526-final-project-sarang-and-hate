@@ -133,10 +133,12 @@ public class GameTimer : MonoBehaviour
             timeRemaining -= Time.deltaTime;
             UpdateTimeDisplay();
 
-            if (timeRemaining > 115)
+            // ✅ Only show navPanel in Level 1 (SampleScene)
+            if (SceneManager.GetActiveScene().name == "SampleScene" && timeRemaining > 115)
             {
                 navPanel.SetActive(true);
-            } else
+            }
+            else
             {
                 navPanel.SetActive(false);
             }
@@ -149,6 +151,7 @@ public class GameTimer : MonoBehaviour
             ShowRestartPanel();
         }
     }
+
 
     private void UpdateTimeDisplay()
     {
