@@ -3638,7 +3638,7 @@ MonoBehaviour:
   restartPanel: {fileID: 654628517}
   dimBackground: {fileID: 0}
   victoryText: {fileID: 0}
-  restartButton: {fileID: 795084254}
+  restartButton: {fileID: 2011395103}
   navPanel: {fileID: 92970363}
   helpPanel: {fileID: 624502576}
   helpButton: {fileID: 1047170183}
@@ -6913,13 +6913,13 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: 
+      - m_Target: {fileID: 658973417}
+        m_TargetAssemblyTypeName: GameTimer, Assembly-CSharp
+        m_MethodName: OpenHelp
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -12965,7 +12965,7 @@ GameObject:
   - component: {fileID: 2011395104}
   - component: {fileID: 2011395103}
   m_Layer: 5
-  m_Name: Button
+  m_Name: RestartButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
