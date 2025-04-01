@@ -643,12 +643,6 @@ void SetupRotationSequences()
                     arrowToTrapTile = CreateTutorialArrow(trapTilePosition);
                     StartCoroutine(BounceArrow(arrowToTrapTile));
 
-                    if (zoneMessageText != null)
-                    {
-                        zoneMessageText.text = "Hmm... something’s different back in Zone 8.";
-                        zoneMessageText.gameObject.SetActive(true);
-                        StartCoroutine(HideZoneMessageAfterDelay(4f));
-                    }
                 }
             }
 
@@ -679,7 +673,46 @@ void SetupRotationSequences()
                     if (tile != null)
                         tile.originalColor = Color.red;
                 }
+
+                // 👉 Now set up the power-up and guiding arrow
+                powerUpAvailable = true;
+
+                //Set up arrow to make player pick up power collectible 
+                // Place arrow at (3, 4)
+                Vector3 arrowPosition = new Vector3(4f, 0.2f, 5f);
+                arrowToPowerUp = CreateTutorialArrow(arrowPosition);
+                StartCoroutine(BounceArrow(arrowToPowerUp));
+
+
+                    // Optionally instantiate an invisible power-up object at (4, 5)
+                Vector3 powerUpPos = new Vector3(4f, 0.1f, 5f);
+                if (collectibleInvisible != null)
+                {
+                    powerUpObject = Instantiate(collectibleInvisible, powerUpPos, Quaternion.identity, transform);
+                }
+
             }
+
+            // Player steps on (4, 5) to collect the power-up
+            if (currentMazeLevel == MazeLevel.Level1 && playerTileX == 4 && playerTileY == 5 && powerUpAvailable && !powerUpCollected)
+            {
+                powerUpCollected = true;
+
+                if (arrowToPowerUp != null)
+                    Destroy(arrowToPowerUp);
+
+                if (zoneMessageText != null)
+                {
+                    zoneMessageText.text = "You found a hidden power-up!";
+                    zoneMessageText.gameObject.SetActive(true);
+                    StartCoroutine(HideZoneMessageAfterDelay(3f));
+                }
+
+                if (powerUpObject != null)
+                    Destroy(powerUpObject);
+
+            }
+
 
 
 
