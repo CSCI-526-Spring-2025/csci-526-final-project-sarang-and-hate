@@ -693,6 +693,8 @@ void SetupRotationSequences()
                     powerUpObject = Instantiate(collectibleInvisible, powerUpPos, Quaternion.identity, transform);
                 }
 
+                
+
             }
 
             // Player steps on (4, 5) to collect the power-up
@@ -711,7 +713,12 @@ void SetupRotationSequences()
                 }
 
                 if (powerUpObject != null)
+                {
                     Destroy(powerUpObject);
+                }
+                   
+                // ✅ Actually grant the power-up to the player
+                player.GetComponent<PlayerController>().CollectPowerUp();
 
             }
 
