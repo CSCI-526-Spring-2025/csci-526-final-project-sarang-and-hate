@@ -103,6 +103,10 @@ public class GameTimer : MonoBehaviour
         {
             helpButton.onClick.AddListener(OpenHelp);
         }
+        if (helpButton != null)
+        {
+            helpButton.interactable = true; // 🔁 Reset to interactable at level start
+        }
 
         if (exitHelpButton != null)
         {
@@ -237,8 +241,17 @@ public class GameTimer : MonoBehaviour
     public void ExitToLoadingScene()
     {
         Debug.Log("Switching to Loading Screen...");
+        Time.timeScale = 1;
+
+        // Optional: Re-enable if user hasn't used all 3
+        if (GameSession.helpUsesRemaining > 0)
+        {
+            helpButton.interactable = true;
+        }
+
         SceneManager.LoadScene("LoadingScene");
     }
+
 
     public void PromoteToNextLevel()
     {
