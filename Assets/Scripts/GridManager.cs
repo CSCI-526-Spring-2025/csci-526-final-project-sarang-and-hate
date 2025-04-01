@@ -63,6 +63,17 @@ public class GridManager : MonoBehaviour
     //Provide text for zone entering 
     public TMP_Text zoneMessageText; // Assign in inspector
 
+    //Variables for trap tile tutorial 
+    private GameObject arrowToTrapTile; // 
+    private bool trapTileArrowShown = false; // 🟢 Flag
+    private bool trapTileTriggered = false; // 🟢 Flag to only allow once
+    private bool zone9VisitedAfterZone8 = false; // 🟢 Track path logic
+
+    bool zone8Entered = false;
+    bool returnedToZone9 = false;
+    bool trapTileArmed = false;
+
+
     //ENUM for levels
     public enum MazeLevel
     {
@@ -525,46 +536,79 @@ void SetupRotationSequences()
         if (tileZones.ContainsKey(currentTile))
         {
             int currentZone = tileZones[currentTile];
-            if (currentMazeLevel == MazeLevel.Level1 && currentZone == 8 && !zone8ArrowTriggered)
+            // 1. Player enters Zone 8 (Tile 4,3)
+            if (currentMazeLevel == MazeLevel.Level1 && currentZone == 8 && playerTileX == 4 && playerTileY == 3 && !zone8Entered)
             {
-                zone8ArrowTriggered = true;
+                zone8Entered = true;
 
                 if (arrowToZone8 != null)
-                    Destroy(arrowToZone8); // 🧹 Remove arrow to zone 8
+                    Destroy(arrowToZone8);
 
                 arrowToZone9 = CreateTutorialArrow(zone9Center);
                 StartCoroutine(BounceArrow(arrowToZone9));
 
-                // 👇 Show tutorial message
                 if (zoneMessageText != null)
                 {
                     zoneMessageText.text = "Tip: Entering or re-entering zones triggers wall rotations!";
                     zoneMessageText.gameObject.SetActive(true);
-                    StartCoroutine(HideZoneMessageAfterDelay(4f));
+                    StartCoroutine(HideZoneMessageAfterDelay(3f));
                 }
             }
-            if (currentMazeLevel == MazeLevel.Level1 && currentZone == 9)
+
+            // 2. Player returns to Zone 9 AFTER visiting Zone 8
+            if (currentMazeLevel == MazeLevel.Level1 && currentZone == 9 && zone8Entered && !returnedToZone9)
             {
+                returnedToZone9 = true;
+                trapTileArmed = true; // 3. Now we arm the trap at (4,3)
+
                 if (arrowToZone9 != null)
-                {
                     Destroy(arrowToZone9);
-                    if (!destinationArrowInitialized)
+
+                if (!trapTileArrowShown)
+                {
+                    trapTileArrowShown = true;
+                    Vector3 trapTilePosition = new Vector3(4f, 0.2f, 3f);
+                    arrowToTrapTile = CreateTutorialArrow(trapTilePosition);
+                    StartCoroutine(BounceArrow(arrowToTrapTile));
+
+                    if (zoneMessageText != null)
                     {
-                        arrowToDestination = CreateTutorialArrow(new Vector3(0f, 0.2f, 0f));
-                        destinationArrowInitialized = true;
-                        StartCoroutine(BounceArrow(arrowToDestination));
+                        zoneMessageText.text = "Hmm... something’s different back in Zone 8.";
+                        zoneMessageText.gameObject.SetActive(true);
+                        StartCoroutine(HideZoneMessageAfterDelay(4f));
                     }
                 }
-
-
             }
-            if (currentMazeLevel == MazeLevel.Level1 && playerTileX == 0 && playerTileY == 0)
+
+            // 4. Player steps back onto (4,3) which is now a trap
+            if (currentMazeLevel == MazeLevel.Level1 && playerTileX == 4 && playerTileY == 3 && trapTileArmed && !trapTileTriggered)
             {
-                if (arrowToDestination != null)
+                trapTileTriggered = true;
+
+                if (arrowToTrapTile != null)
+                    Destroy(arrowToTrapTile);
+
+                if (zoneMessageText != null)
                 {
-                    Destroy(arrowToDestination); // or arrowToDestination.SetActive(false);
+                    zoneMessageText.text = "Oops! That tile was a trap!";
+                    zoneMessageText.gameObject.SetActive(true);
+                    StartCoroutine(HideZoneMessageAfterDelay(4f));
+                }
+
+                player.transform.position = zone9Center; // Teleport player back
+
+                int trapZone = tileZones[currentTile];
+                GameObject trapTile = GameObject.Find("Tile (4, 3) - Zone " + trapZone);
+                if (trapTile != null)
+                {
+                    Renderer sr = trapTile.GetComponent<Renderer>();
+                    sr.material.color = Color.red;
+                    Tile tile = sr.GetComponent<Tile>();
+                    if (tile != null)
+                        tile.originalColor = Color.red;
                 }
             }
+
 
 
 

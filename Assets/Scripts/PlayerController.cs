@@ -94,6 +94,25 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
+        if (gridManager != null)
+        {
+            if (gridManager.currentMazeLevel == GridManager.MazeLevel.Level3)
+            {
+                minX = 0f;
+                maxX = gridManager.gridSize - 0.5f;
+                minZ = 0f;
+                maxZ = gridManager.gridSize - 0.5f;
+            }
+            else
+            {
+                float halfTile = gridManager.tileSize / 2f;
+                minX = 0f;
+                maxX = gridManager.gridSize * gridManager.tileSize - gridManager.tileSize;
+                minZ = 0f;
+                maxZ = gridManager.gridSize * gridManager.tileSize - gridManager.tileSize;
+            }
+        }
+
         Vector3 clampedPosition = rb.position;
         clampedPosition.x = Mathf.Clamp(clampedPosition.x, minX, maxX);
         clampedPosition.z = Mathf.Clamp(clampedPosition.z, minZ, maxZ);

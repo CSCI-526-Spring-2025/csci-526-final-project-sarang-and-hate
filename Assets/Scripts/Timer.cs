@@ -37,11 +37,10 @@ public class GameTimer : MonoBehaviour
     // Instructions for Each Level
     private string[] sampleSceneInstructions = new string[]
     {
-        "Welcome to Level 1!",
+        "Welcome to the Tutorial!",
         "",
-        "Goal: Reach the Destination (Blue Tile).",
+        "Goal: Reach the Blue Tile",
         "",
-        "The walls rotate, so find a way to reach the destination before time runs out!"
     };
 
     private string[] scene2Instructions = new string[]
