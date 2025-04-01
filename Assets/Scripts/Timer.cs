@@ -249,7 +249,7 @@ public class GameTimer : MonoBehaviour
             helpButton.interactable = true;
         }
 
-        SceneManager.LoadScene("LoadingScene");
+        SceneManager.LoadScene("SampleScene");
     }
 
 
