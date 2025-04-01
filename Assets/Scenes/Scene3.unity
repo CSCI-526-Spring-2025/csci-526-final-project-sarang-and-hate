@@ -9751,7 +9751,7 @@ MonoBehaviour:
   wallList: []
   collectibleInvisible: {fileID: 3529927858449244120, guid: 62b77d2c1204fcc46bae21bd5bd15b0c, type: 3}
   arrowPrefab: {fileID: 464750281498380233, guid: b7c2ee61a846388458b1f849d8f1f9ba, type: 3}
-  zoneMessageText: {fileID: 0}
+  zoneMessageText: {fileID: 1656598916}
   currentMazeLevel: 3
 --- !u!4 &1611343523
 Transform:
