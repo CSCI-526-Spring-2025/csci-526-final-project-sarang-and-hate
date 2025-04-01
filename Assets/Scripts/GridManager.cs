@@ -252,6 +252,7 @@ public class GridManager : MonoBehaviour
         foreach (Tile tile in tilesToFlash)
         {
             tile.tileRenderer.material.color = defaultTileMaterial.color;
+            tile.originalColor = defaultTileMaterial.color; // update original color so its not purple basically doesnt fonclit with zone flashes
         }
 
         // Hide message
