@@ -7,6 +7,7 @@ using TMPro;
 
 public class GridManager : MonoBehaviour
 {
+    private bool tutorialCompleted = false; // ✅ Track magic tile tutorial
     public GameObject tilePrefab; // Assign a basic cube in Unity
     public int gridSize = 6;
     public float tileSize = 1.0f; // Spacing between tiles
@@ -168,6 +169,15 @@ public class GridManager : MonoBehaviour
                 break;
         }
         GenerateGrid();
+        if (currentMazeLevel == MazeLevel.Level3)
+        {
+            StartCoroutine(ShowMagicTileTutorial()); // ✅ Show tutorial on start
+        }
+        else
+        {
+            tutorialCompleted = true; // ✅ For other levels, start immediately
+        }
+
         if (currentMazeLevel == MazeLevel.Level1)
         {
             //Vector3 zone8Center = new Vector3(4.5f, 0.2f, 2.5f); // actual Zone 8 center
@@ -196,8 +206,53 @@ public class GridManager : MonoBehaviour
         //I commented the random rotating walls for now so that walls only trigger at certain checkpoints 
         SetupRotationSequences(); 
     }
-    void Update(){
+    void Update()
+    {
+        if (!tutorialCompleted) return; // ⛔ Pause all logic until tutorial ends
         CheckPlayerZone();
+    }
+
+
+    IEnumerator ShowMagicTileTutorial()
+    {
+        List<Vector2Int> magicTiles = new List<Vector2Int>
+        {
+            new Vector2Int(6, 5),
+            new Vector2Int(3, 6),
+            new Vector2Int(2, 2)
+        };
+
+        List<Tile> tilesToFlash = new List<Tile>();
+
+        // Highlight each tile and save reference
+        foreach (var pos in magicTiles)
+        {
+            Tile tile = tiles[pos.x, pos.y];
+            tile.tileRenderer.material.color = new Color(0.5f, 0f, 1f); // Purple glow
+            tilesToFlash.Add(tile);
+        }
+
+        if (zoneMessageText != null)
+        {
+            zoneMessageText.text = "Purple tiles boost you forward!";
+            zoneMessageText.gameObject.SetActive(true);
+        }
+
+        yield return new WaitForSeconds(5f);
+
+        // Reset tile colors to original
+        foreach (Tile tile in tilesToFlash)
+        {
+            tile.tileRenderer.material.color = tile.originalColor;
+        }
+
+        // Hide message
+        if (zoneMessageText != null)
+        {
+            zoneMessageText.gameObject.SetActive(false);
+        }
+
+        tutorialCompleted = true;
     }
 
     /// <summary>
