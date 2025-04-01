@@ -15,6 +15,7 @@ public class GameTimer : MonoBehaviour
     public Text victoryText;
     public Button restartButton;
     private bool playerWon = false;
+    public GameObject navPanel; // Displays WASD keys for 10 secs
 
     // Help button and panel
     public GameObject helpPanel;
@@ -112,6 +113,10 @@ public class GameTimer : MonoBehaviour
         {
             helpPanel.SetActive(false); // Hide help panel initially
         }
+
+        if (navPanel != null) {
+            navPanel.SetActive(false);
+        }
     }
 
     void Update()
@@ -123,6 +128,14 @@ public class GameTimer : MonoBehaviour
         {
             timeRemaining -= Time.deltaTime;
             UpdateTimeDisplay();
+
+            if (timeRemaining > 115)
+            {
+                navPanel.SetActive(true);
+            } else
+            {
+                navPanel.SetActive(false);
+            }
         }
         else
         {

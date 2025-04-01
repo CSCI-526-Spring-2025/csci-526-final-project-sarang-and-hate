@@ -260,6 +260,16 @@ public class GridManager : MonoBehaviour
                         Instantiate(collectibleInvisible, new Vector3(x, 0.25f, y), Quaternion.identity, transform);
                     }
                 }
+                else if (currentMazeLevel == MazeLevel.Level3)
+                {
+                    if ((x == 1 && y == 6) ||
+                        (x == 2 && y == 2) ||
+                        (x == 6 && y == 3) ||
+                        (x == 4 && y == 6))
+                    {
+                        Instantiate(collectibleInvisible, new Vector3(x, 0.25f, y), Quaternion.identity, transform);
+                    }
+                }
 
 
             }
