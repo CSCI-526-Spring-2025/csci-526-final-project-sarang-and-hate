@@ -24,8 +24,12 @@ public class PlayerController : MonoBehaviour
     public TMP_Text powerUpUIText;
     private int powerUpCount = 0;
 
+    public float rotationSpeedCamera = 30f;
+
+
     void Start()
     {
+        transform.rotation = Quaternion.Euler(0, 180, 0);
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
 
@@ -43,6 +47,55 @@ public class PlayerController : MonoBehaviour
         UpdatePowerUpUI();
     }
 
+    // void Update()
+    // {
+    //     if (gridManager != null && gridManager.IsWallRotating && !canPassThroughWalls)
+    //     {
+    //         rb.velocity = Vector3.zero;
+    //         return;
+    //     }
+
+    //     moveX = moveZ = 0f;
+    //     if (Input.GetKey(KeyCode.W)) moveZ = -1f;
+    //     if (Input.GetKey(KeyCode.S)) moveZ = 1f;
+    //     if (Input.GetKey(KeyCode.A)) moveX = 1f;
+    //     if (Input.GetKey(KeyCode.D)) moveX = -1f;
+
+    //     if (Input.GetKey(KeyCode.UpArrow)) moveZ = -1f;
+    //     if (Input.GetKey(KeyCode.DownArrow)) moveZ = 1f;
+    //     if (Input.GetKey(KeyCode.LeftArrow)) moveX = 1f;
+    //     if (Input.GetKey(KeyCode.RightArrow)) moveX = -1f;
+
+    //     if (moveX != 0f || moveZ != 0f)
+    //     {
+    //         Vector3 moveDirection = new Vector3(moveX, 0f, moveZ).normalized;
+
+    //         if (gridManager != null && gridManager.currentMazeLevel == GridManager.MazeLevel.Level3)
+    //         {
+    //             Vector3 camForward = Camera.main.transform.forward;
+    //             Vector3 camRight = Camera.main.transform.right;
+    //             camForward.y = camRight.y = 0f;
+    //             moveDirection = (camForward * -moveZ + camRight * -moveX).normalized;
+    //         }
+
+    //         transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(moveDirection), rotationSpeed * Time.deltaTime);
+
+    //         rb.velocity = new Vector3(moveDirection.x * moveSpeed, rb.velocity.y, moveDirection.z * moveSpeed);
+    //         if (canPassThroughWalls) tilesMoved++;
+    //     }
+    //     else
+    //     {
+    //         rb.velocity = new Vector3(0f, rb.velocity.y, 0f);
+    //     }
+
+    //     if (Input.GetKeyDown(KeyCode.C) && powerUpCount > 0 && !canPassThroughWalls)
+    //     {
+    //         ActivateInvisibility(3f);
+    //         powerUpCount--;
+    //         UpdatePowerUpUI();
+    //     }
+    // }
+    
     void Update()
     {
         if (gridManager != null && gridManager.IsWallRotating && !canPassThroughWalls)
@@ -51,39 +104,17 @@ public class PlayerController : MonoBehaviour
             return;
         }
 
-        moveX = moveZ = 0f;
-        if (Input.GetKey(KeyCode.W)) moveZ = -1f;
-        if (Input.GetKey(KeyCode.S)) moveZ = 1f;
-        if (Input.GetKey(KeyCode.A)) moveX = 1f;
-        if (Input.GetKey(KeyCode.D)) moveX = -1f;
+        float moveInput = Input.GetAxis("Vertical");   // W/S for forward/back
+        float turnInput = Input.GetAxis("Horizontal"); // A/D for turning
 
-        if (Input.GetKey(KeyCode.UpArrow)) moveZ = -1f;
-        if (Input.GetKey(KeyCode.DownArrow)) moveZ = 1f;
-        if (Input.GetKey(KeyCode.LeftArrow)) moveX = 1f;
-        if (Input.GetKey(KeyCode.RightArrow)) moveX = -1f;
+        // Rotate player (A/D)
+        transform.Rotate(Vector3.up * turnInput * rotationSpeedCamera * Time.deltaTime);
 
-        if (moveX != 0f || moveZ != 0f)
-        {
-            Vector3 moveDirection = new Vector3(moveX, 0f, moveZ).normalized;
+        // Move forward in facing direction (W/S)
+        Vector3 moveDirection = transform.forward * moveInput;
+        rb.velocity = new Vector3(moveDirection.x * moveSpeed, rb.velocity.y, moveDirection.z * moveSpeed);
 
-            if (gridManager != null && gridManager.currentMazeLevel == GridManager.MazeLevel.Level3)
-            {
-                Vector3 camForward = Camera.main.transform.forward;
-                Vector3 camRight = Camera.main.transform.right;
-                camForward.y = camRight.y = 0f;
-                moveDirection = (camForward * -moveZ + camRight * -moveX).normalized;
-            }
-
-            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(moveDirection), rotationSpeed * Time.deltaTime);
-
-            rb.velocity = new Vector3(moveDirection.x * moveSpeed, rb.velocity.y, moveDirection.z * moveSpeed);
-            if (canPassThroughWalls) tilesMoved++;
-        }
-        else
-        {
-            rb.velocity = new Vector3(0f, rb.velocity.y, 0f);
-        }
-
+        // Power-up
         if (Input.GetKeyDown(KeyCode.C) && powerUpCount > 0 && !canPassThroughWalls)
         {
             ActivateInvisibility(3f);
@@ -91,6 +122,8 @@ public class PlayerController : MonoBehaviour
             UpdatePowerUpUI();
         }
     }
+
+
 
     void FixedUpdate()
     {
@@ -186,7 +219,7 @@ public class PlayerController : MonoBehaviour
         if (!canPassThroughWalls && collision.gameObject.CompareTag("Wall"))
         {
             rb.velocity = Vector3.zero;
-            transform.rotation = Quaternion.identity;
+            //transform.rotation = Quaternion.identity;
         }
     }
 
