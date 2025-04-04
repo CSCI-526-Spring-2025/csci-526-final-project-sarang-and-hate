@@ -765,14 +765,14 @@ void SetupRotationSequences()
             }
         }
 
-        if (SceneManager.GetActiveScene().name == "Scene2")
+        if (SceneManager.GetActiveScene().name == "3DScene2")
         {
             if ((playerTileX == 3 && playerTileY == 3) || (playerTileX == 1 && playerTileY == 0))
             {
                 HandleTrap(currentTile, playerTileX, playerTileY);
             }
         }
-        if (SceneManager.GetActiveScene().name == "Scene3"){
+        if (SceneManager.GetActiveScene().name == "3DScene3"){
             if ((playerTileX == 5 && playerTileY == 4) || (playerTileX == 4 && playerTileY == 5) || (playerTileX == 1 && playerTileY == 2))
             {
                 HandleTrap(currentTile, playerTileX, playerTileY);
