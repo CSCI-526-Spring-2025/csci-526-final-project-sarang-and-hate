@@ -40,6 +40,7 @@ public class GridManager : MonoBehaviour
 
     private bool isWallRotating = false; // Track if walls are currently rotating
     public bool IsWallRotating => isWallRotating; // Public getter for player script
+    private HashSet<GameObject> wallsCurrentlyRotating = new HashSet<GameObject>();
 
     public GameObject collectibleInvisible; // Assign your collectible prefab in the inspector
 
@@ -71,6 +72,7 @@ public class GridManager : MonoBehaviour
     private bool trapTileArrowShown = false; // 🟢 Flag
     private bool trapTileTriggered = false; // 🟢 Flag to only allow once
     private bool zone9VisitedAfterZone8 = false; // 🟢 Track path logic
+
 
     bool zone8Entered = false;
     bool returnedToZone9 = false;
@@ -547,8 +549,13 @@ void SetupRotationSequences()
     /// </summary>
     void RotateAndMoveWall(GameObject wall)
     {
+
+        if (wallsCurrentlyRotating.Contains(wall))
+            return; // Already rotating
+
+        wallsCurrentlyRotating.Add(wall);
         // Get the current local position relative to the tile's center (parent's origin).
-    Vector3 currentLocalPos = wall.transform.localPosition;
+        Vector3 currentLocalPos = wall.transform.localPosition;
     
     // Calculate the new local position by rotating the current position 90° around the Y-axis.
     Vector3 newLocalPos = Quaternion.Euler(0, 90, 0) * currentLocalPos;
@@ -566,32 +573,39 @@ void SetupRotationSequences()
         isWallRotating = true; // Prevent player movement during wall rotation
 
         // Disable the wall's collider so it doesn't interact with the player
-        Collider wallCollider = wall.GetComponent<Collider>();
+        //Collider wallCollider = wall.GetComponent<Collider>();
+        
         /*if (wallCollider != null)
         {
             wallCollider.enabled = false;
         }*/
 
         float elapsedTime = 0;
+        float duration = 1.5f;
+
+
         Vector3 startPos = wall.transform.localPosition;
         Quaternion startRot = wall.transform.localRotation;
 
-        while (elapsedTime < 1.5f)
+        while (elapsedTime < duration)
         {
-            wall.transform.localPosition = Vector3.Lerp(startPos, targetPos, elapsedTime / 1.5f);
-            wall.transform.localRotation = Quaternion.Slerp(startRot, targetRot, elapsedTime / 1.5f);
+            float t = Mathf.Clamp01(elapsedTime / duration);
+            wall.transform.localPosition = Vector3.Lerp(startPos, targetPos, t);
+            wall.transform.localRotation = Quaternion.Slerp(startRot, targetRot, t);
             elapsedTime += Time.deltaTime;
             yield return null;
         }
 
         wall.transform.localPosition = targetPos;
-        wall.transform.localRotation = targetRot;
+        wall.transform.localRotation = Quaternion.Euler(0, Mathf.Round(targetRot.eulerAngles.y / 90f) * 90f, 0);
 
         // Re-enable the collider once the rotation is complete
         /*if (wallCollider != null)
         {
             wallCollider.enabled = true;
         }*/
+
+        wallsCurrentlyRotating.Remove(wall);
 
         isWallRotating = false; // Re-enable player movement
     }
