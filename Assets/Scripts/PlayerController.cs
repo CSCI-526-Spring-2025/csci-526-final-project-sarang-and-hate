@@ -98,11 +98,11 @@ public class PlayerController : MonoBehaviour
     
     void Update()
     {
-        if (gridManager != null && gridManager.IsWallRotating && !canPassThroughWalls)
+        /*if (gridManager != null && gridManager.IsWallRotating && !canPassThroughWalls)
         {
             rb.velocity = Vector3.zero;
             return;
-        }
+        }*/
 
         float moveInput = Input.GetAxis("Vertical");   // W/S for forward/back
         float turnInput = Input.GetAxis("Horizontal"); // A/D for turning

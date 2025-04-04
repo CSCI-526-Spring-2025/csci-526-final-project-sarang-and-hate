@@ -567,10 +567,10 @@ void SetupRotationSequences()
 
         // Disable the wall's collider so it doesn't interact with the player
         Collider wallCollider = wall.GetComponent<Collider>();
-        if (wallCollider != null)
+        /*if (wallCollider != null)
         {
             wallCollider.enabled = false;
-        }
+        }*/
 
         float elapsedTime = 0;
         Vector3 startPos = wall.transform.localPosition;
@@ -588,10 +588,10 @@ void SetupRotationSequences()
         wall.transform.localRotation = targetRot;
 
         // Re-enable the collider once the rotation is complete
-        if (wallCollider != null)
+        /*if (wallCollider != null)
         {
             wallCollider.enabled = true;
-        }
+        }*/
 
         isWallRotating = false; // Re-enable player movement
     }
