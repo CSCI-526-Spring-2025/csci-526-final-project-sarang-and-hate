@@ -186,7 +186,7 @@ public class PlayerController : MonoBehaviour
     {
         if (powerUpUIText != null)
         {
-            powerUpUIText.text = "Collectibles: " + powerUpCount;
+            powerUpUIText.text = "Power ups: " + powerUpCount;
         }
     }
 
