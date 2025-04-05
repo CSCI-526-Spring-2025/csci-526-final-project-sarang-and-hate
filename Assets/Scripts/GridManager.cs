@@ -108,7 +108,7 @@ public class GridManager : MonoBehaviour
     [SerializeField] private bool[,,] gridWallsLevel1 = new bool[6,6,4]
     {
         { { false, false, false,false}, { false, true, false, true }, { false, false, true, true}, { false, false, false,false }, { false, false,false, false }, { false, true, false, true } },
-        { { false, true, false, true }, { false, false, false, false }, { false, false, false, false }, {false, false, true, true}, { false, true, false,true }, {false, false, false, false } },
+        { { false, true,true, true }, { false, false, false, false }, { false, false, false, false }, {false, false, true, true}, { false, true, false,true }, {false, false, false, false } },
         { { false, false, false, false }, { false, true, false, true }, { false, false, false, false }, { false, true, false, true }, { false, false, false, false }, {true, false, true,false } },
         { { false, true, false,true}, { false, false, false,false }, { false,true, false,true }, { false, false,false,false }, {true,false,true, false }, {false,false, false,false } },
         { { true,true, false,false}, { false, false,false, false }, { false, false, false,false }, { false, true, false,true}, { false, false, false,false}, { false, true, false,true} },
@@ -1124,17 +1124,17 @@ IEnumerator HideZoneMessageAfterDelay(float delay)
 
         int zoneId = tileZones[tilePos];
 
-        if (zonesPlayerRotated.Contains(zoneId))
-        {
-            Debug.Log("You’ve already rotated this zone.");
-            return;
-        }
+        // if (zonesPlayerRotated.Contains(zoneId))
+        // {
+        //     Debug.Log("You’ve already rotated this zone.");
+        //     return;
+        // }
 
-        if (rotationsUsed >= maxRotations)
-        {
-            Debug.Log("Out of rotations.");
-            return;
-        }
+        // if (rotationsUsed >= maxRotations)
+        // {
+        //     Debug.Log("Out of rotations.");
+        //     return;
+        // }
 
         // 🔥 Rotate walls in current zone only
         if (zoneWalls.ContainsKey(zoneId))
