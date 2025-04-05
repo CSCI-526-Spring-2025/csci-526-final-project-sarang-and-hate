@@ -3403,6 +3403,10 @@ MonoBehaviour:
   rotationSpeed: 5
   powerUpUIText: {fileID: 69546276}
   rotationSpeedCamera: 120
+  rotationUIText: {fileID: 0}
+  minimapCamera: {fileID: 0}
+  mapUsesRemaining: 3
+  minimapDuration: 5
 --- !u!54 &403169152
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -9558,7 +9562,7 @@ Transform:
   m_GameObject: {fileID: 1463378027}
   serializedVersion: 2
   m_LocalRotation: {x: 0.309017, y: 0, z: 0, w: 0.95105654}
-  m_LocalPosition: {x: 0, y: 1.7, z: -0.90000033}
+  m_LocalPosition: {x: 0, y: 0.4, z: -0.8}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
