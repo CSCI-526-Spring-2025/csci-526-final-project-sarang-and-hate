@@ -265,7 +265,6 @@ public class GameTimer : MonoBehaviour
     public void PromoteToLevelThree()
     {
         Time.timeScale = 1;
-        Debug.Log("Promote to next level");
         SceneManager.LoadScene("3DScene3"); // Ensure this scene name is correct
     }
 
