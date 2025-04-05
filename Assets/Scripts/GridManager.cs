@@ -154,6 +154,11 @@ public class GridManager : MonoBehaviour
         {true, false,true, false }, { false, false, false, false }, {true, false,true, false }, { false, false, false, false } }
     };
 
+    //store walls to each zone 
+
+    private Dictionary<int, List<GameObject>> zoneWalls = new Dictionary<int, List<GameObject>>();
+
+
 
     private bool[,,] gridWalls; // this was your internal “active” array
 
@@ -419,6 +424,20 @@ public class GridManager : MonoBehaviour
 
         wallList.Add(wall);
         wallRotationState[wall] = 0; // NEW: Track rotation state
+
+        //Add each wall to assigned zone 
+        // Add this to store it by zone
+        string[] split = parent.name.Split(' ');
+        int x = int.Parse(split[1].Trim('(', ','));
+        int y = int.Parse(split[2].TrimEnd(',', ')'));
+        Vector2Int tilePos = new Vector2Int(x, y);
+        if (tileZones.TryGetValue(tilePos, out int zoneId))
+        {
+            if (!zoneWalls.ContainsKey(zoneId)){
+                zoneWalls[zoneId] = new List<GameObject>();
+            }
+            zoneWalls[zoneId].Add(wall);
+        }
         wallCounter++;
 
         Debug.Log($"Created {wall.name} at {wall.transform.position}");
@@ -1105,30 +1124,32 @@ IEnumerator HideZoneMessageAfterDelay(float delay)
 
         int zoneId = tileZones[tilePos];
 
-        // OPTIONAL: limit 1 use per zone
         if (zonesPlayerRotated.Contains(zoneId))
         {
             Debug.Log("You’ve already rotated this zone.");
             return;
         }
 
-        // OPTIONAL: global limit
         if (rotationsUsed >= maxRotations)
         {
             Debug.Log("Out of rotations.");
             return;
         }
 
-        int dictKey = (zoneId % 2 == 1) ? 1 : 2;
-
-        if (rotationSequencesDict.ContainsKey(dictKey))
+        // 🔥 Rotate walls in current zone only
+        if (zoneWalls.ContainsKey(zoneId))
         {
-            TriggerRotationSequence(dictKey); // your existing logic!
+            foreach (var wall in zoneWalls[zoneId])
+            {
+                RotateAndMoveWall(wall);
+            }
+
             zonesPlayerRotated.Add(zoneId);
             rotationsUsed++;
-            Debug.Log($"Maze rotated by player in Zone {zoneId} (Group {dictKey}).");
+            Debug.Log($"Player manually rotated walls in Zone {zoneId}");
         }
     }
+
     public float minimapPadding = 0;  // Adjust this number to add space around the maze
     public void AdjustMinimapViewport()
     {
