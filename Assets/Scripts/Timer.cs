@@ -243,7 +243,7 @@ public class GameTimer : MonoBehaviour
 
     public void ExitToLoadingScene()
     {
-        Debug.Log("Switching to Loading Screen...");
+        Debug.Log("Switching to Menu Screen...");
         Time.timeScale = 1;
 
         // Optional: Re-enable if user hasn't used all 3
@@ -252,7 +252,7 @@ public class GameTimer : MonoBehaviour
             helpButton.interactable = true;
         }
 
-        SceneManager.LoadScene("SampleScene");
+        SceneManager.LoadScene("Menu");
     }
 
 
