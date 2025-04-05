@@ -26,6 +26,14 @@ public class PlayerController : MonoBehaviour
 
     public float rotationSpeedCamera = 30f;
 
+    public TMP_Text rotationUIText; // drag in from Inspector
+
+    //Make mini map optional and pressed by M key 
+    public GameObject minimapCamera; // drag your minimap camera here in the Inspector
+    public int mapUsesRemaining = 3; // adjustable per level
+    public float minimapDuration = 5f;
+    private bool isMinimapActive = false;
+
 
     void Start()
     {
@@ -121,7 +129,38 @@ public class PlayerController : MonoBehaviour
             powerUpCount--;
             UpdatePowerUpUI();
         }
+
+        //Playing with E Key for Wall Rotation 
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            if (gridManager != null)
+            {
+                gridManager.TryPlayerRotateMaze(transform.position);
+            }
+        }
+
+        if (gridManager != null && rotationUIText != null)
+        {
+            rotationUIText.text = $"Rotations: {gridManager.GetRotationsUsed()} / {gridManager.GetMaxRotations()}";
+        }
+
+        if (Input.GetKeyDown(KeyCode.M) && !isMinimapActive && mapUsesRemaining > 0)
+        {
+            minimapCamera.SetActive(true);
+            isMinimapActive = true;
+            mapUsesRemaining--;
+            StartCoroutine(HideMinimapAfterSeconds(minimapDuration));
+        }
+
     }
+
+    IEnumerator HideMinimapAfterSeconds(float seconds)
+    {
+        yield return new WaitForSeconds(seconds);
+        minimapCamera.SetActive(false);
+        isMinimapActive = false;
+    }
+
 
 
 

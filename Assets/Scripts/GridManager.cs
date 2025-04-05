@@ -84,6 +84,16 @@ public class GridManager : MonoBehaviour
     GameObject powerUpObject; // Optional reference if you want to deactivate it later
 
 
+    //To set up manual wall rotation for player 
+    private HashSet<int> zonesPlayerRotated = new HashSet<int>(); // to track per-zone usage
+    private int maxRotations = 3;
+    private int rotationsUsed = 0;
+
+    public int GetRotationsUsed() => rotationsUsed;
+    public int GetMaxRotations() => maxRotations;
+
+
+
     //ENUM for levels
     public enum MazeLevel
     {
@@ -770,12 +780,12 @@ void SetupRotationSequences()
                     // Default odd/even logic for Level 1 and 2
                     dictionaryKey = (currentZone % 2 == 1) ? 1 : 2;
                 }
-
-                if (rotationSequencesDict.ContainsKey(dictionaryKey))
-                {
-                    StartCoroutine(DelayedRotationSequence(dictionaryKey, 0.25f));
-                    Debug.Log($"Player moved to Zone {currentZone} (Dictionary Key = {dictionaryKey}). Triggering wall movement.");
-                }
+                //This is where the walls rotate based off of zones 
+                // if (rotationSequencesDict.ContainsKey(dictionaryKey))
+                // {
+                //     StartCoroutine(DelayedRotationSequence(dictionaryKey, 0.25f));
+                //     Debug.Log($"Player moved to Zone {currentZone} (Dictionary Key = {dictionaryKey}). Triggering wall movement.");
+                // }
             }
         }
 
@@ -1078,6 +1088,44 @@ IEnumerator HideZoneMessageAfterDelay(float delay)
         zoneMessageText.gameObject.SetActive(false);
     }
 }
+
+
+    public void TryPlayerRotateMaze(Vector3 playerPosition)
+    {
+        Vector2Int tilePos = new Vector2Int(Mathf.RoundToInt(playerPosition.x), Mathf.RoundToInt(playerPosition.z));
+
+        if (!tileZones.ContainsKey(tilePos))
+        {
+            Debug.Log("Player not on a valid tile.");
+            return;
+        }
+
+        int zoneId = tileZones[tilePos];
+
+        // OPTIONAL: limit 1 use per zone
+        if (zonesPlayerRotated.Contains(zoneId))
+        {
+            Debug.Log("You’ve already rotated this zone.");
+            return;
+        }
+
+        // OPTIONAL: global limit
+        if (rotationsUsed >= maxRotations)
+        {
+            Debug.Log("Out of rotations.");
+            return;
+        }
+
+        int dictKey = (zoneId % 2 == 1) ? 1 : 2;
+
+        if (rotationSequencesDict.ContainsKey(dictKey))
+        {
+            TriggerRotationSequence(dictKey); // your existing logic!
+            zonesPlayerRotated.Add(zoneId);
+            rotationsUsed++;
+            Debug.Log($"Maze rotated by player in Zone {zoneId} (Group {dictKey}).");
+        }
+    }
 
 
 }
