@@ -7215,7 +7215,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1779522868}
         m_TargetAssemblyTypeName: GameTimer, Assembly-CSharp
-        m_MethodName: PromoteToNextLevel
+        m_MethodName: PromoteToLevelThree
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -11775,6 +11775,7 @@ MonoBehaviour:
   dimBackground: {fileID: 0}
   victoryText: {fileID: 0}
   restartButton: {fileID: 1555527838}
+  nextLevelButton: {fileID: 0}
   navPanel: {fileID: 402557572}
   helpPanel: {fileID: 1713215847}
   helpButton: {fileID: 122392255}

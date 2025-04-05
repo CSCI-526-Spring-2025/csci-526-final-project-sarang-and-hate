@@ -14,6 +14,7 @@ public class GameTimer : MonoBehaviour
     public GameObject dimBackground; // Background dim panel
     public Text victoryText;
     public Button restartButton;
+    public Button nextLevelButton;
     private bool playerWon = false;
     public GameObject navPanel; // Displays WASD keys for 10 secs
 
@@ -131,8 +132,8 @@ public class GameTimer : MonoBehaviour
             timeRemaining -= Time.deltaTime;
             UpdateTimeDisplay();
 
-            // ✅ Only show navPanel in Level 1 (SampleScene)
-            if (SceneManager.GetActiveScene().name == "SampleScene" && timeRemaining > 115)
+            // ✅ Only show navPanel in TutorialScene 
+            if (SceneManager.GetActiveScene().name == "3DTutorialScene" && timeRemaining > 115)
             {
                 navPanel.SetActive(true);
             }
@@ -181,6 +182,7 @@ public class GameTimer : MonoBehaviour
         if (victoryPanel != null) victoryPanel.SetActive(true);
         if (victoryText != null) victoryText.text = "Victory!";
         if (restartButton != null) restartButton.gameObject.SetActive(true);
+        if (nextLevelButton != null) nextLevelButton.gameObject.SetActive(true);
         Time.timeScale = 0;
     }
 
@@ -257,13 +259,14 @@ public class GameTimer : MonoBehaviour
     public void PromoteToNextLevel()
     {
         Time.timeScale = 1;
-        SceneManager.LoadScene("Scene2"); // Ensure this scene name is correct
+        SceneManager.LoadScene("3DScene2"); // Ensure this scene name is correct
     }
 
     public void PromoteToLevelThree()
     {
         Time.timeScale = 1;
-        SceneManager.LoadScene("Scene3"); // Ensure this scene name is correct
+        Debug.Log("Promote to next level");
+        SceneManager.LoadScene("3DScene3"); // Ensure this scene name is correct
     }
 
     // Show Next Instruction When "Continue" is Clicked

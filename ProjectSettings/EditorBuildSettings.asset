@@ -20,4 +20,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/3DTutorialScene.unity
     guid: df3040542b7a5f844884869be52836c6
+  - enabled: 1
+    path: Assets/Scenes/3DScene2.unity
+    guid: 6a2a191e586f64f53af585d28ce02270
+  - enabled: 1
+    path: Assets/Scenes/3DScene3.unity
+    guid: 1c5878414b3064c69b7341208d432df5
   m_configObjects: {}
