@@ -1557,7 +1557,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &166303215
 Transform:
   m_ObjectHideFlags: 0
@@ -1586,7 +1586,7 @@ Camera:
   m_BackGroundColor: {r: 0, g: 0, b: 0, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
-  m_FOVAxisMode: 0
+  m_FOVAxisMode: 1
   m_Iso: 200
   m_ShutterSpeed: 0.005
   m_Aperture: 16
@@ -8756,7 +8756,9 @@ MonoBehaviour:
   collectibleInvisible: {fileID: 3529927858449244120, guid: 62b77d2c1204fcc46bae21bd5bd15b0c, type: 3}
   arrowPrefab: {fileID: 464750281498380233, guid: b7c2ee61a846388458b1f849d8f1f9ba, type: 3}
   zoneMessageText: {fileID: 266714644}
+  minimapCamera: {fileID: 166303216}
   currentMazeLevel: 3
+  minimapPadding: 2
 --- !u!4 &1218340808
 Transform:
   m_ObjectHideFlags: 0

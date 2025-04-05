@@ -92,7 +92,8 @@ public class GridManager : MonoBehaviour
     public int GetRotationsUsed() => rotationsUsed;
     public int GetMaxRotations() => maxRotations;
 
-
+    //Camera for Mini Map 
+    public Camera minimapCamera; // Assign in Inspector
 
     //ENUM for levels
     public enum MazeLevel
@@ -224,6 +225,8 @@ public class GridManager : MonoBehaviour
         //StartRotatingWalls(); // NEW: Start automatic wall movement
         //I commented the random rotating walls for now so that walls only trigger at certain checkpoints 
         SetupRotationSequences(); 
+        //Adjust Minicam depending on grid size
+        AdjustMinimapViewport();
     }
     void Update()
     {
@@ -1125,6 +1128,32 @@ IEnumerator HideZoneMessageAfterDelay(float delay)
             rotationsUsed++;
             Debug.Log($"Maze rotated by player in Zone {zoneId} (Group {dictKey}).");
         }
+    }
+    public float minimapPadding = 0;  // Adjust this number to add space around the maze
+    public void AdjustMinimapViewport()
+    {
+        if (minimapCamera == null) return;
+
+        float centerX = (gridSize - 1) * tileSize / 2f;
+        float centerZ = (gridSize - 1) * tileSize / 2f;
+        minimapCamera.transform.position = new Vector3(centerX, 30f, centerZ);
+        minimapCamera.transform.rotation = Quaternion.Euler(90f, 270f, 0f); // Top-down
+
+        // Match orthographic size exactly
+        float mazeHeight = gridSize * tileSize;
+        float mazeWidth = gridSize * tileSize;
+        minimapCamera.orthographicSize = mazeHeight / 2f;
+
+        // Match aspect ratio to avoid black bars
+        Camera cam = minimapCamera.GetComponent<Camera>();
+        if (cam != null)
+        {
+            float aspectRatio = mazeWidth / mazeHeight;
+            cam.aspect = aspectRatio;
+        }
+        cam.aspect = 1f; // Force square if grid is square
+
+
     }
 
 
