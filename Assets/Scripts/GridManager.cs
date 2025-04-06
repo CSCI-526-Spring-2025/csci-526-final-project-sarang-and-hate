@@ -63,9 +63,11 @@ public class GridManager : MonoBehaviour
     private bool destinationArrowInitialized = false; // 🟢 Flag to prevent early arrow activation
 
     private Vector3 zone9Center;
+    private Vector3 zone8Center;
 
     //Provide text for zone entering 
     public TMP_Text zoneMessageText; // Assign in inspector
+    public TMP_Text MapMessageText; // Assign in inspector
 
     //Variables for trap tile tutorial 
     private GameObject arrowToTrapTile; // 
@@ -206,10 +208,13 @@ public class GridManager : MonoBehaviour
         if (currentMazeLevel == MazeLevel.Level1)
         {
             //Vector3 zone8Center = new Vector3(4.5f, 0.2f, 2.5f); // actual Zone 8 center
-            Vector3 zone8Center = new Vector3(4f, 0.2f, 3f); // ✔️ actual Zone 8 center
+            zone8Center = new Vector3(4f, 0.2f, 3f); // ✔️ actual Zone 8 center
             zone9Center = new Vector3(4f, 0.2f, 4f);          // ✔️ promote to class level
-            arrowToZone8 = CreateTutorialArrow(zone8Center);
-            StartCoroutine(BounceArrow(arrowToZone8));
+            // arrowToZone8 = CreateTutorialArrow(zone8Center);
+            // StartCoroutine(BounceArrow(arrowToZone8));
+
+            arrowToZone9 = CreateTutorialArrow(zone9Center);
+            StartCoroutine(BounceArrow(arrowToZone9));
         }
 
         // List<Vector2Int> tutorialPath = new List<Vector2Int>
@@ -658,15 +663,50 @@ void SetupRotationSequences()
         {
             int currentZone = tileZones[currentTile];
             // 1. Player enters Zone 8 (Tile 4,3)
-            if (currentMazeLevel == MazeLevel.Level1 && currentZone == 8 && playerTileX == 4 && playerTileY == 3 && !zone8Entered)
+            if (currentMazeLevel == MazeLevel.Level1 && currentZone == 9 && playerTileX == 4 && playerTileY == 4 && !zone8Entered)
             {
                 zone8Entered = true;
+
+                // if (arrowToZone8 != null)
+                //     Destroy(arrowToZone8);
+
+                // arrowToZone9 = CreateTutorialArrow(zone9Center);
+                // StartCoroutine(BounceArrow(arrowToZone9));
+
+                if (arrowToZone9 != null)
+                    Destroy(arrowToZone9);
+
+                arrowToZone8 = CreateTutorialArrow(zone8Center);
+                StartCoroutine(BounceArrow(arrowToZone8));
+
+                if(zoneMessageText!=null){
+                    zoneMessageText.text = "Tip: Press M to view the map!";
+                    zoneMessageText.gameObject.SetActive(true);
+                    StartCoroutine(HideZoneMessageAfterDelay(3f));
+                }
+            }
+
+            // 2. Player returns to Zone 9 AFTER visiting Zone 8
+            if (currentMazeLevel == MazeLevel.Level1 && currentZone == 8 && zone8Entered && !returnedToZone9)
+            {
+                returnedToZone9 = true;
+                trapTileArmed = true; // 3. Now we arm the trap at (4,3)
+
+                // if (arrowToZone9 != null)
+                //     Destroy(arrowToZone9);
 
                 if (arrowToZone8 != null)
                     Destroy(arrowToZone8);
 
-                arrowToZone9 = CreateTutorialArrow(zone9Center);
-                StartCoroutine(BounceArrow(arrowToZone9));
+                if (!trapTileArrowShown)
+                {
+                    trapTileArrowShown = true;
+                    // Vector3 trapTilePosition = new Vector3(4f, 0.2f, 3f);
+                    Vector3 trapTilePosition = new Vector3(3f, 0.2f, 3f);
+                    arrowToTrapTile = CreateTutorialArrow(trapTilePosition);
+                    StartCoroutine(BounceArrow(arrowToTrapTile));
+
+                }
 
                 if (zoneMessageText != null)
                 {
@@ -677,27 +717,9 @@ void SetupRotationSequences()
                 }
             }
 
-            // 2. Player returns to Zone 9 AFTER visiting Zone 8
-            if (currentMazeLevel == MazeLevel.Level1 && currentZone == 9 && zone8Entered && !returnedToZone9)
-            {
-                returnedToZone9 = true;
-                trapTileArmed = true; // 3. Now we arm the trap at (4,3)
-
-                if (arrowToZone9 != null)
-                    Destroy(arrowToZone9);
-
-                if (!trapTileArrowShown)
-                {
-                    trapTileArrowShown = true;
-                    Vector3 trapTilePosition = new Vector3(4f, 0.2f, 3f);
-                    arrowToTrapTile = CreateTutorialArrow(trapTilePosition);
-                    StartCoroutine(BounceArrow(arrowToTrapTile));
-
-                }
-            }
-
             // 4. Player steps back onto (4,3) which is now a trap
-            if (currentMazeLevel == MazeLevel.Level1 && playerTileX == 4 && playerTileY == 3 && trapTileArmed && !trapTileTriggered)
+            // if (currentMazeLevel == MazeLevel.Level1 && playerTileX == 4 && playerTileY == 3 && trapTileArmed && !trapTileTriggered)
+            if (currentMazeLevel == MazeLevel.Level1 && playerTileX == 3 && playerTileY == 3 && trapTileArmed && !trapTileTriggered)
             {
                 trapTileTriggered = true;
 
@@ -729,13 +751,15 @@ void SetupRotationSequences()
 
                 //Set up arrow to make player pick up power collectible 
                 // Place arrow at (3, 3)
-                Vector3 arrowPosition = new Vector3(3f, 0.2f, 3f);
+                // Vector3 arrowPosition = new Vector3(3f, 0.2f, 3f);
+                Vector3 arrowPosition = new Vector3(3f, 0.2f, 2f);
                 arrowToPowerUp = CreateTutorialArrow(arrowPosition);
                 StartCoroutine(BounceArrow(arrowToPowerUp));
 
 
                     // Optionally instantiate an invisible power-up object at (3, 3)
-                Vector3 powerUpPos = new Vector3(3f, 0.1f, 3f);
+                // Vector3 powerUpPos = new Vector3(3f, 0.1f, 3f);
+                Vector3 powerUpPos = new Vector3(3f, 0.1f, 2f);
                 if (collectibleInvisible != null)
                 {
                     powerUpObject = Instantiate(collectibleInvisible, powerUpPos, Quaternion.identity, transform);
@@ -746,7 +770,8 @@ void SetupRotationSequences()
             }
 
             // Player steps on (3, 3) to collect the power-up
-            if (currentMazeLevel == MazeLevel.Level1 && playerTileX == 3 && playerTileY == 3 && powerUpAvailable && !powerUpCollected)
+            // if (currentMazeLevel == MazeLevel.Level1 && playerTileX == 3 && playerTileY == 3 && powerUpAvailable && !powerUpCollected)
+            if (currentMazeLevel == MazeLevel.Level1 && playerTileX == 3 && playerTileY == 2 && powerUpAvailable && !powerUpCollected)
             {
                 powerUpCollected = true;
 
@@ -1109,6 +1134,15 @@ IEnumerator HideZoneMessageAfterDelay(float delay)
     if (zoneMessageText != null)
     {
         zoneMessageText.gameObject.SetActive(false);
+    }
+}
+
+IEnumerator HideMapMessageTextAfterDelay(float delay)
+{
+    yield return new WaitForSeconds(delay);
+    if (MapMessageText != null)
+    {
+        MapMessageText.gameObject.SetActive(false);
     }
 }
 
