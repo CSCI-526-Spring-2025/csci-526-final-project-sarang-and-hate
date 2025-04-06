@@ -670,7 +670,8 @@ void SetupRotationSequences()
 
                 if (zoneMessageText != null)
                 {
-                    zoneMessageText.text = "Tip: Entering or re-entering zones triggers wall rotations!";
+                    // zoneMessageText.text = "Tip: Entering or re-entering zones triggers wall rotations!";
+                    zoneMessageText.text = "Tip: Press E to rotate the walls!";
                     zoneMessageText.gameObject.SetActive(true);
                     StartCoroutine(HideZoneMessageAfterDelay(3f));
                 }
@@ -705,7 +706,7 @@ void SetupRotationSequences()
 
                 if (zoneMessageText != null)
                 {
-                    zoneMessageText.text = "Oops! That tile was a trap!";
+                    zoneMessageText.text = "Oops! Red tiles are a trap!";
                     zoneMessageText.gameObject.SetActive(true);
                     StartCoroutine(HideZoneMessageAfterDelay(4f));
                 }
@@ -727,14 +728,14 @@ void SetupRotationSequences()
                 powerUpAvailable = true;
 
                 //Set up arrow to make player pick up power collectible 
-                // Place arrow at (3, 4)
-                Vector3 arrowPosition = new Vector3(4f, 0.2f, 5f);
+                // Place arrow at (3, 3)
+                Vector3 arrowPosition = new Vector3(3f, 0.2f, 3f);
                 arrowToPowerUp = CreateTutorialArrow(arrowPosition);
                 StartCoroutine(BounceArrow(arrowToPowerUp));
 
 
-                    // Optionally instantiate an invisible power-up object at (4, 5)
-                Vector3 powerUpPos = new Vector3(4f, 0.1f, 5f);
+                    // Optionally instantiate an invisible power-up object at (3, 3)
+                Vector3 powerUpPos = new Vector3(3f, 0.1f, 3f);
                 if (collectibleInvisible != null)
                 {
                     powerUpObject = Instantiate(collectibleInvisible, powerUpPos, Quaternion.identity, transform);
@@ -744,8 +745,8 @@ void SetupRotationSequences()
 
             }
 
-            // Player steps on (4, 5) to collect the power-up
-            if (currentMazeLevel == MazeLevel.Level1 && playerTileX == 4 && playerTileY == 5 && powerUpAvailable && !powerUpCollected)
+            // Player steps on (3, 3) to collect the power-up
+            if (currentMazeLevel == MazeLevel.Level1 && playerTileX == 3 && playerTileY == 3 && powerUpAvailable && !powerUpCollected)
             {
                 powerUpCollected = true;
 

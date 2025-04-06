@@ -39,10 +39,9 @@ public class GameTimer : MonoBehaviour
     // Instructions for Each Level
     private string[] sampleSceneInstructions = new string[]
     {
-        "Welcome to the Tutorial!",
+        "Follow the green arrow to complete the Tutorial!",
         "",
         "Goal: Reach the Blue Tile",
-        "",
     };
 
     private string[] scene2Instructions = new string[]
@@ -61,7 +60,7 @@ public class GameTimer : MonoBehaviour
 
         // Select Instructions Based on the Scene
         string sceneName = SceneManager.GetActiveScene().name;
-        if (sceneName == "SampleScene")
+        if (sceneName == "3DTutorialScene")
         {
             instructions = sampleSceneInstructions;
         }
