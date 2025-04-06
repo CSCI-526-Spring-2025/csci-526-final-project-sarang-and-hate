@@ -45,6 +45,9 @@ public class NavPanelBuilder : MonoBehaviour
         AddKeyText("S - Move Back");
         AddKeyText("D - Move Right");
         AddKeyText("C - Use Power-Up");
+        AddKeyText("E - Rotate Walls");
+        AddKeyText("M - See Map");
+
     }
 
     void AddKeyText(string label)

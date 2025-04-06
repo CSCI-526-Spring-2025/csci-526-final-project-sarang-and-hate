@@ -132,7 +132,7 @@ public class GameTimer : MonoBehaviour
             UpdateTimeDisplay();
 
             // ✅ Only show navPanel in TutorialScene 
-            if (SceneManager.GetActiveScene().name == "3DTutorialScene" && timeRemaining > 115)
+            if (SceneManager.GetActiveScene().name == "3DTutorialScene" && timeRemaining > 110)
             {
                 navPanel.SetActive(true);
             }
