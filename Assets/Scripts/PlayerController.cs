@@ -36,6 +36,7 @@ public class PlayerController : MonoBehaviour
 
     public static bool hasPlayerRotatedWalls = false; // track analytics for E key pressed
     public static bool hasPlayerOpenedMap = false; // track analytics for M key pressed
+    public static int mapViewedNum = 0; // track analytics for M key pressed
     public static int playerUsedPowerups = 0; // track analytics for how many times E key pressed
 
     void Start()
@@ -57,6 +58,7 @@ public class PlayerController : MonoBehaviour
 
         UpdatePowerUpUI();
         playerUsedPowerups = 0;
+        mapViewedNum = 0;
     }
 
     // void Update()
@@ -157,6 +159,7 @@ public class PlayerController : MonoBehaviour
             mapUsesRemaining--;
             StartCoroutine(HideMinimapAfterSeconds(minimapDuration));
             hasPlayerOpenedMap = true;
+            mapViewedNum++;
         }
 
     }

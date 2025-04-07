@@ -34,7 +34,7 @@ public class GameTimer : MonoBehaviour
 
     public static bool isPlayerStuck = false; // track analytics for deadlock
     public static bool didPlayerRanOutOfTime = false; // track analytics for not completing level within stated time
-
+    public static string currentLevelPlayed = "Level 1";
 
     // Different Instructions for Each Scene
     private string[] instructions;
@@ -66,6 +66,7 @@ public class GameTimer : MonoBehaviour
         if (sceneName == "3DTutorialScene")
         {
             instructions = sampleSceneInstructions;
+            currentLevelPlayed = "Tutorial";
         }
         else if (sceneName == "Scene2")
         {
@@ -74,6 +75,14 @@ public class GameTimer : MonoBehaviour
         else
         {
             instructions = new string[] { "Goal: Reach the Blue Tile!" }; // Fallback
+            if (sceneName == "3DScene2")
+            {
+                currentLevelPlayed = "Level 1";
+            }
+            else if (sceneName == "3DScene3")
+            {
+                currentLevelPlayed = "Level 2";
+            }
         }
 
         // Skip Game 
@@ -206,6 +215,10 @@ public class GameTimer : MonoBehaviour
         Time.timeScale = 0;
 
         didPlayerRanOutOfTime = true;
+
+        // Send Data to Google Forms and Spreadsheet for Analytics
+        sendToGoogle sendGoogle = FindObjectOfType<sendToGoogle>();
+        sendGoogle.Send();
     }
 
     public void RestartGame()
@@ -250,6 +263,10 @@ public class GameTimer : MonoBehaviour
                 Time.timeScale = 0;
             }
         }
+
+        // Send Data to Google Forms and Spreadsheet for Analytics
+        sendToGoogle sendGoogle = FindObjectOfType<sendToGoogle>();
+        sendGoogle.Send();
     }
 
 
