@@ -3922,9 +3922,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 1
   rotationSpeed: 5
-  powerUpUIText: {fileID: 1589987155}
+  powerUpUIText: {fileID: 0}
   rotationSpeedCamera: 120
-  rotationUIText: {fileID: 860984321}
+  rotationUIText: {fileID: 0}
   minimapCamera: {fileID: 215227075}
   mapUsesRemaining: 3
   minimapDuration: 5
@@ -5938,11 +5938,11 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 674660824}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -332, y: 180}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 20, y: -40}
   m_SizeDelta: {x: 250, y: 30}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_Pivot: {x: 0, y: 1}
 --- !u!114 &860984321
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12208,11 +12208,11 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 674660824}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -332, y: 206}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 20, y: -15}
   m_SizeDelta: {x: 250, y: 30}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_Pivot: {x: 0, y: 1}
 --- !u!1 &1611343521
 GameObject:
   m_ObjectHideFlags: 0
