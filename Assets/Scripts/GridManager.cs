@@ -111,7 +111,7 @@ public class GridManager : MonoBehaviour
     {
         { { false, false, false,false}, { false, true, false, true }, { false, false, true, true}, { false, false, false,false }, { false, false,false, false }, { false, true, false, true } },
         { { false, true,true, true }, { false, false, false, false }, { false, false, false, false }, {false, false, true, true}, { false, true, false,true }, {false, false, false, false } },
-        { { false, false, false, false }, { false, true, false, true }, { false, false, false, false }, { false, true, false, true }, { false, false, false, false }, {true, false, true,false } },
+        { { false, false, false, false }, { false, false, false, true }, { false, false, false, false }, { false, true, false, true }, { false, false, false, false }, {true, false, true,false } },
         { { false, true, false,true}, { false, false, false,false }, { false,true, false,true }, { false, false,false,false }, {true,false,true, false }, {false,false, false,false } },
         { { true,true, false,false}, { false, false,false, false }, { false, false, false,false }, { false, true, false,false}, { false, false, false,false}, { false, true, false,true} },
         { {false, false,false, false }, {true,true, false, false }, { false, true, false,true }, { false, false, false, false }, { false,true, false,true }, { false,false, false, false } }
@@ -702,7 +702,8 @@ void SetupRotationSequences()
                 {
                     trapTileArrowShown = true;
                     // Vector3 trapTilePosition = new Vector3(4f, 0.2f, 3f);
-                    Vector3 trapTilePosition = new Vector3(3f, 0.2f, 3f);
+                    // Vector3 trapTilePosition = new Vector3(3f, 0.2f, 3f);
+                    Vector3 trapTilePosition = new Vector3(4f, 0.2f, 2f);
                     arrowToTrapTile = CreateTutorialArrow(trapTilePosition);
                     StartCoroutine(BounceArrow(arrowToTrapTile));
 
@@ -717,8 +718,8 @@ void SetupRotationSequences()
                 }
             }
 
-            // 4. Player steps back onto (3,3) which is now a trap
-            if (currentMazeLevel == MazeLevel.Level1 && playerTileX == 3 && playerTileY == 3 && trapTileArmed && !trapTileTriggered)
+            // 4. Player steps back onto (4,2) which is now a trap
+            if (currentMazeLevel == MazeLevel.Level1 && playerTileX == 4 && playerTileY == 2 && trapTileArmed && !trapTileTriggered)
             {
                 trapTileTriggered = true;
 
@@ -735,7 +736,7 @@ void SetupRotationSequences()
                 player.transform.position = zone9Center; // Teleport player back
 
                 int trapZone = tileZones[currentTile];
-                GameObject trapTile = GameObject.Find("Tile (3, 3) - Zone " + trapZone);
+                GameObject trapTile = GameObject.Find("Tile (4, 2) - Zone " + trapZone);
                 if (trapTile != null)
                 {
                     Renderer sr = trapTile.GetComponent<Renderer>();
