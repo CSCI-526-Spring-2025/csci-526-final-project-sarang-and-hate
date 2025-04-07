@@ -757,7 +757,7 @@ void SetupRotationSequences()
 
 
                 // Optionally instantiate an invisible power-up object at (3, 2)
-                Vector3 powerUpPos = new Vector3(3f, 0.1f, 2f);
+                Vector3 powerUpPos = new Vector3(3f, 0.25f, 2f);
                 if (collectibleInvisible != null)
                 {
                     powerUpObject = Instantiate(collectibleInvisible, powerUpPos, Quaternion.identity, transform);
@@ -861,7 +861,7 @@ void SetupRotationSequences()
         // 2. Spawn the collectible at (0,0)
         // spawn again *every* time they trigger a trap,
         Debug.Log("Spawning collectibleInvisible now...");
-        Instantiate(collectibleInvisible, new Vector3(5.5f, 0.25f, 4.75f), Quaternion.identity, transform);
+        Instantiate(collectibleInvisible, new Vector3(5f, 0.25f, 5f), Quaternion.identity, transform);
         hasSpawnedCollectibleAtStart = true;
     }
     private void HandleTrap(Vector2Int currentTile, int xTile, int yTile)
@@ -873,7 +873,7 @@ void SetupRotationSequences()
         int currentZone = tileZones[currentTile];
 
         // Example: you only want to spawn the collectible the *first* time they hit a trap
-        StartCoroutine(SpawnCollectibleAtStartWithDelay(1.0f)); 
+        // StartCoroutine(SpawnCollectibleAtStartWithDelay(1.0f)); 
         // 1 second delay 
 
         // Change the color of the tile at (3,3) to red
