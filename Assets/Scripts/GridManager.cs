@@ -1162,11 +1162,11 @@ IEnumerator HideMapMessageTextAfterDelay(float delay)
         //     return;
         // }
 
-        // if (rotationsUsed >= maxRotations)
-        // {
-        //     Debug.Log("Out of rotations.");
-        //     return;
-        // }
+        if (rotationsUsed >= maxRotations)
+        {
+            Debug.Log("Out of rotations.");
+            return;
+        }
 
         // 🔥 Rotate walls in current zone only
         if (zoneWalls.ContainsKey(zoneId))
