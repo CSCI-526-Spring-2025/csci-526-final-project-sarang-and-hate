@@ -62,6 +62,12 @@ public class PlayerController : MonoBehaviour
         UpdateMapUsesUI();  // <-- Add this
         playerUsedPowerups = 0;
         mapViewedNum = 0;
+
+        if (gridManager != null && gridManager.currentMazeLevel == GridManager.MazeLevel.Level3)
+        {
+            StartCoroutine(TemporarilyShowMinimap());
+        }
+
     }
 
     // void Update()
@@ -303,6 +309,19 @@ public class PlayerController : MonoBehaviour
         if (mapUsesUIText != null)
         {
             mapUsesUIText.text = $"Map Uses Left: {mapUsesRemaining}";
+        }
+    }
+
+
+    IEnumerator TemporarilyShowMinimap()
+    {
+        if (minimapCamera != null)
+        {
+            minimapCamera.SetActive(true);
+            isMinimapActive = true;
+            yield return new WaitForSeconds(3f); // Show map for 3 seconds at start
+            minimapCamera.SetActive(false);
+            isMinimapActive = false;
         }
     }
 

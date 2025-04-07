@@ -243,6 +243,9 @@ public class GridManager : MonoBehaviour
 
         playerTrapped = 0;
         playerMagicallyMoved = 0;
+        //Set Zone Message Text to 30
+        zoneMessageText.fontSize = 30;
+
     }
     void Update()
     {
@@ -715,13 +718,12 @@ void SetupRotationSequences()
 
                 }
 
-                if (zoneMessageText != null)
+                StartCoroutine(ShowZoneMessageSequence(new List<(string, float)>
                 {
-                    // zoneMessageText.text = "Tip: Entering or re-entering zones triggers wall rotations!";
-                    zoneMessageText.text = "Tip: Press E to rotate the walls!";
-                    zoneMessageText.gameObject.SetActive(true);
-                    StartCoroutine(HideZoneMessageAfterDelay(3f));
-                }
+                    ("Tip: Press M to view the map!", 3f),
+                    ("Tip: Press E to rotate the walls!", 3f)
+                }));
+
             }
 
             // 4. Player steps back onto (4,2) which is now a trap
@@ -1218,4 +1220,20 @@ IEnumerator HideMapMessageTextAfterDelay(float delay)
     }
 
 
+    IEnumerator ShowZoneMessageSequence(List<(string text, float duration)> messages)
+    {
+        foreach (var msg in messages)
+        {
+            if (zoneMessageText != null)
+            {
+                zoneMessageText.text = msg.text;
+                zoneMessageText.gameObject.SetActive(true);
+            }
+
+            yield return new WaitForSeconds(msg.duration);
+        }
+
+        if (zoneMessageText != null)
+            zoneMessageText.gameObject.SetActive(false);
+    }
 }
