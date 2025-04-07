@@ -34,6 +34,8 @@ public class PlayerController : MonoBehaviour
     public float minimapDuration = 5f;
     private bool isMinimapActive = false;
 
+    public static bool hasPlayerRotatedWalls = false; //track analytics for E key pressed
+    public static bool hasPlayerOpenedMap = false; //track analytics for M key pressed
 
     void Start()
     {
@@ -137,6 +139,7 @@ public class PlayerController : MonoBehaviour
             {
                 gridManager.TryPlayerRotateMaze(transform.position);
             }
+            hasPlayerRotatedWalls = true;
         }
 
         if (gridManager != null && rotationUIText != null)
@@ -150,6 +153,7 @@ public class PlayerController : MonoBehaviour
             isMinimapActive = true;
             mapUsesRemaining--;
             StartCoroutine(HideMinimapAfterSeconds(minimapDuration));
+            hasPlayerOpenedMap = true;
         }
 
     }
@@ -268,6 +272,10 @@ public class PlayerController : MonoBehaviour
         if (Mathf.RoundToInt(playerPos.x) == 0 && Mathf.RoundToInt(playerPos.z) == 0)
         {
             TriggerWinCondition();
+
+            // Send Data to Google Forms and Spreadsheet for Analytics
+            sendToGoogle sendGoogle = FindObjectOfType<sendToGoogle>();
+            sendGoogle.Send();
         }
     }
 

@@ -211,8 +211,7 @@ public class GameTimer : MonoBehaviour
         if (helpPanel != null){
             helpPanel.SetActive(false);
         }
-        
-        
+
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
