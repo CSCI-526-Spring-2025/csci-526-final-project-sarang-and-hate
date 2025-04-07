@@ -31,6 +31,8 @@ public class PlayerController : MonoBehaviour
     //Make mini map optional and pressed by M key 
     public GameObject minimapCamera; // drag your minimap camera here in the Inspector
     public int mapUsesRemaining = 3; // adjustable per level
+
+    public TMP_Text mapUsesUIText; //Map Uses
     public float minimapDuration = 5f;
     private bool isMinimapActive = false;
 
@@ -57,6 +59,7 @@ public class PlayerController : MonoBehaviour
         }
 
         UpdatePowerUpUI();
+        UpdateMapUsesUI();  // <-- Add this
         playerUsedPowerups = 0;
         mapViewedNum = 0;
     }
@@ -160,6 +163,7 @@ public class PlayerController : MonoBehaviour
             StartCoroutine(HideMinimapAfterSeconds(minimapDuration));
             hasPlayerOpenedMap = true;
             mapViewedNum++;
+            UpdateMapUsesUI();
         }
 
     }
@@ -293,4 +297,13 @@ public class PlayerController : MonoBehaviour
             gameTimer.ShowVictoryPanel();
         }
     }
+
+    private void UpdateMapUsesUI()
+    {
+        if (mapUsesUIText != null)
+        {
+            mapUsesUIText.text = $"Map Uses Left: {mapUsesRemaining}";
+        }
+    }
+
 }

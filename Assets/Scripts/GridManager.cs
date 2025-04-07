@@ -88,7 +88,7 @@ public class GridManager : MonoBehaviour
 
     //To set up manual wall rotation for player 
     private HashSet<int> zonesPlayerRotated = new HashSet<int>(); // to track per-zone usage
-    private int maxRotations = 3;
+    private int maxRotations = 5;
     private int rotationsUsed = 0;
 
     public int GetRotationsUsed() => rotationsUsed;
