@@ -41,7 +41,7 @@ public class GameTimer : MonoBehaviour
     {
         "Follow the green arrow to complete the Tutorial!",
         "",
-        "Goal: Reach the Blue Tile",
+        "Goal: Reach the Blue Tile!",
     };
 
     private string[] scene2Instructions = new string[]
@@ -70,7 +70,7 @@ public class GameTimer : MonoBehaviour
         }
         else
         {
-            instructions = new string[] { "Default Instructions: Good luck!" }; // Fallback
+            instructions = new string[] { "Goal: Reach the Blue Tile!" }; // Fallback
         }
 
         // Skip Game 
