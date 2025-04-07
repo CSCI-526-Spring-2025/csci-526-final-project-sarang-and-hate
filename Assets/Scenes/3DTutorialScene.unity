@@ -3922,9 +3922,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 1
   rotationSpeed: 5
-  powerUpUIText: {fileID: 0}
+  powerUpUIText: {fileID: 1589987155}
   rotationSpeedCamera: 120
-  rotationUIText: {fileID: 0}
+  rotationUIText: {fileID: 860984321}
   minimapCamera: {fileID: 215227075}
   mapUsesRemaining: 3
   minimapDuration: 5
