@@ -2,6 +2,9 @@ using System;
 using System.Collections;
 using UnityEngine.Networking;
 using UnityEngine;
+using System.Threading;
+using Unity.VisualScripting;
+using System.Timers;
 
 public class sendToGoogle : MonoBehaviour
 {
@@ -9,8 +12,14 @@ public class sendToGoogle : MonoBehaviour
     [SerializeField] private string URL;
 
     private long _sessionID;
-    public bool _map;
-    public bool _wallRotation;
+    public string _map;
+    public string _wallRotation;
+    public int _powerUps;
+    public int _trapTiles;
+    public int _magicTiles;
+    public string _deadlocked;
+    public string _timeUp;
+    public string _levelCompleted;
 
     private void Awake()
     {
@@ -19,19 +28,34 @@ public class sendToGoogle : MonoBehaviour
 
     public void Send()
     {
-        _map = PlayerController.hasPlayerOpenedMap;
-        _wallRotation = PlayerController.hasPlayerRotatedWalls;
+        _map = PlayerController.hasPlayerOpenedMap ? "Yes" : "No";
+        _wallRotation = PlayerController.hasPlayerRotatedWalls ? "Yes" : "No";
+        _powerUps = PlayerController.playerUsedPowerups;
+        _trapTiles = GridManager.playerTrapped;
+        _magicTiles = GridManager.playerMagicallyMoved;
+        _deadlocked = GameTimer.isPlayerStuck ? "Yes" : "No";
+        _timeUp = GameTimer.didPlayerRanOutOfTime ? "Yes" : "No";
+        _levelCompleted = (GameTimer.isPlayerStuck == false && GameTimer.didPlayerRanOutOfTime == false) ? "Yes" : "No";
 
-        StartCoroutine(Post(_sessionID.ToString(), _map.ToString(), _wallRotation.ToString()));
+        StartCoroutine(Post(_sessionID.ToString(), _map.ToString(), _wallRotation.ToString(), _powerUps.ToString(), _trapTiles.ToString(),
+            _magicTiles.ToString(), _deadlocked.ToString(), _timeUp.ToString(), _levelCompleted.ToString() ));
     }
 
-    private IEnumerator Post(string sessionID, string hasPlayerOpenedMap, string hasPlayerRotatedWalls)
+    private IEnumerator Post(string sessionID, string hasPlayerOpenedMap, string hasPlayerRotatedWalls, string powerUpsUsed, string trapTile,
+        string magicTile, string deadLocked, string timesUp, string levelComplete)
     {
         // Create the form and enter responses
         WWWForm form = new WWWForm();
         form.AddField("entry.1426993428", sessionID);
         form.AddField("entry.393964918", hasPlayerOpenedMap);
         form.AddField("entry.1997040888", hasPlayerRotatedWalls);
+        form.AddField("entry.2019652008", powerUpsUsed);
+        form.AddField("entry.356531011", trapTile);
+        form.AddField("entry.808463466", magicTile);
+        form.AddField("entry.1926433817", deadLocked);
+        form.AddField("entry.264644573", timesUp);
+        form.AddField("entry.1597035899", levelComplete);
+
 
         // Send responses and verify result
         using (UnityWebRequest www = UnityWebRequest.Post(URL, form))

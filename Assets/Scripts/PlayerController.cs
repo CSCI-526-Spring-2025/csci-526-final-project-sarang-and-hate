@@ -34,8 +34,9 @@ public class PlayerController : MonoBehaviour
     public float minimapDuration = 5f;
     private bool isMinimapActive = false;
 
-    public static bool hasPlayerRotatedWalls = false; //track analytics for E key pressed
-    public static bool hasPlayerOpenedMap = false; //track analytics for M key pressed
+    public static bool hasPlayerRotatedWalls = false; // track analytics for E key pressed
+    public static bool hasPlayerOpenedMap = false; // track analytics for M key pressed
+    public static int playerUsedPowerups = 0; // track analytics for how many times E key pressed
 
     void Start()
     {
@@ -55,6 +56,7 @@ public class PlayerController : MonoBehaviour
         }
 
         UpdatePowerUpUI();
+        playerUsedPowerups = 0;
     }
 
     // void Update()
@@ -130,6 +132,7 @@ public class PlayerController : MonoBehaviour
             ActivateInvisibility(3f);
             powerUpCount--;
             UpdatePowerUpUI();
+            playerUsedPowerups++;
         }
 
         //Playing with E Key for Wall Rotation 

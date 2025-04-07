@@ -32,6 +32,9 @@ public class GameTimer : MonoBehaviour
     //to change the text of the helpPanel 
     public TMP_Text helpPanelText;
 
+    public static bool isPlayerStuck = false; // track analytics for deadlock
+    public static bool didPlayerRanOutOfTime = false; // track analytics for not completing level within stated time
+
 
     // Different Instructions for Each Scene
     private string[] instructions;
@@ -201,6 +204,8 @@ public class GameTimer : MonoBehaviour
         if (victoryText != null) victoryText.text = "Time Over!";
         if (restartButton != null) restartButton.gameObject.SetActive(true);
         Time.timeScale = 0;
+
+        didPlayerRanOutOfTime = true;
     }
 
     public void RestartGame()
@@ -218,6 +223,7 @@ public class GameTimer : MonoBehaviour
     // Help panel methods
     public void OpenHelp()
     {
+        isPlayerStuck = true;
         if (GameSession.helpUsesRemaining > 0)
         {
             GameSession.helpUsesRemaining--;

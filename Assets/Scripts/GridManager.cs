@@ -97,6 +97,9 @@ public class GridManager : MonoBehaviour
     //Camera for Mini Map 
     public Camera minimapCamera; // Assign in Inspector
 
+    public static int playerTrapped = 0; // track analytics for how many times player was trapped
+    public static int playerMagicallyMoved = 0; // track analytics for how many times player was move forward using magic tiles
+
     //ENUM for levels
     public enum MazeLevel
     {
@@ -237,6 +240,9 @@ public class GridManager : MonoBehaviour
         SetupRotationSequences(); 
         //Adjust Minicam depending on grid size
         AdjustMinimapViewport();
+
+        playerTrapped = 0;
+        playerMagicallyMoved = 0;
     }
     void Update()
     {
@@ -866,6 +872,7 @@ void SetupRotationSequences()
     }
     private void HandleTrap(Vector2Int currentTile, int xTile, int yTile)
     {
+        playerTrapped++;
         // Move player back a few tiles
         int replaceXTile = xTile + 1;
         int replaceYTile = yTile + 2;
@@ -892,6 +899,7 @@ void SetupRotationSequences()
 
     private void HandleMagicTile(Vector2Int currentTile)
     {
+        playerMagicallyMoved++;
         Vector2Int teleportTile = GetMagicTileDestination(currentTile);
         player.transform.position = new Vector3(teleportTile.x, 0, teleportTile.y);
         Debug.Log("Magic tile triggered! Teleporting player to: " + teleportTile);
