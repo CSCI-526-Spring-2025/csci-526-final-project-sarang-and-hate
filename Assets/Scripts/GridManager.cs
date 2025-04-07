@@ -1178,14 +1178,14 @@ IEnumerator HideMapMessageTextAfterDelay(float delay)
             return;
         }
 
-        // 🔥 Rotate walls in current zone only
+        // Rotate walls in current zone only
         if (zoneWalls.ContainsKey(zoneId))
         {
             foreach (var wall in zoneWalls[zoneId])
             {
                 RotateAndMoveWall(wall);
             }
-
+            HighlightZoneTiles(zoneId, new Color(1f, 1f, 0.6f)); // Light yellow flash
             zonesPlayerRotated.Add(zoneId);
             rotationsUsed++;
             Debug.Log($"Player manually rotated walls in Zone {zoneId}");
@@ -1236,4 +1236,40 @@ IEnumerator HideMapMessageTextAfterDelay(float delay)
         if (zoneMessageText != null)
             zoneMessageText.gameObject.SetActive(false);
     }
+
+
+    public void HighlightZoneTiles(int zoneId, Color highlightColor, float duration = 1.5f)
+    {
+        List<Tile> tilesToHighlight = new List<Tile>();
+
+        foreach (var kvp in tileZones)
+        {
+            if (kvp.Value == zoneId)
+            {
+                Vector2Int pos = kvp.Key;
+                if (tiles[pos.x, pos.y] != null)
+                {
+                    tilesToHighlight.Add(tiles[pos.x, pos.y]);
+                }
+            }
+        }
+
+        StartCoroutine(FlashTilesTemporarily(tilesToHighlight, highlightColor, duration));
+    }
+
+    IEnumerator FlashTilesTemporarily(List<Tile> tiles, Color color, float duration)
+    {
+        foreach (var tile in tiles)
+        {
+            tile.tileRenderer.material.color = color;
+        }
+
+        yield return new WaitForSeconds(duration);
+
+        foreach (var tile in tiles)
+        {
+            tile.tileRenderer.material.color = tile.originalColor;
+        }
+    }
+
 }
