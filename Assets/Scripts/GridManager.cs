@@ -662,7 +662,7 @@ void SetupRotationSequences()
         if (tileZones.ContainsKey(currentTile))
         {
             int currentZone = tileZones[currentTile];
-            // 1. Player enters Zone 8 (Tile 4,3)
+            // 1. Player enters Zone 9 (Tile 4,4) -- didnt change the true/false variable
             if (currentMazeLevel == MazeLevel.Level1 && currentZone == 9 && playerTileX == 4 && playerTileY == 4 && !zone8Entered)
             {
                 zone8Entered = true;
@@ -686,11 +686,11 @@ void SetupRotationSequences()
                 }
             }
 
-            // 2. Player returns to Zone 9 AFTER visiting Zone 8
+            // 2. Player returns to Zone 8 AFTER visiting Zone 9  -- didnt change returnedToZone9 variable
             if (currentMazeLevel == MazeLevel.Level1 && currentZone == 8 && zone8Entered && !returnedToZone9)
             {
                 returnedToZone9 = true;
-                trapTileArmed = true; // 3. Now we arm the trap at (4,3)
+                trapTileArmed = true; // 3. Now we arm the trap at (3,3)
 
                 // if (arrowToZone9 != null)
                 //     Destroy(arrowToZone9);
@@ -717,8 +717,7 @@ void SetupRotationSequences()
                 }
             }
 
-            // 4. Player steps back onto (4,3) which is now a trap
-            // if (currentMazeLevel == MazeLevel.Level1 && playerTileX == 4 && playerTileY == 3 && trapTileArmed && !trapTileTriggered)
+            // 4. Player steps back onto (3,3) which is now a trap
             if (currentMazeLevel == MazeLevel.Level1 && playerTileX == 3 && playerTileY == 3 && trapTileArmed && !trapTileTriggered)
             {
                 trapTileTriggered = true;
@@ -736,7 +735,7 @@ void SetupRotationSequences()
                 player.transform.position = zone9Center; // Teleport player back
 
                 int trapZone = tileZones[currentTile];
-                GameObject trapTile = GameObject.Find("Tile (4, 3) - Zone " + trapZone);
+                GameObject trapTile = GameObject.Find("Tile (3, 3) - Zone " + trapZone);
                 if (trapTile != null)
                 {
                     Renderer sr = trapTile.GetComponent<Renderer>();
@@ -750,15 +749,13 @@ void SetupRotationSequences()
                 powerUpAvailable = true;
 
                 //Set up arrow to make player pick up power collectible 
-                // Place arrow at (3, 3)
-                // Vector3 arrowPosition = new Vector3(3f, 0.2f, 3f);
+                // Place arrow at (3, 2)
                 Vector3 arrowPosition = new Vector3(3f, 0.2f, 2f);
                 arrowToPowerUp = CreateTutorialArrow(arrowPosition);
                 StartCoroutine(BounceArrow(arrowToPowerUp));
 
 
-                    // Optionally instantiate an invisible power-up object at (3, 3)
-                // Vector3 powerUpPos = new Vector3(3f, 0.1f, 3f);
+                // Optionally instantiate an invisible power-up object at (3, 2)
                 Vector3 powerUpPos = new Vector3(3f, 0.1f, 2f);
                 if (collectibleInvisible != null)
                 {
@@ -769,8 +766,7 @@ void SetupRotationSequences()
 
             }
 
-            // Player steps on (3, 3) to collect the power-up
-            // if (currentMazeLevel == MazeLevel.Level1 && playerTileX == 3 && playerTileY == 3 && powerUpAvailable && !powerUpCollected)
+            // Player steps on (3, 2) to collect the power-up
             if (currentMazeLevel == MazeLevel.Level1 && playerTileX == 3 && playerTileY == 2 && powerUpAvailable && !powerUpCollected)
             {
                 powerUpCollected = true;
