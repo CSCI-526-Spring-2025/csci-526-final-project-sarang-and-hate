@@ -1114,7 +1114,10 @@ void SetupRotationSequences()
 
 GameObject CreateTutorialArrow(Vector3 position)
 {
-    GameObject arrow = Instantiate(arrowPrefab, position, Quaternion.identity);
+    // Lift the arrow significantly above the grid (e.g., 1.75 units)
+    Vector3 elevatedPosition = position + new Vector3(0, 0.7f, 0); 
+
+    GameObject arrow = Instantiate(arrowPrefab, elevatedPosition, Quaternion.identity);
     tutorialArrows.Add(arrow);
     return arrow;
 }
@@ -1122,14 +1125,19 @@ GameObject CreateTutorialArrow(Vector3 position)
 
 IEnumerator BounceArrow(GameObject arrow)
 {
-    float bounceHeight = 0.25f;
-    float bounceSpeed = 2f;
+    float bounceHeight = 0.4f;          // increased height
+    float bounceSpeed = 2.5f;           // slightly faster
+    float rotationSpeed = 45f;          // slow rotation to show direction
     Vector3 startPos = arrow.transform.position;
 
     while (arrow != null)
     {
         float yOffset = Mathf.Sin(Time.time * bounceSpeed) * bounceHeight;
         arrow.transform.position = new Vector3(startPos.x, startPos.y + yOffset, startPos.z);
+
+        // Optional: Rotate to make it look more dynamic
+        arrow.transform.Rotate(Vector3.up * rotationSpeed * Time.deltaTime);
+
         yield return null;
     }
 }
