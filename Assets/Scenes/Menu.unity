@@ -234,6 +234,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca69b534bf69c814c8d24eb21d3662cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  tutorialButton: {fileID: 1819478712}
+  level2Button: {fileID: 1801408002}
+  level3Button: {fileID: 821448458}
+  level2Text: {fileID: 1282493678}
+  level3Text: {fileID: 937838695}
 --- !u!1 &821448456
 GameObject:
   m_ObjectHideFlags: 0
@@ -1079,7 +1084,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 67024754}
         m_TargetAssemblyTypeName: LevelSelectManager, Assembly-CSharp
-        m_MethodName: LoadLevel1
+        m_MethodName: LoadTutorial
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

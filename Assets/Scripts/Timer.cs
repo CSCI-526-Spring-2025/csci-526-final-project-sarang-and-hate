@@ -197,6 +197,15 @@ public class GameTimer : MonoBehaviour
     public void ShowVictoryPanel()
     {
         Debug.Log("🎉 Victory! Player completed the maze in time.");
+        
+        // ✅ Only mark tutorial completed if in the actual tutorial scene
+        if (SceneManager.GetActiveScene().name == "3DTutorialScene")
+        {
+            PlayerPrefs.SetInt("TutorialCompleted", 1);
+            PlayerPrefs.Save();
+            Debug.Log("Tutorial marked as completed ✅");
+        }
+
         if (dimBackground != null) dimBackground.SetActive(true);
         if (victoryPanel != null) victoryPanel.SetActive(true);
         if (victoryText != null) victoryText.text = "Victory!";
