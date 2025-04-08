@@ -42,7 +42,7 @@ public class GameTimer : MonoBehaviour
     // Instructions for Each Level
     private string[] sampleSceneInstructions = new string[]
     {
-        "Follow the green arrow to complete the Tutorial!",
+        "Follow the arrow to complete the Tutorial!",
         "",
         "Goal: Reach the Blue Tile!",
     };
