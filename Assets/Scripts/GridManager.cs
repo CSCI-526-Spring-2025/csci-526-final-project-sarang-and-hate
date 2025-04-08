@@ -244,7 +244,7 @@ public class GridManager : MonoBehaviour
         playerTrapped = 0;
         playerMagicallyMoved = 0;
         //Set Zone Message Text to 30
-        zoneMessageText.fontSize = 30;
+        zoneMessageText.fontSize = 25;
 
     }
     void Update()
