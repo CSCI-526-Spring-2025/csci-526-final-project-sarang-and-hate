@@ -325,4 +325,10 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    public void TriggerTemporaryMinimap()
+    {
+        StartCoroutine(TemporarilyShowMinimap());
+    }
+
+
 }
