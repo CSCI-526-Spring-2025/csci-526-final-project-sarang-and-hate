@@ -740,6 +740,8 @@ void SetupRotationSequences()
                     zoneMessageText.gameObject.SetActive(true);
                     StartCoroutine(HideZoneMessageAfterDelay(4f));
                 }
+                // Trigger minimap from PlayerController
+                player.GetComponent<PlayerController>().TriggerTemporaryMinimap();
 
                 player.transform.position = zone9Center; // Teleport player back
 
