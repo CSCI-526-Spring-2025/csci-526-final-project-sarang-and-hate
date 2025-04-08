@@ -897,6 +897,10 @@ void SetupRotationSequences()
             }
 
         }
+
+        
+        // Trigger minimap from PlayerController
+        player.GetComponent<PlayerController>().TriggerTemporaryMinimap();
     }
 
     private void HandleMagicTile(Vector2Int currentTile)
@@ -915,6 +919,9 @@ void SetupRotationSequences()
             Renderer sr = magicTile.GetComponent<Renderer>();
             sr.material.color = new Color(0.5f, 0f, 1f); // Purple/magenta glow
         }
+
+        // Trigger minimap from PlayerController
+        player.GetComponent<PlayerController>().TriggerTemporaryMinimap();
     }
 
     private Vector2Int GetMagicTileDestination(Vector2Int currentTile)
