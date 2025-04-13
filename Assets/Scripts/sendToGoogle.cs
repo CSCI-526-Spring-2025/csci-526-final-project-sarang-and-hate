@@ -5,6 +5,7 @@ using UnityEngine;
 using System.Threading;
 using Unity.VisualScripting;
 using System.Timers;
+using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class sendToGoogle : MonoBehaviour
 {
@@ -22,6 +23,7 @@ public class sendToGoogle : MonoBehaviour
     public string _timeUp;
     public string _levelCompleted;
     public string _currentLevel;
+    public string _playerTile;
 
     private void Awake()
     {
@@ -40,13 +42,14 @@ public class sendToGoogle : MonoBehaviour
         _timeUp = GameTimer.didPlayerRanOutOfTime ? "Yes" : "No";
         _levelCompleted = (GameTimer.isPlayerStuck == false && GameTimer.didPlayerRanOutOfTime == false) ? "Yes" : "No";
         _currentLevel = GameTimer.currentLevelPlayed;
+        _playerTile = GridManager.tileStr;
 
         StartCoroutine(Post(_sessionID.ToString(), _mapViewedAttempts.ToString(), _wallRotation.ToString(), _powerUps.ToString(), _trapTiles.ToString(),
-            _magicTiles.ToString(), _deadlocked.ToString(), _timeUp.ToString(), _levelCompleted.ToString(), _currentLevel.ToString()));
+            _magicTiles.ToString(), _deadlocked.ToString(), _timeUp.ToString(), _levelCompleted.ToString(), _currentLevel.ToString(), _playerTile.ToString()));
     }
 
     private IEnumerator Post(string sessionID, string mapViewedNum, string hasPlayerRotatedWalls, string powerUpsUsed, string trapTile,
-        string magicTile, string deadLocked, string timesUp, string levelComplete, string levelName)
+        string magicTile, string deadLocked, string timesUp, string levelComplete, string levelName, string playerTile)
     {
         // Create the form and enter responses
         WWWForm form = new WWWForm();
@@ -60,6 +63,7 @@ public class sendToGoogle : MonoBehaviour
         form.AddField("entry.264644573", timesUp);
         form.AddField("entry.1597035899", levelComplete);
         form.AddField("entry.318650544", levelName);
+        form.AddField("entry.282788516", playerTile);
 
 
         // Send responses and verify result

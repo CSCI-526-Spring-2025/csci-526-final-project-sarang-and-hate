@@ -99,6 +99,7 @@ public class GridManager : MonoBehaviour
 
     public static int playerTrapped = 0; // track analytics for how many times player was trapped
     public static int playerMagicallyMoved = 0; // track analytics for how many times player was move forward using magic tiles
+    public static string tileStr = "(0, 0)"; // track analytics for player has stuck on which tile
 
     //ENUM for levels
     public enum MazeLevel
@@ -235,6 +236,7 @@ public class GridManager : MonoBehaviour
         {
             lastPlayerZone = tileZones[startTile];
         }
+        tileStr = startTile.ToString();
         //StartRotatingWalls(); // NEW: Start automatic wall movement
         //I commented the random rotating walls for now so that walls only trigger at certain checkpoints 
         SetupRotationSequences(); 
@@ -667,6 +669,7 @@ void SetupRotationSequences()
         int playerTileX = Mathf.RoundToInt(playerPos.x);
         int playerTileY = Mathf.RoundToInt(playerPos.z);
         Vector2Int currentTile = new Vector2Int(playerTileX, playerTileY);
+        tileStr = currentTile.ToString();
 
         if (tileZones.ContainsKey(currentTile))
         {

@@ -257,6 +257,10 @@ public class GameTimer : MonoBehaviour
                 helpPanelText.color = Color.black;
                 helpPanel.SetActive(true);
             }
+
+            // Send Data to Google Forms and Spreadsheet for Analytics
+            sendToGoogle sendGoogle = FindObjectOfType<sendToGoogle>();
+            sendGoogle.Send();
         }
         else
         {
@@ -272,10 +276,6 @@ public class GameTimer : MonoBehaviour
                 Time.timeScale = 0;
             }
         }
-
-        // Send Data to Google Forms and Spreadsheet for Analytics
-        sendToGoogle sendGoogle = FindObjectOfType<sendToGoogle>();
-        sendGoogle.Send();
     }
 
 
