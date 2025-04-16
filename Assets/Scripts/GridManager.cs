@@ -364,7 +364,6 @@ public class GridManager : MonoBehaviour
                 else if (currentMazeLevel == MazeLevel.Level3)
                 {
                     if ((x == 1 && y == 6) ||
-                        (x == 2 && y == 2) ||
                         (x == 6 && y == 3) ||
                         (x == 4 && y == 6))
                     {
