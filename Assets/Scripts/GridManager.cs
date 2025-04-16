@@ -934,8 +934,7 @@ void SetupRotationSequences()
         Dictionary<Vector2Int, Vector2Int> fixedTeleports = new Dictionary<Vector2Int, Vector2Int>
         {
             { new Vector2Int(6, 5), new Vector2Int(4, 3) },
-            { new Vector2Int(3, 6), new Vector2Int(0, 4) },
-            { new Vector2Int(2, 2), new Vector2Int(0, 1) }
+            { new Vector2Int(3, 6), new Vector2Int(0, 4) }
         };
 
         if (fixedTeleports.ContainsKey(currentTile))
