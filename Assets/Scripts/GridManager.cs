@@ -127,9 +127,9 @@ public class GridManager : MonoBehaviour
         { { false, false, false,false}, { false, true, false, true }, { false, false, true, true}, { false, false, false,false }, {true,true,false, false }, { false,false, false,false } },
         { { false, true, false, true }, { false, false, false, false }, { false, false, false, false }, {false, false, true, true}, { false,false, false,false }, {true, true, false, false } },
         { { false, false, false, false }, { true, false,true,false}, { false, false, false, false }, { false, true, false, true }, { false, false, false, false }, {true, false, true,false } },
-        { { true,false,true,false}, { false, false, false,false }, { false,true, false,true }, { false, false,false,false }, {true,false,true, false }, {false,false, false,false } },
-        { {false,false,true,true}, { false, true,false, false },  { false,false,false, false }, { true,false,true,false}, { false, false, false,false}, {true,false,true,true} },
-        { {false, false,false, false }, {false,false,true,true}, { true,false,true,false}, { false, false, false, false }, {true,false,true,false}, { false,false, false, false} }
+        { { true,false,true,false}, { false, false, false,true }, { false,true, false,true }, { false, false,false,false }, {true,false,true, false }, {false,false, false,false } },
+        { {false,false,true,true}, { false, true,false, false },  {false,true,false, false }, { true,false,true,false}, { false, false, false,false}, {true,false,true,true} },
+        { {false, false,false, false }, {false,false,true,true}, { true,false,true,false}, { false, false, false, false }, {false,false,true,false}, { false,false, false, false} }
     };
 
     // N W E S 
@@ -354,8 +354,8 @@ public class GridManager : MonoBehaviour
                 if (currentMazeLevel == MazeLevel.Level2)
                 {
                     // If the tile is one of these (4,5), (5,4), or (3,2)
-                    if ((x == 4 && y == 5) ||
-                        (x == 5 && y == 4) ||
+                    //UPDATE: I took out collectible on 
+                    if ((x == 5 && y == 4) ||
                         (x == 3 && y == 2))
                     {
                         Instantiate(collectibleInvisible, new Vector3(x, 0.25f, y), Quaternion.identity, transform);
@@ -1058,6 +1058,7 @@ void SetupRotationSequences()
             lineObj.transform.parent = gridLineParent.transform;
 
             LineRenderer lr = lineObj.AddComponent<LineRenderer>();
+            lr.useWorldSpace = true;
             lr.positionCount = 2;
             lr.SetPosition(0, new Vector3(x + offset, lineHeight, offset));
             lr.SetPosition(1, new Vector3(x + offset, lineHeight, gridSize + offset));
@@ -1075,6 +1076,7 @@ void SetupRotationSequences()
             lineObj.transform.parent = gridLineParent.transform;
 
             LineRenderer lr = lineObj.AddComponent<LineRenderer>();
+            lr.useWorldSpace = true;
             lr.positionCount = 2;
             lr.SetPosition(0, new Vector3(offset, lineHeight, z + offset));
             lr.SetPosition(1, new Vector3(gridSize + offset, lineHeight, z + offset));
