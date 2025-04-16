@@ -122,6 +122,61 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &18704472
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 18704474}
+  - component: {fileID: 18704473}
+  m_Layer: 0
+  m_Name: TutorialGrid
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &18704473
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 18704472}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 360c1656c02bf8e4b8c6f35b899599d9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tilePrefab: {fileID: 613115640612862635, guid: 2b1611565e00286409cdc73ddcd95af8, type: 3}
+  width: 7
+  height: 4
+  tileSize: 1
+  player: {fileID: 592577021}
+  boundaryPrefab: {fileID: 0}
+  minX: 0
+  maxX: 0
+  minZ: 0
+  maxZ: 0
+  wallPrefab: {fileID: 5233444293985566254, guid: 07ba3b151072cb64096f9ce6363cdaaa, type: 3}
+--- !u!4 &18704474
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 18704472}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &26962447
 GameObject:
   m_ObjectHideFlags: 0
@@ -4114,6 +4169,7 @@ MonoBehaviour:
   _timeUp: 
   _levelCompleted: 
   _currentLevel: 
+  _playerTile: 
 --- !u!1 &603587867
 GameObject:
   m_ObjectHideFlags: 0
@@ -4419,7 +4475,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &658973417
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4481,7 +4537,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &674660821
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12389,7 +12445,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1611343522
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12397,7 +12453,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1611343521}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d1921b13f39a39c4ebf1801ec9f03765, type: 3}
   m_Name: 
@@ -16356,3 +16412,4 @@ SceneRoots:
   - {fileID: 1436412632}
   - {fileID: 1753290658}
   - {fileID: 564228021}
+  - {fileID: 18704474}

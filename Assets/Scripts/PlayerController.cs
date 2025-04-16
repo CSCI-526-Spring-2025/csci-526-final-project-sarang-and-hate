@@ -8,6 +8,7 @@ public class PlayerController : MonoBehaviour
     public float moveSpeed = 5f;
     private Rigidbody rb;
     private GridManager gridManager;
+    private TutorialScript tutorialScript;
 
     private float moveX = 0f;
     private float moveZ = 0f;
@@ -68,6 +69,28 @@ public class PlayerController : MonoBehaviour
             StartCoroutine(TemporarilyShowMinimap());
         }
 
+        //Tutorial new implementation
+        tutorialScript = FindObjectOfType<TutorialScript>();
+
+        if (gridManager != null)
+        {
+            float halfTile = gridManager.tileSize / 2f;
+            minX = 0f;
+            maxX = gridManager.gridSize * gridManager.tileSize - gridManager.tileSize;
+            minZ = 0f;
+            maxZ = gridManager.gridSize * gridManager.tileSize - gridManager.tileSize;
+        }
+        else if (tutorialScript != null)
+        {
+            // Use tutorial grid bounds
+            minX = tutorialScript.minX;
+            maxX = tutorialScript.maxX;
+            minZ = tutorialScript.minZ;
+            maxZ = tutorialScript.maxZ;
+
+        }
+
+
     }
 
     // void Update()
@@ -118,7 +141,7 @@ public class PlayerController : MonoBehaviour
     //         UpdatePowerUpUI();
     //     }
     // }
-    
+
     void Update()
     {
         /*if (gridManager != null && gridManager.IsWallRotating && !canPassThroughWalls)
@@ -153,6 +176,11 @@ public class PlayerController : MonoBehaviour
             {
                 gridManager.TryPlayerRotateMaze(transform.position);
             }
+            //else if (tutorialScript != null) 
+            //{ 
+            //    tutorialScript.TryPlayerRotateMaze(transform.position); 
+            //}
+                
             hasPlayerRotatedWalls = true;
         }
 

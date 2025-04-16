@@ -1,0 +1,218 @@
+﻿using UnityEngine;
+using UnityEngine;
+using System.Collections;
+using System.Collections.Generic; // ✅ Required for List<>
+
+
+public class TutorialScript : MonoBehaviour
+{
+    [Header("Tile Grid Settings")]
+    public GameObject tilePrefab;       // Assign in Inspector
+    public int width = 6;
+    public int height = 4;
+    public float tileSize = 1.0f;
+
+    private GameObject[,] tiles;
+
+    [Header("Player Setup")]
+    public GameObject player;           // Drag your player object in the Inspector
+
+    [Header("Boundary Walls (Optional)")]
+    public GameObject boundaryPrefab;   // Assign a wall prefab to create surrounding walls
+
+    public float minX, maxX, minZ, maxZ; // Public for PlayerController to read
+
+
+    public GameObject wallPrefab; // WALLLL CODDEEEE
+
+    private List<GameObject> wallList = new List<GameObject>();
+
+
+    void Start()
+    {
+        GenerateTileGrid();
+        SetupBoundaries();
+        PlacePlayer();
+        DrawGridLines();
+
+        //Manually Added Walls
+        AddWallToTile(1, 1, new Vector3(-0.5f, 2.5f, 0f), Quaternion.identity); // North
+        AddWallToTile(2, 2, new Vector3(0.5f, 2.5f, 0f), Quaternion.identity);  // South
+        AddWallToTile(3, 1, new Vector3(0f, 2.5f, -0.5f), Quaternion.Euler(0, 90, 0)); // West
+        AddWallToTile(4, 2, new Vector3(0f, 2.5f, 0.5f), Quaternion.Euler(0, 90, 0));  // East
+    }
+
+    private readonly Vector2Int[] goalTilePositions = new Vector2Int[]
+    {
+        new Vector2Int(0, 3),
+        new Vector2Int(2, 3),
+        new Vector2Int(4, 3),
+        new Vector2Int(6, 3)
+    };
+
+
+
+    void GenerateTileGrid()
+    {
+        tiles = new GameObject[width, height];
+
+        for (int x = 0; x < width; x++)
+        {
+            for (int z = 0; z < height; z++)
+            {
+                Vector3 spawnPosition = new Vector3(x * tileSize, 0, z * tileSize);
+                GameObject tile = Instantiate(tilePrefab, spawnPosition, Quaternion.identity, transform);
+                tile.name = $"Tile ({x}, {z})";
+                tiles[x, z] = tile;
+
+                Renderer rend = tile.GetComponent<Renderer>();
+                if (rend != null)
+                {
+                    // Start tile
+                    if (x == 0 && z == 0)
+                    {
+                        rend.material.color = Color.blue;
+                        tile.tag = "Start";
+                    }
+                    // Goal tile
+                    else if (IsGoalTile(x, z))
+                    {
+                        rend.material.color = Color.green;
+                        tile.tag = "Goal";
+                    }
+                }
+            }
+        }
+    }
+
+    
+
+
+    bool IsGoalTile(int x, int z)
+    {
+        foreach (Vector2Int pos in goalTilePositions)
+        {
+            if (pos.x == x && pos.y == z)
+                return true;
+        }
+        return false;
+    }
+
+
+    //Add Wall code Here
+    void AddWallToTile(int tileX, int tileZ, Vector3 localPosition, Quaternion rotation)
+    {
+        if (tiles == null || tiles[tileX, tileZ] == null) return;
+
+        GameObject tile = tiles[tileX, tileZ];
+        GameObject wall = Instantiate(wallPrefab, tile.transform);
+        wall.transform.localPosition = localPosition;
+        wall.transform.localRotation = rotation;
+        wall.name = $"Wall_{tileX}_{tileZ}";
+        wallList.Add(wall);
+    }
+
+    
+
+
+
+    void PlacePlayer()
+    {
+        if (player != null)
+        {
+            Vector3 startPos = new Vector3(0 * tileSize, 0.5f, 0 * tileSize);
+            player.transform.position = startPos;
+        }
+        else
+        {
+            Debug.LogWarning("Player not assigned in TutorialScript!");
+        }
+    }
+
+    void SetupBoundaries()
+    {
+        float ts = tileSize;
+        float wallThickness = 0.1f;
+        float wallHeight = 2f;
+
+        // Movement limits for player
+        minX = -ts / 2f;
+        maxX = (width - 1) * ts + ts / 2f;
+        minZ = -ts / 2f;
+        maxZ = (height - 1) * ts + ts / 2f;
+
+        if (boundaryPrefab == null) return;
+
+        float gridWidth = width * ts;
+        float gridHeight = height * ts;
+
+        float xCenter = (width - 1) * ts / 2f;
+        float zCenter = (height - 1) * ts / 2f;
+
+        // LEFT wall — aligned to minX
+        GameObject leftWall = Instantiate(boundaryPrefab, transform);
+        leftWall.transform.position = new Vector3(minX - wallThickness / 2f, wallHeight / 2f, zCenter);
+        leftWall.transform.localScale = new Vector3(wallThickness, wallHeight, gridHeight);
+
+        // RIGHT wall — aligned to maxX
+        GameObject rightWall = Instantiate(boundaryPrefab, transform);
+        rightWall.transform.position = new Vector3(maxX + wallThickness / 2f, wallHeight / 2f, zCenter);
+        rightWall.transform.localScale = new Vector3(wallThickness, wallHeight, gridHeight);
+
+        // BOTTOM wall — aligned to minZ
+        GameObject bottomWall = Instantiate(boundaryPrefab, transform);
+        bottomWall.transform.position = new Vector3(xCenter, wallHeight / 2f, minZ - wallThickness / 2f);
+        bottomWall.transform.localScale = new Vector3(gridWidth, wallHeight, wallThickness);
+
+        // TOP wall — aligned to maxZ
+        GameObject topWall = Instantiate(boundaryPrefab, transform);
+        topWall.transform.position = new Vector3(xCenter, wallHeight / 2f, maxZ + wallThickness / 2f);
+        topWall.transform.localScale = new Vector3(gridWidth, wallHeight, wallThickness);
+    }
+
+    void DrawGridLines()
+    {
+        GameObject gridLineParent = new GameObject("GridLines");
+        gridLineParent.transform.parent = transform;
+
+        float offset = -tileSize / 2f;
+        float lineHeight = 0.05f; // Slightly above tile surface
+
+        // Draw vertical lines
+        for (int x = 0; x <= width; x++)
+        {
+            GameObject lineObj = new GameObject($"VerticalLine_{x}");
+            lineObj.transform.parent = gridLineParent.transform;
+
+            LineRenderer lr = lineObj.AddComponent<LineRenderer>();
+            lr.positionCount = 2;
+            lr.SetPosition(0, new Vector3(x * tileSize + offset, lineHeight, offset));
+            lr.SetPosition(1, new Vector3(x * tileSize + offset, lineHeight, height * tileSize + offset));
+            lr.startWidth = 0.03f;
+            lr.endWidth = 0.03f;
+            lr.material = new Material(Shader.Find("Sprites/Default"));
+            lr.startColor = Color.black;
+            lr.endColor = Color.black;
+        }
+
+        // Draw horizontal lines
+        for (int z = 0; z <= height; z++)
+        {
+            GameObject lineObj = new GameObject($"HorizontalLine_{z}");
+            lineObj.transform.parent = gridLineParent.transform;
+
+            LineRenderer lr = lineObj.AddComponent<LineRenderer>();
+            lr.positionCount = 2;
+            lr.SetPosition(0, new Vector3(offset, lineHeight, z * tileSize + offset));
+            lr.SetPosition(1, new Vector3(width * tileSize + offset, lineHeight, z * tileSize + offset));
+            lr.startWidth = 0.03f;
+            lr.endWidth = 0.03f;
+            lr.material = new Material(Shader.Find("Sprites/Default"));
+            lr.startColor = Color.black;
+            lr.endColor = Color.black;
+        }
+    }
+
+
+
+}
