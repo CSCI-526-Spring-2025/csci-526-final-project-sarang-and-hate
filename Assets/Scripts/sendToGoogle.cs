@@ -32,6 +32,8 @@ public class sendToGoogle : MonoBehaviour
 
     public void Send()
     {
+        // Skip sending if we're in the Tutorial scene
+        if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == "3DTutorialScene") return;
         _map = PlayerController.hasPlayerOpenedMap ? "Yes" : "No";
         _mapViewedAttempts = PlayerController.mapViewedNum;
         _wallRotation = PlayerController.hasPlayerRotatedWalls ? "Yes" : "No";
