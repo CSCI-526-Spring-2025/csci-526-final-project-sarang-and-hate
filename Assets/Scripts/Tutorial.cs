@@ -69,15 +69,16 @@ public class TutorialScript : MonoBehaviour
                 if (rend != null)
                 {
                     // Start tile
+                    // Starting tile should be green and ending tiles should be blue 
                     if (x == 0 && z == 0)
                     {
-                        rend.material.color = Color.blue;
+                        rend.material.color = Color.green;
                         tile.tag = "Start";
                     }
                     // Goal tile
                     else if (IsGoalTile(x, z))
                     {
-                        rend.material.color = Color.green;
+                        rend.material.color = Color.blue;
                         tile.tag = "Goal";
                     }
                 }
