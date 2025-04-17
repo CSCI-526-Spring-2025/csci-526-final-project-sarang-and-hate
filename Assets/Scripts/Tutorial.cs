@@ -27,6 +27,16 @@ public class TutorialScript : MonoBehaviour
 
     private List<GameObject> wallList = new List<GameObject>();
 
+    // Directions: 0 = North, 1 = West, 2 = East, 3 = South
+    [SerializeField] private bool[,,] tutorialWallGrid = new bool[6, 4, 4]
+    {
+        { { false, false, false, false }, { false, false, false, false }, { false, false, false, false }, { false, false, false, false } },
+        { { false, false, false, false }, { true, false, false, false }, { false, true, false, false }, { false, false, false, false } },
+        { { false, false, false, false }, { false, false, false, false }, { false, false, true, false }, { false, false, false, false } },
+        { { false, false, true, false }, { false, false, false, false }, { false, false, false, false }, { false, false, false, false } },
+        { { false, false, false, true }, { false, false, false, false }, { false, false, false, false }, { false, false, false, false } },
+        { { false, false, false, false }, { false, false, false, false }, { false, false, false, false }, {true,true, false, false } }
+    };
 
     void Start()
     {
@@ -36,10 +46,13 @@ public class TutorialScript : MonoBehaviour
         DrawGridLines();
 
         //Manually Added Walls
-        AddWallToTile(1, 1, new Vector3(-0.5f, 2.5f, 0f), Quaternion.identity); // North
-        AddWallToTile(2, 2, new Vector3(0.5f, 2.5f, 0f), Quaternion.identity);  // South
-        AddWallToTile(3, 1, new Vector3(0f, 2.5f, -0.5f), Quaternion.Euler(0, 90, 0)); // West
-        AddWallToTile(4, 2, new Vector3(0f, 2.5f, 0.5f), Quaternion.Euler(0, 90, 0));  // East
+        GenerateWallsFromGrid();
+        // AddWallToTile(1, 1, new Vector3(-0.5f, 2.5f, 0f), Quaternion.identity); // North
+        // AddWallToTile(2, 2, new Vector3(0.5f, 2.5f, 0f), Quaternion.identity);  // South
+        // AddWallToTile(3, 1, new Vector3(0f, 2.5f, -0.5f), Quaternion.Euler(0, 90, 0)); // West
+        // AddWallToTile(5, 3, new Vector3(0f, 2.5f, -0.5f), Quaternion.Euler(0, 90, 0)); // West
+        // AddWallToTile(4, 2, new Vector3(0f, 2.5f, 0.5f), Quaternion.Euler(0, 90, 0));  // East
+        
     }
 
     private readonly Vector2Int[] goalTilePositions = new Vector2Int[]
@@ -47,13 +60,20 @@ public class TutorialScript : MonoBehaviour
         new Vector2Int(0, 3),
         new Vector2Int(2, 3),
         new Vector2Int(4, 3),
-        new Vector2Int(6, 3)
     };
 
 
 
     void GenerateTileGrid()
     {
+        // Clean up previous tiles
+        // 🔥 Clear previous children
+        foreach (Transform child in transform)
+        {
+            DestroyImmediate(child.gameObject); // Use DestroyImmediate in Editor mode
+        }
+
+
         tiles = new GameObject[width, height];
 
         for (int x = 0; x < width; x++)
@@ -70,7 +90,7 @@ public class TutorialScript : MonoBehaviour
                 {
                     // Start tile
                     // Starting tile should be green and ending tiles should be blue 
-                    if (x == 0 && z == 0)
+                    if (x == 5 && z == 3)
                     {
                         rend.material.color = Color.green;
                         tile.tag = "Start";
@@ -112,6 +132,41 @@ public class TutorialScript : MonoBehaviour
         wall.name = $"Wall_{tileX}_{tileZ}";
         wallList.Add(wall);
     }
+    
+
+    void GenerateWallsFromGrid()
+{
+    float wallY = 2.5f;
+
+    // Directions: 0 = North, 1 = West, 2 = East, 3 = South
+    Vector3[] wallOffsets = {
+        new Vector3(-0.5f, wallY,0f),  // North
+        new Vector3(0f, wallY, -0.5f),  // West
+        new Vector3(0f, wallY,0.5f),   // East
+        new Vector3(0.5f, wallY,0f)    // South
+    };
+
+    Quaternion[] wallRotations = {
+        Quaternion.identity,              // North
+        Quaternion.Euler(0, 90, 0),       // West
+        Quaternion.Euler(0, 90, 0),       // East
+        Quaternion.identity               // South
+    };
+
+    for (int x = 0; x < width; x++)
+    {
+        for (int z = 0; z < height; z++)
+        {
+            for (int dir = 0; dir < 4; dir++)
+            {
+                if (tutorialWallGrid[x, z, dir])
+                {
+                    AddWallToTile(x, z, wallOffsets[dir], wallRotations[dir]);
+                }
+            }
+        }
+    }
+}
 
     
 
@@ -121,7 +176,7 @@ public class TutorialScript : MonoBehaviour
     {
         if (player != null)
         {
-            Vector3 startPos = new Vector3(0 * tileSize, 0.5f, 0 * tileSize);
+            Vector3 startPos = new Vector3(5 * tileSize, 0.5f, 3 * tileSize);
             player.transform.position = startPos;
         }
         else
