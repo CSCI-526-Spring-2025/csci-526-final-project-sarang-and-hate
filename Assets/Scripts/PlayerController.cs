@@ -176,13 +176,14 @@ public class PlayerController : MonoBehaviour
             {
                 gridManager.TryPlayerRotateMaze(transform.position);
             }
-            //else if (tutorialScript != null) 
-            //{ 
-            //    tutorialScript.TryPlayerRotateMaze(transform.position); 
-            //}
-                
+            else if (tutorialScript != null)  // For Tutorial Scene 
+            {
+                tutorialScript.TryPlayerRotateMaze(transform.position);
+            }
+
             hasPlayerRotatedWalls = true;
         }
+
 
         if (gridManager != null && rotationUIText != null)
         {
@@ -231,6 +232,13 @@ public class PlayerController : MonoBehaviour
                 minZ = 0f;
                 maxZ = gridManager.gridSize * gridManager.tileSize - gridManager.tileSize;
             }
+        }
+        if (tutorialScript != null)
+        {
+            minX = tutorialScript.minX;
+            maxX = tutorialScript.maxX;
+            minZ = tutorialScript.minZ;
+            maxZ = tutorialScript.maxZ;
         }
 
         Vector3 clampedPosition = rb.position;

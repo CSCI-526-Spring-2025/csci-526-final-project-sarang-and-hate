@@ -38,6 +38,25 @@ public class TutorialScript : MonoBehaviour
         { { false, false, false, false }, { false, false, false, false }, { false, false, false, false }, {true,true, false, false } }
     };
 
+    private Dictionary<GameObject, int> tutorialWallRotationState = new Dictionary<GameObject, int>();
+    private HashSet<GameObject> tutorialWallsCurrentlyRotating = new HashSet<GameObject>();
+    private bool tutorialIsWallRotating = false;
+
+    public bool IsWallRotating => tutorialIsWallRotating; // for PlayerController
+
+    // You can also track rotations
+    private int tutorialRotationsUsed = 0;
+    private int tutorialMaxRotations = 5;
+    public int GetRotationsUsed() => tutorialRotationsUsed;
+    public int GetMaxRotations() => tutorialMaxRotations;
+
+
+    //This is Text on Screen
+    public TMPro.TMP_Text tutorialMessageText; // Drag into Inspector
+    private bool hasRotatedOnce = false;
+    private bool isWaitingForRotationInput = false;
+
+
     void Start()
     {
         GenerateTileGrid();
@@ -131,6 +150,9 @@ public class TutorialScript : MonoBehaviour
         wall.transform.localRotation = rotation;
         wall.name = $"Wall_{tileX}_{tileZ}";
         wallList.Add(wall);
+
+
+        tutorialWallRotationState[wall] = 0; // track rotation state
     }
     
 
@@ -269,6 +291,57 @@ public class TutorialScript : MonoBehaviour
         }
     }
 
+    //A lot of the wall rotation is duplicated from the gridManager code 
+    
+    public void TryPlayerRotateMaze(Vector3 playerPosition)
+    {
+        if (tutorialIsWallRotating || tutorialRotationsUsed >= tutorialMaxRotations) return;
 
+        foreach (GameObject wall in wallList)
+        {
+            RotateAndMoveWall(wall);
+        }
+
+        tutorialRotationsUsed++;
+    }
+
+    void RotateAndMoveWall(GameObject wall)
+    {
+        if (tutorialWallsCurrentlyRotating.Contains(wall)) return;
+
+        tutorialWallsCurrentlyRotating.Add(wall);
+
+        Vector3 currentLocalPos = wall.transform.localPosition;
+        Vector3 newLocalPos = Quaternion.Euler(0, 90, 0) * currentLocalPos;
+        Quaternion newLocalRot = wall.transform.localRotation * Quaternion.Euler(0, 90, 0);
+
+        StartCoroutine(SmoothMoveWall(wall, newLocalPos, newLocalRot));
+    }
+
+    IEnumerator SmoothMoveWall(GameObject wall, Vector3 targetPos, Quaternion targetRot)
+    {
+        tutorialIsWallRotating = true;
+
+        float elapsedTime = 0f;
+        float duration = 1.2f;
+
+        Vector3 startPos = wall.transform.localPosition;
+        Quaternion startRot = wall.transform.localRotation;
+
+        while (elapsedTime < duration)
+        {
+            float t = elapsedTime / duration;
+            wall.transform.localPosition = Vector3.Lerp(startPos, targetPos, t);
+            wall.transform.localRotation = Quaternion.Slerp(startRot, targetRot, t);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        wall.transform.localPosition = targetPos;
+        wall.transform.localRotation = Quaternion.Euler(0, Mathf.Round(targetRot.eulerAngles.y / 90f) * 90f, 0);
+
+        tutorialWallsCurrentlyRotating.Remove(wall);
+        tutorialIsWallRotating = false;
+    }
 
 }
