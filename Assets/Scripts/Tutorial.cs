@@ -71,7 +71,7 @@ public class TutorialScript : MonoBehaviour
         // AddWallToTile(3, 1, new Vector3(0f, 2.5f, -0.5f), Quaternion.Euler(0, 90, 0)); // West
         // AddWallToTile(5, 3, new Vector3(0f, 2.5f, -0.5f), Quaternion.Euler(0, 90, 0)); // West
         // AddWallToTile(4, 2, new Vector3(0f, 2.5f, 0.5f), Quaternion.Euler(0, 90, 0));  // East
-        
+        StartCoroutine(ShowWallRotationTutorial());
     }
 
     private readonly Vector2Int[] goalTilePositions = new Vector2Int[]
@@ -342,6 +342,47 @@ public class TutorialScript : MonoBehaviour
 
         tutorialWallsCurrentlyRotating.Remove(wall);
         tutorialIsWallRotating = false;
+    }
+
+    //Wall Rotation Tutorial Step 1
+    IEnumerator ShowWallRotationTutorial()
+    {
+        // Step 1: Lock player input
+        PlayerController playerController = player.GetComponent<PlayerController>();
+        //playerController.enabled = false;
+
+        // Step 2: Show instruction
+        if (tutorialMessageText != null)
+        {
+            tutorialMessageText.text = "This wall is blocking your path.\nPress E to rotate the walls!";
+            tutorialMessageText.gameObject.SetActive(true);
+        }
+
+        // Step 3: Bounce an arrow on a wall
+        // GameObject targetWall = wallList.Count > 0 ? wallList[0] : null;
+        // if (targetWall != null)
+        // {
+        //     GameObject arrow = CreateTutorialArrow(targetWall.transform.position);
+        //     StartCoroutine(BounceArrow(arrow));
+        // }
+
+        // Step 4: Wait for E key
+        isWaitingForRotationInput = true;
+
+        // Step 5: Re-enable movement AFTER rotation
+        while (!hasRotatedOnce)
+        {
+            yield return null;
+        }
+
+        if (tutorialMessageText != null)
+        {
+            tutorialMessageText.text = "Great! You rotated the wall!";
+            yield return new WaitForSeconds(2f);
+            tutorialMessageText.gameObject.SetActive(false);
+        }
+
+        playerController.enabled = true;
     }
 
 }
