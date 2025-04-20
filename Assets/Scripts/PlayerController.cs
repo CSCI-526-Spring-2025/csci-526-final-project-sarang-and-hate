@@ -307,6 +307,23 @@ public class PlayerController : MonoBehaviour
                 }
             }
         }
+        if (tutorialScript != null)
+        {
+            foreach (GameObject wall in tutorialScript.GetTutorialWallList())
+            {
+                Collider wallCollider = wall.GetComponent<Collider>();
+                if (wallCollider != null) wallCollider.enabled = false;
+
+                Renderer rend = wall.GetComponent<Renderer>();
+                if (rend != null)
+                {
+                    Color faded = rend.material.color;
+                    faded.a = 0.3f;
+                    rend.material.color = faded;
+                }
+            }
+        }
+
     }
 
     private void OnCollisionEnter(Collision collision)

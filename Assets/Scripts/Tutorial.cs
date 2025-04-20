@@ -301,14 +301,28 @@ public class TutorialScript : MonoBehaviour
     }
 
     //A lot of the wall rotation is duplicated from the gridManager code 
+    //Right now for the wall rotation, only the walls on the tile that the player is rotating
     
     public void TryPlayerRotateMaze(Vector3 playerPosition)
     {
         if (tutorialIsWallRotating || tutorialRotationsUsed >= tutorialMaxRotations) return;
 
-        foreach (GameObject wall in wallList)
+        // Step 1: Get the tile position player is on
+        int tileX = Mathf.RoundToInt(playerPosition.x);
+        int tileZ = Mathf.RoundToInt(playerPosition.z);
+
+        // Step 2: Check if within bounds
+        if (tileX < 0 || tileX >= width || tileZ < 0 || tileZ >= height) return;
+
+        GameObject currentTile = tiles[tileX, tileZ];
+
+        // Step 3: Find all child walls and rotate only them
+        foreach (Transform child in currentTile.transform)
         {
-            RotateAndMoveWall(wall);
+            if (child.CompareTag("Wall")) // Only rotate children tagged as "Wall"
+            {
+                RotateAndMoveWall(child.gameObject);
+            }
         }
 
         tutorialRotationsUsed++;
@@ -317,7 +331,7 @@ public class TutorialScript : MonoBehaviour
         {
             hasRotatedOnce = true;
             ShowTutorialText("Great! Now pick up the glowing orb.");
-            SpawnCollectible(new Vector3(3f, 0.3f, 2f)); // Change this to a tile next to a wall
+            SpawnCollectible(new Vector3(5f, 0.3f, 1f)); // Place collectible logically near player
         }
     }
 
@@ -399,6 +413,10 @@ public class TutorialScript : MonoBehaviour
         }
 
         playerController.enabled = true;
+
+        
+        // Step 2: Trigger power-up tutorial
+        StartCoroutine(ShowCollectibleTutorial());
     }
 
     void ShowTutorialText(string message)
@@ -432,5 +450,37 @@ public class TutorialScript : MonoBehaviour
         collectibleInstructionShown = true;
     }
 
+
+
+    IEnumerator ShowCollectibleTutorial()
+    {
+        if (tutorialText != null)
+        {
+            tutorialText.text = "Now pick up the glowing orb!";
+            tutorialText.gameObject.SetActive(true);
+        }
+
+        // Spawn power-up collectible
+        Vector3 spawnPos = new Vector3(3f, 0.25f, 2f); // Change as needed
+        GameObject powerUp = Instantiate(powerUpPrefab, spawnPos, Quaternion.identity, transform);
+
+        // Wait until player picks up the collectible
+        while (!hasUsedPowerUp)
+            yield return null;
+
+        if (tutorialText != null)
+        {
+            tutorialText.text = "Nice! Press 'C' to walk through walls!";
+            yield return new WaitForSeconds(3f);
+            tutorialText.gameObject.SetActive(false);
+        }
+
+        // 🚀 Continue to next tutorial step if needed
+    }
+
+    public List<GameObject> GetTutorialWallList()
+    {
+        return wallList;
+    }
 
 }
