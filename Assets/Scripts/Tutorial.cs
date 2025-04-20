@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using UnityEngine;
 using System.Collections;
-using System.Collections.Generic; // ✅ Required for List<>
+using System.Collections.Generic; 
+using TMPro;
 
 
 public class TutorialScript : MonoBehaviour
@@ -35,7 +36,7 @@ public class TutorialScript : MonoBehaviour
         { { false, false, false, false }, { false, false, false, false }, { false, false, true, false }, { false, false, false, false } },
         { { false, false, true, false }, { false, false, false, false }, { false, false, false, false }, { false, false, false, false } },
         { { false, false, false, true }, { false, false, false, false }, { false, false, false, false }, { false, false, false, false } },
-        { { false, false, false, false }, { false, false, false, false }, { false, false, false, false }, {true,true, false, false } }
+        { { false, false, false, false }, {true,true, false,true}, {true, false, false,true}, {true,true, false, false } }
     };
 
     private Dictionary<GameObject, int> tutorialWallRotationState = new Dictionary<GameObject, int>();
@@ -52,9 +53,17 @@ public class TutorialScript : MonoBehaviour
 
 
     //This is Text on Screen
-    public TMPro.TMP_Text tutorialMessageText; // Drag into Inspector
     private bool hasRotatedOnce = false;
     private bool isWaitingForRotationInput = false;
+
+    //These are variables for tracking the powerup collectible; now we need to figure this collectible oout on how to let users know that they can go through walls 
+    private bool collectibleInstructionShown = false;
+    private bool collectiblePickedUp = false;
+    private bool hasUsedPowerUp = false;
+
+    public GameObject powerUpPrefab; // assign in Inspector
+    public TMPro.TMP_Text tutorialText;    // assign the TMP UI text box in Inspector
+
 
 
     void Start()
@@ -303,6 +312,13 @@ public class TutorialScript : MonoBehaviour
         }
 
         tutorialRotationsUsed++;
+
+        if (!hasRotatedOnce)
+        {
+            hasRotatedOnce = true;
+            ShowTutorialText("Great! Now pick up the glowing orb.");
+            SpawnCollectible(new Vector3(3f, 0.3f, 2f)); // Change this to a tile next to a wall
+        }
     }
 
     void RotateAndMoveWall(GameObject wall)
@@ -352,10 +368,10 @@ public class TutorialScript : MonoBehaviour
         //playerController.enabled = false;
 
         // Step 2: Show instruction
-        if (tutorialMessageText != null)
+        if (tutorialText != null)
         {
-            tutorialMessageText.text = "This wall is blocking your path.\nPress E to rotate the walls!";
-            tutorialMessageText.gameObject.SetActive(true);
+            tutorialText.text = "This wall is blocking your path.\nPress E to rotate the walls!";
+            tutorialText.gameObject.SetActive(true);
         }
 
         // Step 3: Bounce an arrow on a wall
@@ -375,14 +391,46 @@ public class TutorialScript : MonoBehaviour
             yield return null;
         }
 
-        if (tutorialMessageText != null)
+        if (tutorialText != null)
         {
-            tutorialMessageText.text = "Great! You rotated the wall!";
+            tutorialText.text = "Great! You rotated the wall!";
             yield return new WaitForSeconds(2f);
-            tutorialMessageText.gameObject.SetActive(false);
+            tutorialText.gameObject.SetActive(false);
         }
 
         playerController.enabled = true;
     }
+
+    void ShowTutorialText(string message)
+    {
+        if (tutorialText != null)
+        {
+            tutorialText.text = message;
+            tutorialText.gameObject.SetActive(true);
+        }
+    }
+
+    IEnumerator HideTutorialTextAfterSeconds(float seconds)
+    {
+        yield return new WaitForSeconds(seconds);
+        if (tutorialText != null)
+        {
+            tutorialText.gameObject.SetActive(false);
+        }
+    }
+
+    public bool HasPowerUp()
+    {
+        return true;
+        //return powerUpCount > 0;
+    }
+
+    //Method to spawn a collectible depending on position and location 
+    void SpawnCollectible(Vector3 position)
+    {
+        Instantiate(powerUpPrefab, position, Quaternion.identity, transform);
+        collectibleInstructionShown = true;
+    }
+
 
 }
