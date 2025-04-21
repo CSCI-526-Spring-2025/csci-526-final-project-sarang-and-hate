@@ -248,7 +248,45 @@ public class GridManager : MonoBehaviour
         //Set Zone Message Text to 30
         zoneMessageText.fontSize = 25;
 
+        // 🔴 Make trap tiles always red
+        if (tiles != null)
+        {
+            // Trap tile in Level 1
+            if (currentMazeLevel == MazeLevel.Level1)
+            {
+                SetTileRed(4, 2);
+            }
+
+            // Trap tiles for 3DScene2
+            if (SceneManager.GetActiveScene().name == "3DScene2")
+            {
+                SetTileRed(3, 3);
+                SetTileRed(1, 0);
+            }
+
+            // Trap tiles for 3DScene3
+            if (SceneManager.GetActiveScene().name == "3DScene3")
+            {
+                SetTileRed(5, 4);
+                SetTileRed(4, 5);
+                SetTileRed(1, 2);
+            }
+        }
+
+
     }
+
+    private void SetTileRed(int x, int y)
+    {
+        if (x >= 0 && y >= 0 && x < gridSize && y < gridSize && tiles[x, y] != null)
+        {
+            Tile tile = tiles[x, y];
+            tile.tileRenderer.material.color = Color.red;
+            tile.originalColor = Color.red;
+        }
+    }
+
+
     void Update()
     {
         if (!tutorialCompleted) return; // ⛔ Pause all logic until tutorial ends
