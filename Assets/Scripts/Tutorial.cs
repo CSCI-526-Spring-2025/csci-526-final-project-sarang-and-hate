@@ -103,6 +103,7 @@ public class TutorialScript : MonoBehaviour
         // Magic tiles: teleport to specific locations
 
         magicTileDestinations[new Vector2Int(1, 2)] = new Vector2Int(2, 3);
+        AdjustMinimapViewport();
 
     }
 
@@ -683,5 +684,23 @@ public class TutorialScript : MonoBehaviour
         line.material.mainTexture = Resources.Load<Texture2D>("DottedLine"); // optional
         Destroy(trailObj, 3f);
     }
+
+
+    public void AdjustMinimapViewport()
+    {
+        if (minimapCamera == null) return;
+
+        float centerX = (width - 1) * tileSize / 2f;
+        float centerZ = (height - 1) * tileSize / 2f;
+
+        // Reposition camera to center of the grid
+        minimapCamera.transform.position = new Vector3(centerX, 30f, centerZ);
+        minimapCamera.transform.rotation = Quaternion.Euler(90f, 270f, 0f); // Top-down
+
+        // Dynamically scale to grid size with padding
+        float largestDimension = Mathf.Max(width, height);
+        minimapCamera.orthographicSize = (largestDimension * tileSize / 2f) + 0.5f; // extra padding
+    }
+
 
 }
