@@ -9816,7 +9816,7 @@ MonoBehaviour:
   arrowPrefab: {fileID: 464750281498380233, guid: b7c2ee61a846388458b1f849d8f1f9ba, type: 3}
   zoneMessageText: {fileID: 1029758954}
   MapMessageText: {fileID: 1365513639}
-  minimapCamera: {fileID: 0}
+  minimapCamera: {fileID: 566011413}
   currentMazeLevel: 2
   minimapPadding: 0
 --- !u!4 &1283137346
