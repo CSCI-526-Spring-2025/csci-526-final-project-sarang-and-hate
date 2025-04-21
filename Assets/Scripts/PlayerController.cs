@@ -191,6 +191,11 @@ public class PlayerController : MonoBehaviour
             rotationUIText.text = $"Rotations: {gridManager.GetRotationsUsed()} / {gridManager.GetMaxRotations()}";
         }
 
+        else if (tutorialScript != null && rotationUIText != null)
+        {
+            rotationUIText.text = $"Rotations: {tutorialScript.GetRotationsUsed()} / {tutorialScript.GetMaxRotations()}";
+        }
+
         if (Input.GetKeyDown(KeyCode.M) && !isMinimapActive && mapUsesRemaining > 0)
         {
             minimapCamera.SetActive(true);
