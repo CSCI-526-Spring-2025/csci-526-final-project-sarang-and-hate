@@ -64,6 +64,8 @@ public class TutorialScript : MonoBehaviour
     public GameObject powerUpPrefab; // assign in Inspector
     public TMPro.TMP_Text tutorialText;    // assign the TMP UI text box in Inspector
 
+    //to track and destroy the colletible 
+    private GameObject currentCollectible;
 
 
     void Start()
@@ -460,22 +462,28 @@ public class TutorialScript : MonoBehaviour
             tutorialText.gameObject.SetActive(true);
         }
 
-        // Spawn power-up collectible
-        Vector3 spawnPos = new Vector3(3f, 0.25f, 2f); // Change as needed
-        GameObject powerUp = Instantiate(powerUpPrefab, spawnPos, Quaternion.identity, transform);
+        Vector3 spawnPos = new Vector3(3f, 0.25f, 2f); // Or your desired position
+        Instantiate(powerUpPrefab, spawnPos, Quaternion.identity, transform);
 
-        // Wait until player picks up the collectible
-        while (!hasUsedPowerUp)
-            yield return null;
-
+        yield return new WaitForSeconds(3f); // Just show instruction for a few seconds
         if (tutorialText != null)
         {
-            tutorialText.text = "Nice! Press 'C' to walk through walls!";
-            yield return new WaitForSeconds(3f);
             tutorialText.gameObject.SetActive(false);
         }
 
-        // 🚀 Continue to next tutorial step if needed
+        // Now wait for C key press to trigger the next instruction
+        PlayerController playerController = player.GetComponent<PlayerController>();
+        while (!playerController.InvisibilityIsActive()) {
+            yield return null;
+        }
+
+        // Show follow-up text once player uses the power-up
+        if (tutorialText != null)
+        {
+            tutorialText.text = "You're now invisible! Walk through walls!";
+            yield return new WaitForSeconds(3f);
+            tutorialText.gameObject.SetActive(false);
+        }
     }
 
     public List<GameObject> GetTutorialWallList()

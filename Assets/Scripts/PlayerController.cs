@@ -263,6 +263,17 @@ public class PlayerController : MonoBehaviour
                         if (rend != null) rend.material.color = new Color(rend.material.color.r, rend.material.color.g, rend.material.color.b, 1f);
                     }
                 }
+                if (tutorialScript != null)
+                {
+                    foreach (GameObject wall in tutorialScript.GetTutorialWallList())
+                    {
+                        Collider wallCollider = wall.GetComponent<Collider>();
+                        if (wallCollider != null) wallCollider.enabled = true;
+
+                        Renderer rend = wall.GetComponent<Renderer>();
+                        if (rend != null) rend.material.color = new Color(rend.material.color.r, rend.material.color.g, rend.material.color.b, 1f);
+                    }
+                }
 
                 canPassThroughWalls = false;
                 tilesMoved = 0;
@@ -451,5 +462,11 @@ public class PlayerController : MonoBehaviour
     //     transform.position = end;
     //     lastTeleportTime = Time.time; // 🟢 mark teleport end time      
     // }
+
+    public bool InvisibilityIsActive()
+    {
+        return canPassThroughWalls && invisibilityTime > 0f;
+    }
+
 
 }
