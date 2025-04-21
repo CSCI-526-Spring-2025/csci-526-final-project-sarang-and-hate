@@ -78,6 +78,9 @@ public class TutorialScript : MonoBehaviour
     public static int playerTrapped = 0;
     public static int playerMagicallyMoved = 0;
 
+    public GameObject arrowPrefab; // drag Arrow 1 prefab into this in the Inspector
+    private GameObject collectibleArrow;
+
 
 
     void Start()
@@ -489,7 +492,7 @@ public class TutorialScript : MonoBehaviour
         {
             hasRotatedOnce = true;
             ShowTutorialText("Great! Now pick up the glowing orb.");
-            SpawnCollectible(new Vector3(5f, 0.3f, 1f)); // Place collectible logically near player
+            //SpawnCollectible(new Vector3(5f, 0.3f, 1f)); // Place collectible logically near player
         }
     }
 
@@ -618,19 +621,29 @@ public class TutorialScript : MonoBehaviour
             tutorialText.gameObject.SetActive(true);
         }
 
-        Vector3 spawnPos = new Vector3(2f, 0.25f, 1f); // Or your desired position
-        Instantiate(powerUpPrefab, spawnPos, Quaternion.identity, transform);
+        Vector3 spawnPos = new Vector3(5f, 0.25f, 1f); // Desired orb location
+        GameObject collectible = Instantiate(powerUpPrefab, spawnPos, Quaternion.identity, transform);
 
-        // Wait until player has collected the orb
+        // 🔽 Spawn the arrow above the orb
+        Vector3 arrowPos = spawnPos + new Vector3(0f, 1.0f, 0f);
+        collectibleArrow = Instantiate(arrowPrefab, arrowPos, Quaternion.identity, transform);
+        StartCoroutine(BounceArrow(collectibleArrow));
+
+        // Wait until player collects the orb
         PlayerController playerController = player.GetComponent<PlayerController>();
-        int initialPowerUps = playerController.GetPowerUpCount(); // You may need to expose this
+        int initialPowerUps = playerController.GetPowerUpCount();
 
         while (playerController.GetPowerUpCount() == initialPowerUps)
         {
             yield return null;
         }
 
-        // Step 2: Show 'Press C' message
+        // destroy arrow
+        if (collectibleArrow != null)
+        {
+            Destroy(collectibleArrow);
+        }
+
         if (tutorialText != null)
         {
             tutorialText.text = "Press C to go through walls!";
@@ -638,12 +651,11 @@ public class TutorialScript : MonoBehaviour
             tutorialText.gameObject.SetActive(false);
         }
 
-        // Now wait for C key press to trigger the next instruction
-        while (!playerController.InvisibilityIsActive()) {
+        while (!playerController.InvisibilityIsActive())
+        {
             yield return null;
         }
 
-        // Show follow-up text once player uses the power-up
         if (tutorialText != null)
         {
             tutorialText.text = "You're now invisible! Walk through walls!";
@@ -651,6 +663,7 @@ public class TutorialScript : MonoBehaviour
             tutorialText.gameObject.SetActive(false);
         }
     }
+
 
     public List<GameObject> GetTutorialWallList()
     {
@@ -700,6 +713,22 @@ public class TutorialScript : MonoBehaviour
         // Dynamically scale to grid size with padding
         float largestDimension = Mathf.Max(width, height);
         minimapCamera.orthographicSize = (largestDimension * tileSize / 2f) + 0.5f; // extra padding
+    }
+
+    IEnumerator BounceArrow(GameObject arrow)
+    {
+        float bounceHeight = 0.3f;
+        float bounceSpeed = 2f;
+        float rotationSpeed = 45f;
+        Vector3 startPos = arrow.transform.position;
+
+        while (arrow != null)
+        {
+            float yOffset = Mathf.Sin(Time.time * bounceSpeed) * bounceHeight;
+            arrow.transform.position = new Vector3(startPos.x, startPos.y + yOffset, startPos.z);
+            arrow.transform.Rotate(Vector3.up * rotationSpeed * Time.deltaTime);
+            yield return null;
+        }
     }
 
 

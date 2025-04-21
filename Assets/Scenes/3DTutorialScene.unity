@@ -165,6 +165,7 @@ MonoBehaviour:
   minimapCamera: {fileID: 215227078}
   powerUpPrefab: {fileID: 3529927858449244120, guid: 62b77d2c1204fcc46bae21bd5bd15b0c, type: 3}
   tutorialText: {fileID: 840550755}
+  arrowPrefab: {fileID: 464750281498380233, guid: b7c2ee61a846388458b1f849d8f1f9ba, type: 3}
 --- !u!4 &18704474
 Transform:
   m_ObjectHideFlags: 0
