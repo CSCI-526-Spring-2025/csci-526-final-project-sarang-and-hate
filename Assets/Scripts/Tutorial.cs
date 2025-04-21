@@ -28,15 +28,22 @@ public class TutorialScript : MonoBehaviour
 
     private List<GameObject> wallList = new List<GameObject>();
 
+    private Vector2Int lastPlayerTile = new Vector2Int(-1, -1); // to detect tile change
+
+    private Dictionary<Vector2Int, Vector2Int> trapTileDestinations = new Dictionary<Vector2Int, Vector2Int>();
+    private Dictionary<Vector2Int, Vector2Int> magicTileDestinations = new Dictionary<Vector2Int, Vector2Int>();
+
+
+
     // Directions: 0 = North, 1 = West, 2 = East, 3 = South
     [SerializeField] private bool[,,] tutorialWallGrid = new bool[6, 4, 4]
     {
+        { { false, false, false, true }, { false, false, false, true }, { false, false, false, true }, { false, false, false, true } },
         { { false, false, false, false }, { false, false, false, false }, { false, false, false, false }, { false, false, false, false } },
-        { { false, false, false, false }, { true, false, false, false }, { false, true, false, false }, { false, false, false, false } },
-        { { false, false, false, false }, { false, false, false, false }, { false, false, true, false }, { false, false, false, false } },
-        { { false, false, true, false }, { false, false, false, false }, { false, false, false, false }, { false, false, false, false } },
-        { { false, false, false, true }, { false, false, false, false }, { false, false, false, false }, { false, false, false, false } },
-        { { false, false, false, false }, {true,true, false,true}, {true, false, false,true}, {true,true, false, false } }
+        { { true, true, false, false }, { true, false, true, false }, { false, false, false, false }, { false, false, false, false } },
+        { { false, true, false, true }, { false, false, true, true }, { false, false, false, false }, { false, false, false, false } },
+        { { false, false, false, false }, { false, false, false, false }, { false, false, false, false }, { false, false, false, false } },
+        { { true, false, false, false }, {true,true, false,true}, {true, false, false,true}, {true,true, false, false } }
     };
 
     private Dictionary<GameObject, int> tutorialWallRotationState = new Dictionary<GameObject, int>();
@@ -83,15 +90,85 @@ public class TutorialScript : MonoBehaviour
         // AddWallToTile(5, 3, new Vector3(0f, 2.5f, -0.5f), Quaternion.Euler(0, 90, 0)); // West
         // AddWallToTile(4, 2, new Vector3(0f, 2.5f, 0.5f), Quaternion.Euler(0, 90, 0));  // East
         StartCoroutine(ShowWallRotationTutorial());
+
+        // Trap: send player to tile (5, 3) — the green start tile
+        trapTileDestinations[new Vector2Int(1, 0)] = new Vector2Int(5, 3);
+        trapTileDestinations[new Vector2Int(1, 1)] = new Vector2Int(5, 3);
+        trapTileDestinations[new Vector2Int(1, 3)] = new Vector2Int(5, 3);
+        // Magic tiles: teleport to specific locations
+
+        magicTileDestinations[new Vector2Int(1, 2)] = new Vector2Int(2, 3);
+
     }
+
+    void Update()
+    {
+        if (player == null || tiles == null) return;
+
+        Vector3 playerPos = player.transform.position;
+        int x = Mathf.RoundToInt(playerPos.x);
+        int z = Mathf.RoundToInt(playerPos.z);
+        Vector2Int currentTile = new Vector2Int(x, z);
+
+        if (currentTile == lastPlayerTile) return;
+        lastPlayerTile = currentTile;
+
+        if (x < 0 || x >= width || z < 0 || z >= height) return;
+
+        GameObject tileObj = tiles[x, z];
+        if (tileObj.CompareTag("Trap"))
+        {
+            HandleTrapTile(x, z);
+        }
+        else if (tileObj.CompareTag("Magic"))
+        {
+            HandleMagicTile(x, z);
+        }
+    }
+
 
     private readonly Vector2Int[] goalTilePositions = new Vector2Int[]
     {
-        new Vector2Int(0, 3),
-        new Vector2Int(2, 3),
-        new Vector2Int(4, 3),
+        new Vector2Int(0, 0),
+        new Vector2Int(3, 0),
+        new Vector2Int(5, 1),
     };
 
+
+    void HandleTrapTile(int x, int z)
+    {
+        Vector2Int trigger = new Vector2Int(x, z);
+        if (trapTileDestinations.ContainsKey(trigger))
+        {
+            Vector2Int target = trapTileDestinations[trigger];
+            player.transform.position = new Vector3(target.x, 0.5f, target.y);
+
+            if (tutorialText != null)
+            {
+                tutorialText.text = "You hit a trap! Be careful!";
+                tutorialText.gameObject.SetActive(true);
+                StartCoroutine(HideTutorialTextAfterSeconds(2f));
+            }
+        }
+    }
+
+
+    void HandleMagicTile(int x, int z)
+    {
+        Vector2Int trigger = new Vector2Int(x, z);
+        if (magicTileDestinations.ContainsKey(trigger))
+        {
+            Vector2Int target = magicTileDestinations[trigger];
+            player.transform.position = new Vector3(target.x, 0.5f, target.y);
+
+            if (tutorialText != null)
+            {
+                tutorialText.text = "Magic tile activated! Zoom!";
+                tutorialText.gameObject.SetActive(true);
+                StartCoroutine(HideTutorialTextAfterSeconds(2f));
+            }
+        }
+    }
 
 
     void GenerateTileGrid()
@@ -114,6 +191,37 @@ public class TutorialScript : MonoBehaviour
                 GameObject tile = Instantiate(tilePrefab, spawnPosition, Quaternion.identity, transform);
                 tile.name = $"Tile ({x}, {z})";
                 tiles[x, z] = tile;
+
+
+                Tile tileComp = tile.AddComponent<Tile>();
+                tileComp.tileRenderer = tile.GetComponent<Renderer>();
+
+                // Assign special tiles manually (hardcoded like GridManager)
+                if ((x == 1 && z == 0) || (x == 1 && z == 1 ) || (x == 1 && z == 3) )  // Trap tile
+                {
+                    tileComp.tileRenderer.material.color = Color.red;
+                    tileComp.originalColor = Color.red;
+                    tile.tag = "Trap";
+                }
+                else if ((x == 1 && z == 2))  // Magic tiles
+                {
+                    Color neonPink = new Color(1f, 0.1f, 0.9f); // Neon pink/purple
+                    tileComp.tileRenderer.material.color = neonPink;
+                    tileComp.originalColor = neonPink;
+                    tile.tag = "Magic";
+
+                    // Optional: Glow effect
+                    Material mat = tileComp.tileRenderer.material;
+                    mat.EnableKeyword("_EMISSION");
+                    mat.SetColor("_EmissionColor", neonPink);
+
+
+                }
+                else
+                {
+                    tileComp.originalColor = tileComp.tileRenderer.material.color;
+                }
+
 
                 Renderer rend = tile.GetComponent<Renderer>();
                 if (rend != null)
@@ -462,7 +570,7 @@ public class TutorialScript : MonoBehaviour
             tutorialText.gameObject.SetActive(true);
         }
 
-        Vector3 spawnPos = new Vector3(3f, 0.25f, 2f); // Or your desired position
+        Vector3 spawnPos = new Vector3(2f, 0.25f, 1f); // Or your desired position
         Instantiate(powerUpPrefab, spawnPos, Quaternion.identity, transform);
 
         // Wait until player has collected the orb
