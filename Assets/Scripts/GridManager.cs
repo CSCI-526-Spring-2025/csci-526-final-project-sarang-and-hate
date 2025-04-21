@@ -876,35 +876,122 @@ void SetupRotationSequences()
         Instantiate(collectibleInvisible, new Vector3(5f, 0.25f, 5f), Quaternion.identity, transform);
         hasSpawnedCollectibleAtStart = true;
     }
+    // private void HandleTrap(Vector2Int currentTile, int xTile, int yTile)
+    // {
+    //     playerTrapped++;
+    //     // Move player back a few tiles
+    //     int replaceXTile = xTile + 1;
+    //     int replaceYTile = yTile + 2;
+    //     player.transform.position = new Vector3(replaceXTile, 0, replaceYTile);
+    //     int currentZone = tileZones[currentTile];
+
+    //     // Example: you only want to spawn the collectible the *first* time they hit a trap
+    //     // StartCoroutine(SpawnCollectibleAtStartWithDelay(1.0f)); 
+    //     // 1 second delay 
+
+    //     // Change the color of the tile at (3,3) to red
+    //     GameObject trapTile = GameObject.Find("Tile " + currentTile + " - Zone " + currentZone); // Ensure this tile has a unique name
+    //     if (trapTile != null)
+    //     {
+    //         Renderer sr = trapTile.GetComponent<Renderer>();
+    //         sr.material.color = Color.red;
+    //         Tile tile = sr.GetComponent<Tile>();
+    //         if (tile != null) {
+    //             tile.originalColor = Color.red; // 🔹 Store red as original
+    //         }
+
+    //     }
+
+        
+    //     // Trigger minimap from PlayerController
+    //     player.GetComponent<PlayerController>().TriggerTemporaryMinimap();
+    // }
+
+    // Modify HandleTrap in GridManager.cs
+    // private void HandleTrap(Vector2Int currentTile, int xTile, int yTile)
+    // {
+    //     playerTrapped++;
+
+    //     Vector3 from = player.transform.position;
+    //     Vector3 to = new Vector3(xTile + 1, 0, yTile + 2);
+
+    //     player.GetComponent<PlayerController>().StartCoroutine(
+    //         player.GetComponent<PlayerController>().SmoothTeleport(from, to, 1.5f)
+    //     );
+
+    //     // Zoom minimap
+    //     StartCoroutine(ZoomMinimap(3f)); // 3 seconds zoom
+
+    //     // Add trail
+    //     ShowDottedTrail(from, to, Color.red);
+
+    //     int currentZone = tileZones[currentTile];
+    //     GameObject trapTile = GameObject.Find("Tile " + currentTile + " - Zone " + currentZone);
+    //     if (trapTile != null)
+    //     {
+    //         Renderer sr = trapTile.GetComponent<Renderer>();
+    //         sr.material.color = Color.red;
+    //         Tile tile = sr.GetComponent<Tile>();
+    //         if (tile != null) tile.originalColor = Color.red;
+    //     }
+
+    //     player.GetComponent<PlayerController>().TriggerTemporaryMinimap();
+    // }
+
     private void HandleTrap(Vector2Int currentTile, int xTile, int yTile)
     {
         playerTrapped++;
-        // Move player back a few tiles
-        int replaceXTile = xTile + 1;
-        int replaceYTile = yTile + 2;
-        player.transform.position = new Vector3(replaceXTile, 0, replaceYTile);
+
+        Vector3 from = player.transform.position;
+        Vector3 to = new Vector3(xTile + 1, 0.25f, yTile + 2); // y is raised slightly
+
+        player.GetComponent<PlayerController>().StartCoroutine(
+            player.GetComponent<PlayerController>().SmoothTeleport(from, to, 3f)
+        );
+
+        StartCoroutine(ZoomMinimap(5f)); // 👁️ Show minimap zoom for full 5 seconds
+        ShowDottedTrail(from, to, Color.red); // 🔴 Add visual trail
+
+        // Optional: visually mark trap tile
         int currentZone = tileZones[currentTile];
-
-        // Example: you only want to spawn the collectible the *first* time they hit a trap
-        // StartCoroutine(SpawnCollectibleAtStartWithDelay(1.0f)); 
-        // 1 second delay 
-
-        // Change the color of the tile at (3,3) to red
-        GameObject trapTile = GameObject.Find("Tile " + currentTile + " - Zone " + currentZone); // Ensure this tile has a unique name
+        GameObject trapTile = GameObject.Find("Tile " + currentTile + " - Zone " + currentZone);
         if (trapTile != null)
         {
             Renderer sr = trapTile.GetComponent<Renderer>();
             sr.material.color = Color.red;
             Tile tile = sr.GetComponent<Tile>();
-            if (tile != null) {
-                tile.originalColor = Color.red; // 🔹 Store red as original
-            }
-
+            if (tile != null) tile.originalColor = Color.red;
         }
 
-        
-        // Trigger minimap from PlayerController
-        player.GetComponent<PlayerController>().TriggerTemporaryMinimap();
+        player.GetComponent<PlayerController>().TriggerTemporaryMinimap(); // maintain minimap visibility
+    }
+
+
+    // Coroutine to zoom minimap
+    IEnumerator ZoomMinimap(float duration)
+    {
+        float originalSize = minimapCamera.orthographicSize;
+        minimapCamera.orthographicSize = 3f;
+        yield return new WaitForSeconds(duration);
+        minimapCamera.orthographicSize = originalSize;
+    }
+
+    // Function to show a dotted trail in 2D minimap
+    public void ShowDottedTrail(Vector3 from, Vector3 to, Color color)
+    {
+        GameObject trailObj = new GameObject("TeleportTrail");
+        LineRenderer line = trailObj.AddComponent<LineRenderer>();
+        line.positionCount = 2;
+        line.SetPosition(0, new Vector3(from.x, 0.01f, from.z));
+        line.SetPosition(1, new Vector3(to.x, 0.01f, to.z));
+        line.material = new Material(Shader.Find("Sprites/Default"));
+        line.startColor = color;
+        line.endColor = color;
+        line.widthMultiplier = 0.05f;
+        line.textureMode = LineTextureMode.Tile;
+        line.material.mainTexture = Resources.Load<Texture2D>("DottedLine"); // Optional: custom dotted texture
+
+        Destroy(trailObj, 3f); // Remove after 3 seconds
     }
 
     private void HandleMagicTile(Vector2Int currentTile)

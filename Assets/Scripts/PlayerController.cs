@@ -5,6 +5,7 @@ using TMPro;
 
 public class PlayerController : MonoBehaviour
 {
+    // private float lastTeleportTime = -10f;
     public float moveSpeed = 5f;
     private Rigidbody rb;
     private GridManager gridManager;
@@ -378,10 +379,77 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    // IEnumerator TemporarilyShowMinimap()
+    // {
+    //     float duration = 3f;
+
+    //     // If called right after teleport, extend the duration
+    //     if (Time.time - lastTeleportTime < 0.1f)
+    //     {
+    //         duration = 5f;
+    //     }
+
+    //     if (minimapCamera != null)
+    //     {
+    //         minimapCamera.SetActive(true);
+    //         isMinimapActive = true;
+    //         yield return new WaitForSeconds(duration);
+    //         minimapCamera.SetActive(false);
+    //         isMinimapActive = false;
+    //     }
+    // }
+
     public void TriggerTemporaryMinimap()
     {
         StartCoroutine(TemporarilyShowMinimap());
     }
 
+    //Add this coroutine to PlayerController.cs
+    public IEnumerator SmoothTeleport(Vector3 fromPosition, Vector3 toPosition, float duration)
+    {
+        float elapsed = 0f;
+        CharacterController cc = GetComponent<CharacterController>();
+        if (cc != null) cc.enabled = false;
+
+        float yHeight = 0.15f; // consistent height above the grid
+
+        Vector3 start = new Vector3(fromPosition.x, yHeight, fromPosition.z);
+        Vector3 end = new Vector3(toPosition.x, yHeight, toPosition.z);
+
+        while (elapsed < duration)
+        {
+            transform.position = Vector3.Lerp(start, end, elapsed / duration);
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+        transform.position = end;
+
+        if (cc != null) cc.enabled = true;
+    }
+
+    // public IEnumerator SmoothTeleport(Vector3 fromPosition, Vector3 toPosition, float duration)
+    // {
+    //     float elapsed = 0f;
+    //     CharacterController cc = GetComponent<CharacterController>();
+    //     if (cc != null) cc.enabled = false;
+
+    //     float yHeight = 0.15f; // consistent height above the grid
+
+    //     Vector3 start = new Vector3(fromPosition.x, yHeight, fromPosition.z);
+    //     Vector3 end = new Vector3(toPosition.x, yHeight, toPosition.z);
+
+        // while (elapsed < duration)
+        // {
+        //     transform.position = Vector3.Lerp(start, end, elapsed / duration);
+        //     elapsed += Time.deltaTime;
+        //     yield return null;
+        // }
+        // transform.position = end;
+
+    //     if (cc != null) cc.enabled = true;
+
+    //     transform.position = end;
+    //     lastTeleportTime = Time.time; // 🟢 mark teleport end time      
+    // }
 
 }
