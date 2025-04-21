@@ -33,7 +33,7 @@ public class TutorialScript : MonoBehaviour
     private Dictionary<Vector2Int, Vector2Int> trapTileDestinations = new Dictionary<Vector2Int, Vector2Int>();
     private Dictionary<Vector2Int, Vector2Int> magicTileDestinations = new Dictionary<Vector2Int, Vector2Int>();
 
-
+    public Camera minimapCamera; // Assign in Inspector
 
     // Directions: 0 = North, 1 = West, 2 = East, 3 = South
     [SerializeField] private bool[,,] tutorialWallGrid = new bool[6, 4, 4]
@@ -73,6 +73,11 @@ public class TutorialScript : MonoBehaviour
 
     //to track and destroy the colletible 
     private GameObject currentCollectible;
+
+
+    public static int playerTrapped = 0;
+    public static int playerMagicallyMoved = 0;
+
 
 
     void Start()
@@ -137,38 +142,80 @@ public class TutorialScript : MonoBehaviour
 
     void HandleTrapTile(int x, int z)
     {
-        Vector2Int trigger = new Vector2Int(x, z);
-        if (trapTileDestinations.ContainsKey(trigger))
-        {
-            Vector2Int target = trapTileDestinations[trigger];
-            player.transform.position = new Vector3(target.x, 0.5f, target.y);
+        playerTrapped++;
 
-            if (tutorialText != null)
-            {
-                tutorialText.text = "You hit a trap! Be careful!";
-                tutorialText.gameObject.SetActive(true);
-                StartCoroutine(HideTutorialTextAfterSeconds(2f));
-            }
+        Vector2Int trigger = new Vector2Int(x, z);
+        if (!trapTileDestinations.ContainsKey(trigger)) return;
+
+        Vector2Int target = trapTileDestinations[trigger];
+        Vector3 from = player.transform.position;
+        Vector3 to = new Vector3(target.x, 0.25f, target.y);
+
+        PlayerController pc = player.GetComponent<PlayerController>();
+        if (pc != null)
+        {
+            pc.StartCoroutine(pc.SmoothTeleport(from, to, 3f));
+            pc.TriggerTemporaryMinimap();
+        }
+        else
+        {
+            player.transform.position = to;
+        }
+
+        StartCoroutine(ZoomMinimap(3f));
+        ShowDottedTrail(from, to, Color.red);
+
+        if (tutorialText != null)
+        {
+            tutorialText.text = "You hit a trap! Be careful!";
+            tutorialText.gameObject.SetActive(true);
+            StartCoroutine(HideTutorialTextAfterSeconds(2f));
+        }
+
+        GameObject trapTile = tiles[x, z];
+        Tile tile = trapTile.GetComponent<Tile>();
+        if (tile != null)
+        {
+            tile.tileRenderer.material.color = Color.red;
+            tile.originalColor = Color.red;
         }
     }
+
+
 
 
     void HandleMagicTile(int x, int z)
     {
-        Vector2Int trigger = new Vector2Int(x, z);
-        if (magicTileDestinations.ContainsKey(trigger))
-        {
-            Vector2Int target = magicTileDestinations[trigger];
-            player.transform.position = new Vector3(target.x, 0.5f, target.y);
+        playerMagicallyMoved++;
 
-            if (tutorialText != null)
-            {
-                tutorialText.text = "Magic tile activated! Zoom!";
-                tutorialText.gameObject.SetActive(true);
-                StartCoroutine(HideTutorialTextAfterSeconds(2f));
-            }
+        Vector2Int trigger = new Vector2Int(x, z);
+        if (!magicTileDestinations.ContainsKey(trigger)) return;
+
+        Vector2Int target = magicTileDestinations[trigger];
+        player.transform.position = new Vector3(target.x, 0.5f, target.y);
+
+        PlayerController pc = player.GetComponent<PlayerController>();
+        if (pc != null)
+        {
+            pc.TriggerTemporaryMinimap();
+        }
+
+        GameObject tileObj = tiles[x, z];
+        Tile tile = tileObj.GetComponent<Tile>();
+        if (tile != null)
+        {
+            tile.tileRenderer.material.color = new Color(0.5f, 0f, 1f); // purple glow
+        }
+
+        if (tutorialText != null)
+        {
+            tutorialText.text = "Magic tile activated! Zoom!";
+            tutorialText.gameObject.SetActive(true);
+            StartCoroutine(HideTutorialTextAfterSeconds(2f));
         }
     }
+
+
 
 
     void GenerateTileGrid()
@@ -607,6 +654,34 @@ public class TutorialScript : MonoBehaviour
     public List<GameObject> GetTutorialWallList()
     {
         return wallList;
+    }
+
+
+    IEnumerator ZoomMinimap(float duration)
+    {
+        if (minimapCamera == null) yield break;
+
+        float originalSize = minimapCamera.orthographicSize;
+        minimapCamera.orthographicSize = 3f; // zoom in
+        yield return new WaitForSeconds(duration);
+        minimapCamera.orthographicSize = originalSize;
+    }
+
+    void ShowDottedTrail(Vector3 from, Vector3 to, Color color)
+    {
+        GameObject trailObj = new GameObject("TeleportTrail");
+        LineRenderer line = trailObj.AddComponent<LineRenderer>();
+        line.positionCount = 2;
+        line.SetPosition(0, new Vector3(from.x, 0.01f, from.z));
+        line.SetPosition(1, new Vector3(to.x, 0.01f, to.z));
+        line.material = new Material(Shader.Find("Sprites/Default"));
+        line.startColor = color;
+        line.endColor = color;
+        line.widthMultiplier = 0.05f;
+        line.textureMode = LineTextureMode.Tile;
+
+        line.material.mainTexture = Resources.Load<Texture2D>("DottedLine"); // optional
+        Destroy(trailObj, 3f);
     }
 
 }
