@@ -468,5 +468,10 @@ public class PlayerController : MonoBehaviour
         return canPassThroughWalls && invisibilityTime > 0f;
     }
 
+    public int GetPowerUpCount()
+    {
+        return powerUpCount;
+    }
+
 
 }

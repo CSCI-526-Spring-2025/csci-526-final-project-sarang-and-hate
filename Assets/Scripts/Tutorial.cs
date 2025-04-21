@@ -465,14 +465,24 @@ public class TutorialScript : MonoBehaviour
         Vector3 spawnPos = new Vector3(3f, 0.25f, 2f); // Or your desired position
         Instantiate(powerUpPrefab, spawnPos, Quaternion.identity, transform);
 
-        yield return new WaitForSeconds(3f); // Just show instruction for a few seconds
+        // Wait until player has collected the orb
+        PlayerController playerController = player.GetComponent<PlayerController>();
+        int initialPowerUps = playerController.GetPowerUpCount(); // You may need to expose this
+
+        while (playerController.GetPowerUpCount() == initialPowerUps)
+        {
+            yield return null;
+        }
+
+        // Step 2: Show 'Press C' message
         if (tutorialText != null)
         {
+            tutorialText.text = "Press C to go through walls!";
+            yield return new WaitForSeconds(3f);
             tutorialText.gameObject.SetActive(false);
         }
 
         // Now wait for C key press to trigger the next instruction
-        PlayerController playerController = player.GetComponent<PlayerController>();
         while (!playerController.InvisibilityIsActive()) {
             yield return null;
         }
