@@ -7,6 +7,7 @@ using TMPro;
 
 public class GridManager : MonoBehaviour
 {
+    private bool isTeleporting = false;
     private bool tutorialCompleted = false; // ✅ Track magic tile tutorial
     public GameObject tilePrefab; // Assign a basic cube in Unity
     public int gridSize = 6;
@@ -890,13 +891,17 @@ void SetupRotationSequences()
             {
                 HandleTrap(currentTile, playerTileX, playerTileY);
             }
+            if ((playerTileX == 4 && playerTileY == 4))
+            {
+                HandleMagicTile(currentTile);
+            }
         }
         if (SceneManager.GetActiveScene().name == "3DScene3"){
             if ((playerTileX == 5 && playerTileY == 4) || (playerTileX == 4 && playerTileY == 5) || (playerTileX == 1 && playerTileY == 2))
             {
                 HandleTrap(currentTile, playerTileX, playerTileY);
             }
-            if ((playerTileX == 6 && playerTileY == 5) || (playerTileX == 3 && playerTileY == 6) || (playerTileX == 2 && playerTileY == 2))
+            if ((playerTileX == 6 && playerTileY == 5) || (playerTileX == 3 && playerTileY == 6) )
             {
                 HandleMagicTile(currentTile);
             }
@@ -918,11 +923,14 @@ void SetupRotationSequences()
 
     private void HandleTrap(Vector2Int currentTile, int xTile, int yTile)
     {
+        if (isTeleporting) return;
         playerTrapped++;
 
         Vector3 from = player.transform.position;
         Vector3 to = new Vector3(xTile + 1, 0.25f, yTile + 2); // y is raised slightly
 
+        isTeleporting = true;  // 🛡️ Block other triggers
+        
         player.GetComponent<PlayerController>().StartCoroutine(
             player.GetComponent<PlayerController>().SmoothTeleport(from, to, 3f)
         );
@@ -942,6 +950,7 @@ void SetupRotationSequences()
         }
 
         player.GetComponent<PlayerController>().TriggerTemporaryMinimap(); // maintain minimap visibility
+        StartCoroutine(ResetTeleportFlag(3f));
     }
 
 
@@ -972,25 +981,105 @@ void SetupRotationSequences()
         Destroy(trailObj, 3f); // Remove after 3 seconds
     }
 
+    // private void HandleMagicTile(Vector2Int currentTile)
+    // {
+    //     playerMagicallyMoved++;
+    //     Vector2Int teleportTile = GetMagicTileDestination(currentTile);
+    //     player.transform.position = new Vector3(teleportTile.x, 0, teleportTile.y);
+    //     Debug.Log("Magic tile triggered! Teleporting player to: " + teleportTile);
+
+    //     int currentZone = tileZones[currentTile];
+
+    //     // Highlight the tile with a special color to show it was activated
+    //     GameObject magicTile = GameObject.Find("Tile " + currentTile + " - Zone " + currentZone);
+    //     if (magicTile != null)
+    //     {
+    //         Renderer sr = magicTile.GetComponent<Renderer>();
+    //         sr.material.color = new Color(0.5f, 0f, 1f); // Purple/magenta glow
+    //     }
+
+    //     // Trigger minimap from PlayerController
+    //     player.GetComponent<PlayerController>().TriggerTemporaryMinimap();
+    // }
+
+    // private void HandleMagicTile(Vector2Int currentTile)
+    // {
+    //     if (isTeleporting) return; // ⛔ Prevent retrigger during teleport
+
+    //     isTeleporting = true; // ✅ Set teleporting flag
+
+    //     playerMagicallyMoved++;
+
+    //     Vector3 from = player.transform.position;
+    //     Vector2Int teleportTile = GetMagicTileDestination(currentTile);
+    //     Vector3 to = new Vector3(teleportTile.x, 0.25f, teleportTile.y); // consistent Y height
+
+    //     // 🔁 Smooth teleport
+    //     player.GetComponent<PlayerController>().StartCoroutine(
+    //         player.GetComponent<PlayerController>().SmoothTeleport(from, to, 3f)
+    //     );
+
+    //     // 👁️ Show minimap zoomed for 5 seconds
+    //     StartCoroutine(ZoomMinimap(5f));
+
+    //     // 🔮 Dotted trail from current to destination
+    //     ShowDottedTrail(from, to, new Color(0.5f, 0f, 1f)); // Purple trail
+
+    //     // 🟣 Highlight magic tile visually
+    //     int currentZone = tileZones[currentTile];
+    //     GameObject magicTile = GameObject.Find("Tile " + currentTile + " - Zone " + currentZone);
+    //     if (magicTile != null)
+    //     {
+    //         Renderer sr = magicTile.GetComponent<Renderer>();
+    //         sr.material.color = new Color(0.5f, 0f, 1f); // Purple
+    //         Tile tile = sr.GetComponent<Tile>();
+    //         if (tile != null) tile.originalColor = new Color(0.5f, 0f, 1f);
+    //     }
+
+    //     // 📍 Trigger minimap to stay open
+    //     player.GetComponent<PlayerController>().TriggerTemporaryMinimap();
+
+    //     // 🔚 Reset flag after teleport ends
+    //     StartCoroutine(ResetTeleportFlag(3f)); // match teleport duration
+    // }
+
     private void HandleMagicTile(Vector2Int currentTile)
     {
+        if (isTeleporting) return;  // ⛔ Skip if already mid-teleport
+
+        isTeleporting = true;
         playerMagicallyMoved++;
+
+        Vector3 from = player.transform.position;
         Vector2Int teleportTile = GetMagicTileDestination(currentTile);
-        player.transform.position = new Vector3(teleportTile.x, 0, teleportTile.y);
-        Debug.Log("Magic tile triggered! Teleporting player to: " + teleportTile);
+        Vector3 to = new Vector3(teleportTile.x, 0.25f, teleportTile.y);
 
+        player.GetComponent<PlayerController>().StartCoroutine(
+            player.GetComponent<PlayerController>().SmoothTeleport(from, to, 3f)
+        );
+
+        StartCoroutine(ZoomMinimap(5f));
+        ShowDottedTrail(from, to, new Color(0.5f, 0f, 1f));
+        player.GetComponent<PlayerController>().TriggerTemporaryMinimap();
+
+        // Color the activated magic tile
         int currentZone = tileZones[currentTile];
-
-        // Highlight the tile with a special color to show it was activated
         GameObject magicTile = GameObject.Find("Tile " + currentTile + " - Zone " + currentZone);
         if (magicTile != null)
         {
             Renderer sr = magicTile.GetComponent<Renderer>();
-            sr.material.color = new Color(0.5f, 0f, 1f); // Purple/magenta glow
+            sr.material.color = new Color(0.5f, 0f, 1f); // Purple
+            Tile tile = sr.GetComponent<Tile>();
+            if (tile != null) tile.originalColor = new Color(0.5f, 0f, 1f);
         }
 
-        // Trigger minimap from PlayerController
-        player.GetComponent<PlayerController>().TriggerTemporaryMinimap();
+        StartCoroutine(ResetTeleportFlag(3f));
+    }
+
+    private IEnumerator ResetTeleportFlag(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        isTeleporting = false;
     }
 
     private Vector2Int GetMagicTileDestination(Vector2Int currentTile)
