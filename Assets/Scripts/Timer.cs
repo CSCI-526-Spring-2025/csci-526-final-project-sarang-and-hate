@@ -56,6 +56,14 @@ public class GameTimer : MonoBehaviour
 
     void Start()
     {
+        string sceneName1 = SceneManager.GetActiveScene().name;
+        // Skip timer entirely for Tutorial
+        if (sceneName1 == "3DTutorialScene")
+        {
+            if (timerText != null)
+                timerText.gameObject.SetActive(false); // hide the timer UI
+            return; // skip timer logic entirely
+        }
         //Ensures that each level will have 3 resets remaining
          GameSession.helpUsesRemaining = 3; // Reset Help for each level
         //Stop the timer initially
