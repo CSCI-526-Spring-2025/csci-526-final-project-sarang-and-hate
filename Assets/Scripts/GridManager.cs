@@ -932,7 +932,7 @@ void SetupRotationSequences()
             player.GetComponent<PlayerController>().SmoothTeleport(from, to, 3f)
         );
 
-        StartCoroutine(ZoomMinimap(5f)); // 👁️ Show minimap zoom for full 5 seconds
+        // StartCoroutine(ZoomMinimap(5f)); // 👁️ Show minimap zoom for full 5 seconds
         ShowDottedTrail(from, to, Color.red); // 🔴 Add visual trail
 
         // Optional: visually mark trap tile
@@ -993,7 +993,7 @@ void SetupRotationSequences()
             player.GetComponent<PlayerController>().SmoothTeleport(from, to, 3f)
         );
 
-        StartCoroutine(ZoomMinimap(5f));
+        // StartCoroutine(ZoomMinimap(5f));
         ShowDottedTrail(from, to, new Color(0.5f, 0f, 1f));
         player.GetComponent<PlayerController>().TriggerTemporaryMinimap();
 
