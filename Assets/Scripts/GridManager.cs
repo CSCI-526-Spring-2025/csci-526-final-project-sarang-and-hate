@@ -892,10 +892,6 @@ void SetupRotationSequences()
             {
                 HandleTrap(currentTile, playerTileX, playerTileY);
             }
-            if ((playerTileX == 4 && playerTileY == 4))
-            {
-                HandleMagicTile(currentTile);
-            }
         }
         if (SceneManager.GetActiveScene().name == "3DScene3"){
             if ((playerTileX == 5 && playerTileY == 4) || (playerTileX == 4 && playerTileY == 5) || (playerTileX == 1 && playerTileY == 2))
