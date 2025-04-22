@@ -45,6 +45,9 @@ public class PlayerController : MonoBehaviour
 
     public Slider invisibilityBar; // drag in Inspector
     private float invisibilityDuration = 3f; // you can customize this
+
+    public GameObject tutorialVictoryPanel; // Drag from Inspector
+
     void Start()
     {
         transform.rotation = Quaternion.Euler(0, 180, 0);
@@ -393,6 +396,7 @@ public class PlayerController : MonoBehaviour
             sendToGoogle sendGoogle = FindObjectOfType<sendToGoogle>();
             sendGoogle.Send();
         }
+        
     }
 
     public void TriggerWinCondition()
@@ -401,6 +405,10 @@ public class PlayerController : MonoBehaviour
         if (gameTimer != null)
         {
             gameTimer.ShowVictoryPanel();
+        }
+        else if (tutorialVictoryPanel != null)
+        {
+            tutorialVictoryPanel.SetActive(true);
         }
     }
 

@@ -35,6 +35,9 @@ public class TutorialScript : MonoBehaviour
 
     public Camera minimapCamera; // Assign in Inspector
 
+    private bool isTeleporting = false; // 🛡️ Prevents multiple tile triggers
+
+
     // Directions: 0 = North, 1 = West, 2 = East, 3 = South
     [SerializeField] private bool[,,] tutorialWallGrid = new bool[6, 4, 4]
     {
@@ -80,7 +83,7 @@ public class TutorialScript : MonoBehaviour
 
     public GameObject arrowPrefab; // drag Arrow 1 prefab into this in the Inspector
     private GameObject collectibleArrow;
-
+    
 
 
     void Start()
@@ -105,14 +108,14 @@ public class TutorialScript : MonoBehaviour
         trapTileDestinations[new Vector2Int(1, 3)] = new Vector2Int(5, 3);
         // Magic tiles: teleport to specific locations
 
-        magicTileDestinations[new Vector2Int(1, 2)] = new Vector2Int(2, 3);
+        magicTileDestinations[new Vector2Int(1, 2)] = new Vector2Int(0, 3);
         AdjustMinimapViewport();
 
     }
 
     void Update()
     {
-        if (player == null || tiles == null) return;
+    if (player == null || tiles == null || isTeleporting) return; //  Prevent checking tiles while teleporting
 
         Vector3 playerPos = player.transform.position;
         int x = Mathf.RoundToInt(playerPos.x);
@@ -190,6 +193,9 @@ public class TutorialScript : MonoBehaviour
 
     void HandleMagicTile(int x, int z)
     {
+        if (isTeleporting) return;
+
+        isTeleporting = true;
         playerMagicallyMoved++;
 
         Vector2Int trigger = new Vector2Int(x, z);
@@ -228,7 +234,16 @@ public class TutorialScript : MonoBehaviour
             tutorialText.gameObject.SetActive(true);
             StartCoroutine(HideTutorialTextAfterSeconds(2f));
         }
+
+        // 🕒 Wiat 0 seconds then allow other triggers again
+        StartCoroutine(ResetTeleportingFlag(3f));
     }
+    IEnumerator ResetTeleportingFlag(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        isTeleporting = false;
+    }
+
 
 
 
@@ -626,12 +641,6 @@ public class TutorialScript : MonoBehaviour
 
     IEnumerator ShowCollectibleTutorial()
     {
-        if (tutorialText != null)
-        {
-            tutorialText.text = "Now pick up the glowing orb!";
-            tutorialText.gameObject.SetActive(true);
-        }
-
         Vector3 spawnPos = new Vector3(5f, 0.25f, 1f); // Desired orb location
         GameObject collectible = Instantiate(powerUpPrefab, spawnPos, Quaternion.identity, transform);
 
@@ -639,6 +648,14 @@ public class TutorialScript : MonoBehaviour
         Vector3 arrowPos = spawnPos + new Vector3(0f, 1.0f, 0f);
         collectibleArrow = Instantiate(arrowPrefab, arrowPos, Quaternion.identity, transform);
         StartCoroutine(BounceArrow(collectibleArrow));
+
+        if (tutorialText != null)
+        {
+            tutorialText.text = "Now pick up the glowing orb!";
+            tutorialText.gameObject.SetActive(true);
+        }
+
+
 
         // Wait until player collects the orb
         PlayerController playerController = player.GetComponent<PlayerController>();
@@ -649,24 +666,11 @@ public class TutorialScript : MonoBehaviour
             yield return null;
         }
 
-        // destroy arrow
+        // destroy 1st arrow
         if (collectibleArrow != null)
         {
             Destroy(collectibleArrow);
         }
-
-        if (tutorialText != null)
-        {
-            tutorialText.text = "Follow the Arrow to the next checkpoint! Press C to go through WALLS";
-            yield return new WaitForSeconds(3f);
-            tutorialText.gameObject.SetActive(false);
-        }
-
-        while (!playerController.InvisibilityIsActive())
-        {
-            yield return null;
-        }
-
 
         //Place New Arrow in the 2nd checkpoint 
         spawnPos = new Vector3(3f, 0.25f, 0f); // Desired orb location
@@ -674,6 +678,34 @@ public class TutorialScript : MonoBehaviour
         collectibleArrow = Instantiate(arrowPrefab, arrowPos, Quaternion.identity, transform);
         StartCoroutine(BounceArrow(collectibleArrow));
 
+        if (tutorialText != null)
+        {
+            tutorialText.text = "Follow the Arrow to the next checkpoint! Press C to go through WALLS";
+            yield return new WaitForSeconds(3f);
+            tutorialText.gameObject.SetActive(false);
+        }
+        
+
+
+
+
+        //Place New Arrow in the 3rd checkpoint 
+            // Wait for player to reach second checkpoint
+        while (true)
+        {
+            Vector2Int tile = new Vector2Int(Mathf.RoundToInt(player.transform.position.x), Mathf.RoundToInt(player.transform.position.z));
+            if (tile == new Vector2Int(3, 0))
+            {
+                Destroy(collectibleArrow);
+
+                // Now show arrow to final checkpoint (0, 0)
+                Vector3 finalPos = new Vector3(0f, 0.25f, 0f);
+                GameObject finalArrow = Instantiate(arrowPrefab, finalPos + new Vector3(0, 1f, 0), Quaternion.identity, transform);
+                StartCoroutine(BounceArrow(finalArrow));
+                break;
+            }
+            yield return null;
+        }
     }
 
 
