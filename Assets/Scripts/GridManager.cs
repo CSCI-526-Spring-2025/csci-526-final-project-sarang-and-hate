@@ -318,6 +318,7 @@ public class GridManager : MonoBehaviour
         {
             zoneMessageText.text = "Purple tiles boost you forward!";
             zoneMessageText.gameObject.SetActive(true);
+            zoneMessageText.color = Color.white;
         }
 
         yield return new WaitForSeconds(5f);

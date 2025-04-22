@@ -196,19 +196,30 @@ public class TutorialScript : MonoBehaviour
         if (!magicTileDestinations.ContainsKey(trigger)) return;
 
         Vector2Int target = magicTileDestinations[trigger];
-        player.transform.position = new Vector3(target.x, 0.5f, target.y);
+        Vector3 from = player.transform.position;
+        Vector3 to = new Vector3(target.x, 0.25f, target.y);
 
         PlayerController pc = player.GetComponent<PlayerController>();
         if (pc != null)
         {
+            pc.StartCoroutine(pc.SmoothTeleport(from, to, 3f));
             pc.TriggerTemporaryMinimap();
         }
+        else
+        {
+            player.transform.position = to;
+        }
 
+        StartCoroutine(ZoomMinimap(3f));
+        ShowDottedTrail(from, to, new Color(0.5f, 0f, 1f)); // 🟣 purple trail
+
+        // Highlight the magic tile that was stepped on
         GameObject tileObj = tiles[x, z];
         Tile tile = tileObj.GetComponent<Tile>();
         if (tile != null)
         {
-            tile.tileRenderer.material.color = new Color(0.5f, 0f, 1f); // purple glow
+            tile.tileRenderer.material.color = new Color(0.5f, 0f, 1f);
+            tile.originalColor = new Color(0.5f, 0f, 1f);
         }
 
         if (tutorialText != null)
