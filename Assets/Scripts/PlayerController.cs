@@ -43,6 +43,8 @@ public class PlayerController : MonoBehaviour
     public static int mapViewedNum = 0; // track analytics for M key pressed
     public static int playerUsedPowerups = 0; // track analytics for how many times E key pressed
 
+    public Slider invisibilityBar; // drag in Inspector
+    private float invisibilityDuration = 3f; // you can customize this
     void Start()
     {
         transform.rotation = Quaternion.Euler(0, 180, 0);
@@ -274,7 +276,14 @@ public class PlayerController : MonoBehaviour
                     {
                         Collider wallCollider = wall.GetComponent<Collider>();
                         if (wallCollider != null) wallCollider.enabled = true;
-
+                        // Renderer playerRenderer = GetComponent<Renderer>();
+                        // if (playerRenderer != null)
+                        // {
+                        //     Material mat = playerRenderer.material;
+                        //     Color color = mat.color;
+                        //     color.a = 1f;  // fully visible
+                        //     mat.color = color;
+                        // }
                         Renderer rend = wall.GetComponent<Renderer>();
                         if (rend != null) rend.material.color = new Color(rend.material.color.r, rend.material.color.g, rend.material.color.b, 1f);
                     }
@@ -306,6 +315,7 @@ public class PlayerController : MonoBehaviour
     {
         canPassThroughWalls = true;
         invisibilityTime = duration;
+        invisibilityDuration = duration;
         tilesMoved = 0;
 
         if (gridManager != null)
@@ -331,6 +341,26 @@ public class PlayerController : MonoBehaviour
                 Collider wallCollider = wall.GetComponent<Collider>();
                 if (wallCollider != null) wallCollider.enabled = false;
 
+                //Code for Making Player inivisble 
+                // Renderer playerRenderer = GetComponent<Renderer>();
+                // if (playerRenderer != null)
+                // {
+                //     Material mat = playerRenderer.material;
+                //     mat.SetFloat("_Mode", 2); // Set to transparent mode if using Standard Shader
+
+                //     // Enable transparency keywords
+                //     mat.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
+                //     mat.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
+                //     mat.SetInt("_ZWrite", 0);
+                //     mat.DisableKeyword("_ALPHATEST_ON");
+                //     mat.EnableKeyword("_ALPHABLEND_ON");
+                //     mat.DisableKeyword("_ALPHAPREMULTIPLY_ON");
+                //     mat.renderQueue = 3000;
+
+                //     Color color = mat.color;
+                //     color.a = 0.3f;  // 30% visible
+                //     mat.color = color;
+                // }
                 Renderer rend = wall.GetComponent<Renderer>();
                 if (rend != null)
                 {

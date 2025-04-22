@@ -54,7 +54,7 @@ public class TutorialScript : MonoBehaviour
 
     // You can also track rotations
     private int tutorialRotationsUsed = 0;
-    private int tutorialMaxRotations = 5;
+    private int tutorialMaxRotations = 500;
     public int GetRotationsUsed() => tutorialRotationsUsed;
     public int GetMaxRotations() => tutorialMaxRotations;
 
@@ -491,7 +491,7 @@ public class TutorialScript : MonoBehaviour
         if (!hasRotatedOnce)
         {
             hasRotatedOnce = true;
-            ShowTutorialText("Great! Now pick up the glowing orb.");
+            ShowTutorialText("Great! Now pick up the powerup to go invisible!");
             //SpawnCollectible(new Vector3(5f, 0.3f, 1f)); // Place collectible logically near player
         }
     }
@@ -646,7 +646,7 @@ public class TutorialScript : MonoBehaviour
 
         if (tutorialText != null)
         {
-            tutorialText.text = "Press C to go through walls!";
+            tutorialText.text = "Follow the Arrow to the next checkpoint! Press C to go through WALLS";
             yield return new WaitForSeconds(3f);
             tutorialText.gameObject.SetActive(false);
         }
@@ -656,12 +656,13 @@ public class TutorialScript : MonoBehaviour
             yield return null;
         }
 
-        if (tutorialText != null)
-        {
-            tutorialText.text = "You're now invisible! Walk through walls!";
-            yield return new WaitForSeconds(3f);
-            tutorialText.gameObject.SetActive(false);
-        }
+
+        //Place New Arrow in the 2nd checkpoint 
+        spawnPos = new Vector3(3f, 0.25f, 0f); // Desired orb location
+        arrowPos = spawnPos + new Vector3(0f, 1.0f, 0f);
+        collectibleArrow = Instantiate(arrowPrefab, arrowPos, Quaternion.identity, transform);
+        StartCoroutine(BounceArrow(collectibleArrow));
+
     }
 
 
