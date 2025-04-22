@@ -268,7 +268,7 @@ public class GridManager : MonoBehaviour
             // Trap tiles for 3DScene3
             if (SceneManager.GetActiveScene().name == "3DScene3")
             {
-                SetTileRed(5, 4);
+                SetTileRed(5, 1);
                 SetTileRed(4, 5);
                 SetTileRed(1, 2);
             }
@@ -894,7 +894,7 @@ void SetupRotationSequences()
             }
         }
         if (SceneManager.GetActiveScene().name == "3DScene3"){
-            if ((playerTileX == 5 && playerTileY == 4) || (playerTileX == 4 && playerTileY == 5) || (playerTileX == 1 && playerTileY == 2))
+            if ((playerTileX == 5 && playerTileY == 1) || (playerTileX == 4 && playerTileY == 5) || (playerTileX == 1 && playerTileY == 2))
             {
                 HandleTrap(currentTile, playerTileX, playerTileY);
             }
