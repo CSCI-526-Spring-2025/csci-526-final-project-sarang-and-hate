@@ -95,11 +95,6 @@ public class TutorialScript : MonoBehaviour
 
         //Manually Added Walls
         GenerateWallsFromGrid();
-        // AddWallToTile(1, 1, new Vector3(-0.5f, 2.5f, 0f), Quaternion.identity); // North
-        // AddWallToTile(2, 2, new Vector3(0.5f, 2.5f, 0f), Quaternion.identity);  // South
-        // AddWallToTile(3, 1, new Vector3(0f, 2.5f, -0.5f), Quaternion.Euler(0, 90, 0)); // West
-        // AddWallToTile(5, 3, new Vector3(0f, 2.5f, -0.5f), Quaternion.Euler(0, 90, 0)); // West
-        // AddWallToTile(4, 2, new Vector3(0f, 2.5f, 0.5f), Quaternion.Euler(0, 90, 0));  // East
         StartCoroutine(ShowWallRotationTutorial());
 
         // Trap: send player to tile (5, 3) — the green start tile
