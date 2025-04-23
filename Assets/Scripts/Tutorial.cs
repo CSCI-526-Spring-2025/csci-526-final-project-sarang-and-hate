@@ -489,6 +489,8 @@ public class TutorialScript : MonoBehaviour
     {
         if (tutorialIsWallRotating || tutorialRotationsUsed >= tutorialMaxRotations) return;
 
+        HighlightWallsOnCurrentTile(); // 🟨 Hihglight walls 
+
         // Step 1: Get the tile position player is on
         int tileX = Mathf.RoundToInt(playerPosition.x);
         int tileZ = Mathf.RoundToInt(playerPosition.z);
@@ -768,6 +770,42 @@ public class TutorialScript : MonoBehaviour
             arrow.transform.Rotate(Vector3.up * rotationSpeed * Time.deltaTime);
             yield return null;
         }
+    }
+
+
+
+    //Code for highlighting wall when it rotates
+
+    void HighlightWallsOnCurrentTile()
+    {
+        int tileX = Mathf.RoundToInt(player.transform.position.x);
+        int tileZ = Mathf.RoundToInt(player.transform.position.z);
+
+        if (tileX < 0 || tileX >= width || tileZ < 0 || tileZ >= height) return;
+
+        GameObject tile = tiles[tileX, tileZ];
+        foreach (Transform child in tile.transform)
+        {
+            if (child.CompareTag("Wall"))
+            {
+                Renderer rend = child.GetComponent<Renderer>();
+                if (rend != null)
+                {
+                    // Turn on emission glow
+                    Material mat = rend.material;
+                    mat.EnableKeyword("_EMISSION");
+                    Color dimYellow = Color.yellow * 0.3f;  // Reduce brightness
+                    mat.SetColor("_EmissionColor", dimYellow);
+                    StartCoroutine(RemoveWallHighlightAfterDelay(mat, 1f));
+                }
+            }
+        }
+    }
+
+    IEnumerator RemoveWallHighlightAfterDelay(Material mat, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        mat.DisableKeyword("_EMISSION");
     }
 
 
