@@ -123,14 +123,25 @@ public class GridManager : MonoBehaviour
     };
 
     //N, W, E, S
-    [SerializeField] private bool[,,] gridWallsLevel2 = new bool[6,6,4]
+    // [SerializeField] private bool[,,] gridWallsLevel2 = new bool[6,6,4]
+    // {
+    //     { { false, false, false,false}, { false, true, false, true }, { false, false, true, true}, { false, false, false,false }, {true,true,false, false }, { false,false, false,false } },
+    //     { { false, true, false, true }, { false, false, false, false }, { false, false, false, false }, {false, false, true, true}, { false,false, false,false }, {true, true, false, false } },
+    //     { { false, false, false, false }, { true, false,true,false}, { false, false, false, false }, { false, true, false, true }, { false, false, false, false }, {true, false, true,false } },
+    //     { { true,false,true,false}, { false, false, false,true }, { false,true, false,true }, { false, false,false,false }, {true,false,true, false }, {false,false, false,false } },
+    //     { {false,false,true,true}, { false, true,false, false },  {false,true,false, false }, { true,false,true,false}, { false, false, false,false}, {true,false,true,true} },
+    //     { {false, false,false, false }, {false,false,true,true}, { true,false,true,false}, { false, false, false, false }, {false,false,true,false}, { false,false, false, false} }
+    // };
+
+    //Working on cleaning up tile walls rotation
+        [SerializeField] private bool[,,] gridWallsLevel2 = new bool[6,6,4]
     {
         { { false, false, false,false}, { false, true, false, true }, { false, false, true, true}, { false, false, false,false }, {true,true,false, false }, { false,false, false,false } },
         { { false, true, false, true }, { false, false, false, false }, { false, false, false, false }, {false, false, true, true}, { false,false, false,false }, {true, true, false, false } },
         { { false, false, false, false }, { true, false,true,false}, { false, false, false, false }, { false, true, false, true }, { false, false, false, false }, {true, false, true,false } },
         { { true,false,true,false}, { false, false, false,true }, { false,true, false,true }, { false, false,false,false }, {true,false,true, false }, {false,false, false,false } },
-        { {false,false,true,true}, { false, true,false, false },  {false,true,false, false }, { true,false,true,false}, { false, false, false,false}, {true,false,true,true} },
-        { {false, false,false, false }, {false,false,true,true}, { true,false,true,false}, { false, false, false, false }, {false,false,true,false}, { false,false, false, false} }
+        { {false,false,true,true}, { false, true,false, false },  {false,true,false, false }, { true,false,true,false}, { false, false, false,false}, {true,false,true,false} },
+        { {false, false,false, false }, {false,false,true,true}, { true,false,true,false}, { false, false, false, false }, {false,false,false,false}, {true,true, false, false} }
     };
 
     // N W E S 
@@ -476,6 +487,7 @@ public class GridManager : MonoBehaviour
         wall.transform.localPosition = localPosition;
         wall.transform.localRotation = rotation;
         wall.name = $"Wall {wallCounter}"; // NEW: Assign unique ID
+        
 
         wallList.Add(wall);
         wallRotationState[wall] = 0; // NEW: Track rotation state
@@ -1263,43 +1275,131 @@ IEnumerator HideMapMessageTextAfterDelay(float delay)
 }
 
 
+    // public void TryPlayerRotateMaze(Vector3 playerPosition)
+    // {
+    //     Vector2Int tilePos = new Vector2Int(Mathf.RoundToInt(playerPosition.x), Mathf.RoundToInt(playerPosition.z));
+
+    //     if (!tileZones.ContainsKey(tilePos))
+    //     {
+    //         Debug.Log("Player not on a valid tile.");
+    //         return;
+    //     }
+
+    //     int zoneId = tileZones[tilePos];
+
+    //     // if (zonesPlayerRotated.Contains(zoneId))
+    //     // {
+    //     //     Debug.Log("You’ve already rotated this zone.");
+    //     //     return;
+    //     // }
+
+    //     if (rotationsUsed >= maxRotations)
+    //     {
+    //         Debug.Log("Out of rotations.");
+    //         return;
+    //     }
+
+    //     // Rotate walls in current zone only
+    //     if (zoneWalls.ContainsKey(zoneId))
+    //     {
+    //         foreach (var wall in zoneWalls[zoneId])
+    //         {
+    //             RotateAndMoveWall(wall);
+    //         }
+    //         HighlightZoneTiles(zoneId, new Color(1f, 1f, 0.6f)); // Light yellow flash
+    //         zonesPlayerRotated.Add(zoneId);
+    //         rotationsUsed++;
+    //         Debug.Log($"Player manually rotated walls in Zone {zoneId}");
+    //     }
+    // }
     public void TryPlayerRotateMaze(Vector3 playerPosition)
     {
         Vector2Int tilePos = new Vector2Int(Mathf.RoundToInt(playerPosition.x), Mathf.RoundToInt(playerPosition.z));
 
-        if (!tileZones.ContainsKey(tilePos))
+        if (tilePos.x < 0 || tilePos.x >= gridSize || tilePos.y < 0 || tilePos.y >= gridSize)
         {
-            Debug.Log("Player not on a valid tile.");
+            Debug.Log("Invalid tile position.");
             return;
         }
 
-        int zoneId = tileZones[tilePos];
-
-        // if (zonesPlayerRotated.Contains(zoneId))
-        // {
-        //     Debug.Log("You’ve already rotated this zone.");
-        //     return;
-        // }
-
-        if (rotationsUsed >= maxRotations)
+        Tile currentTile = tiles[tilePos.x, tilePos.y];
+        if (currentTile == null)
         {
-            Debug.Log("Out of rotations.");
+            Debug.Log("Tile not found.");
             return;
         }
 
-        // Rotate walls in current zone only
-        if (zoneWalls.ContainsKey(zoneId))
+        // 🔁 Collect all walls on this tile
+        List<GameObject> wallsToRotate = new List<GameObject>();
+        foreach (Transform child in currentTile.transform)
         {
-            foreach (var wall in zoneWalls[zoneId])
+            if (child.CompareTag("Wall"))
             {
-                RotateAndMoveWall(wall);
+                wallsToRotate.Add(child.gameObject);
             }
-            HighlightZoneTiles(zoneId, new Color(1f, 1f, 0.6f)); // Light yellow flash
-            zonesPlayerRotated.Add(zoneId);
-            rotationsUsed++;
-            Debug.Log($"Player manually rotated walls in Zone {zoneId}");
         }
+
+        // 🛑 If there are no walls, skip rotation entirely
+        if (wallsToRotate.Count == 0)
+        {
+            Debug.Log($"No walls to rotate on tile ({tilePos.x}, {tilePos.y}). Skipping.");
+            return;
+        }
+
+        // 🟡 Highlight walls on current tile
+        foreach (Transform child in currentTile.transform)
+        {
+            if (child.CompareTag("Wall"))
+            {
+                Renderer rend = child.GetComponent<Renderer>();
+                if (rend != null)
+                {
+                    Material mat = rend.material;
+                    mat.EnableKeyword("_EMISSION");
+                    Color dimYellow = Color.yellow * 0.3f;  // Reduce intensity
+                    mat.SetColor("_EmissionColor", dimYellow);
+                    StartCoroutine(RemoveWallHighlightAfterDelay(mat, 1f));
+                }
+            }
+        }
+
+        // 🔁 Rotate all walls on the tile
+        foreach (Transform child in currentTile.transform)
+        {
+            if (child.CompareTag("Wall"))
+            {
+                RotateAndMoveWall(child.gameObject);
+            }
+        }
+
+        rotationsUsed++;
+        Debug.Log($"Rotated walls on tile ({tilePos.x}, {tilePos.y})");
+
+        // 🔒 Comment out zone-based logic (retain for future reversion)
+        /*
+        if (tileZones.TryGetValue(tilePos, out int zoneId))
+        {
+            if (zoneWalls.ContainsKey(zoneId))
+            {
+                foreach (var wall in zoneWalls[zoneId])
+                {
+                    RotateAndMoveWall(wall);
+                }
+                HighlightZoneTiles(zoneId, new Color(1f, 1f, 0.6f)); // Light yellow flash
+                zonesPlayerRotated.Add(zoneId);
+                Debug.Log($"(ZONE MODE) Player manually rotated walls in Zone {zoneId}");
+            }
+        }
+        */
     }
+
+    IEnumerator RemoveWallHighlightAfterDelay(Material mat, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        mat.DisableKeyword("_EMISSION");
+    }
+
+
 
     public float minimapPadding = 0;  // Adjust this number to add space around the maze
     public void AdjustMinimapViewport()
