@@ -107,8 +107,8 @@ public class GridManager : MonoBehaviour
     {
         Level1 = 1,
         Level2 = 2,
-
-        Level3 = 3
+        Level3 = 3,
+        Level4 = 4
     }
     public MazeLevel currentMazeLevel = MazeLevel.Level1;
 
@@ -174,6 +174,22 @@ public class GridManager : MonoBehaviour
 
     //store walls to each zone 
 
+    // N WE S for Level 3/4 
+
+    [SerializeField] private bool[,,] gridWallsLevel4 = new bool[10,10,4]
+{
+    { { false, false, false, false }, { false, true, false, false }, { false, false, false, false }, { false, false, false, false }, { false, false, false, false }, { false, false, false, false }, { false, false, false, false }, { false, false, false, false }, { false, false, false, false }, { false, false, false, false } },
+    { { true, false, false, false }, { true, false, false, false }, { true, true, false, false }, { false, true, false, false }, { true, false, false, false }, { true, false, false, false }, { true, true, false, false }, { true, false, false, false }, { false, true, false, false }, { false, false, false, false } },
+    { { false, true, false, false }, { false, false, false, false }, { false, false, false, false }, { true, false, false, false }, { false, true, false, false }, { false, true, false, false }, { false, false, false, false }, { false, true, false, false }, { true, false, false, false }, { false, true, false, false } },
+    { { false, false, false, false }, { true, false, false, false }, { true, true, false, false }, { false, false, false, false }, { false, true, false, false }, { true, false, false, false }, { false, true, false, false }, { false, false, false, false }, { false, true, false, false }, { true, false, false, false } },
+    { { true, false, false, false }, { false, true, false, false }, { false, false, false, false }, { true, true, false, false }, { true, false, false, false }, { false, true, false, false }, { true, false, false, false }, { true, true, false, false }, { true, false, false, false }, { false, true, false, false } },
+    { { false, true, false, false }, { false, false, false, false }, { true, true, false, false }, { false, false, false, false }, { false, true, false, false }, { true, false, false, false }, { false, true, false, false }, { false, false, false, false }, { false, true, false, false }, { false, false, false, false } },
+    { { true, false, false, false }, { true, true, false, false }, { false, false, false, false }, { false, true, false, false }, { true, false, false, false }, { false, true, false, false }, { false, false, false, false }, { true, true, false, false }, { false, false, false, false }, { true, false, false, false } },
+    { { false, true, false, false }, { false, false, false, false }, { false, true, false, false }, { true, false, false, false }, { false, true, false, false }, { false, false, false, false }, { true, true, false, false }, { false, false, false, false }, { true, true, false, false }, { false, false, false, false } },
+    { { true, false, false, false }, { false, false, false, false }, { true, false, false, false }, { false, true, false, false }, { false, false, false, false }, { true, true, false, false }, { false, false, false, false }, { false, true, false, false }, { false, false, false, false }, { false, true, false, false } },
+    { { false, false, false, false }, { false, false, false, false }, { false, false, false, false }, { false, false, false, false }, { false, false, false, false }, { false, false, false, false }, { false, false, false, false }, { false, false, false, false }, { false, false, false, false }, { false, false, false, false } },
+};
+
     private Dictionary<int, List<GameObject>> zoneWalls = new Dictionary<int, List<GameObject>>();
 
 
@@ -209,6 +225,14 @@ public class GridManager : MonoBehaviour
                 //Set position to 7,0,0 to bottom right of the grid
                 player.transform.position = new Vector3(7f, 0f, 7f);
 
+                break;
+            case MazeLevel.Level4:
+                gridSize = 10;
+                gridWalls = gridWallsLevel4;
+
+                //Set position to 9,0 to bottom left of the grid 
+                //Set position to 7,0,0 to bottom right of the grid
+                player.transform.position = new Vector3(9f, 0f, 0f);
                 break;
         }
         GenerateGrid();
@@ -381,15 +405,34 @@ public class GridManager : MonoBehaviour
                 // Apply color: Start tile (Blue), Finish tile (Green)
                 if (renderer != null)
                 {
-                    if (x == 0 && y == 0) // Start Tile (Bottom-Left)
+                    if (currentMazeLevel == MazeLevel.Level4)
                     {
-                        renderer.material.color = Color.blue; // Set Blue for Start
-                        tileGO.tag = "Destination"; // Set tag for player destination
+                        if (x == 0 && y == 9)
+                        {
+                            renderer.material.color = Color.blue; // Destination
+                            tileGO.tag = "Destination";
+                        }
+                        else if (x == 9 && y == 0)
+                        {
+                            renderer.material.color = Color.green; // Start
+                            tileGO.tag = "Start";
+                        }
                     }
-                    else if (x == gridSize - 1 && y == gridSize - 1) // Finish Tile (Top-Right)
+                    else
                     {
-                        renderer.material.color = Color.green; // Set Green for Finish
+                        // Default logic for Levels 1–3
+                        if (x == 0 && y == 0)
+                        {
+                            renderer.material.color = Color.blue; // Destination
+                            tileGO.tag = "Destination";
+                        }
+                        else if (x == gridSize - 1 && y == gridSize - 1)
+                        {
+                            renderer.material.color = Color.green; // Start
+                            tileGO.tag = "Start";
+                        }
                     }
+
                 }
                 tile.originalColor = renderer.material.color; // Store original color
 
