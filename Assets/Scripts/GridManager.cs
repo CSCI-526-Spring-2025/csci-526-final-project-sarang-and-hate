@@ -103,6 +103,7 @@ public class GridManager : MonoBehaviour
     public static string tileStr = "(0, 0)"; // track analytics for player has stuck on which tile
     //Keep track of final destination for the trap tiles in level 3 
     private Dictionary<Vector2Int, Vector2> trapDestinationsScene4 = new Dictionary<Vector2Int, Vector2>();
+    private Dictionary<Vector2Int, Vector2> magicDestinationsScene4 = new Dictionary<Vector2Int, Vector2>();
 
 
     //ENUM for levels
@@ -324,6 +325,13 @@ public class GridManager : MonoBehaviour
                     { new Vector2Int(5, 6), new Vector2(8f, 5f) },
                     { new Vector2Int(1, 7), new Vector2(2f, 4f) },
                     { new Vector2Int(7, 9), new Vector2(9f, 6f) }
+                };
+                //Set Final Destinations for Magic Tile
+                magicDestinationsScene4 = new Dictionary<Vector2Int, Vector2>
+                {
+                    { new Vector2Int(2, 3), new Vector2(3f, 5f) },
+                    { new Vector2Int(7, 2), new Vector2(5f, 3f) },
+                    { new Vector2Int(8, 6), new Vector2(6f, 7f) }
                 };
             }
         }
@@ -982,7 +990,7 @@ void SetupRotationSequences()
             {
                 HandleTrap(currentTile, playerTileX, playerTileY);
             }
-            if ((playerTileX == 6 && playerTileY == 5) || (playerTileX == 3 && playerTileY == 6) )
+            if ((playerTileX == 7 && playerTileY == 2) || (playerTileX == 2 && playerTileY == 3) || (playerTileX == 8 && playerTileY == 6) )
             {
                 HandleMagicTile(currentTile);
             }
@@ -1081,18 +1089,26 @@ void SetupRotationSequences()
         playerMagicallyMoved++;
 
         Vector3 from = player.transform.position;
-        Vector2Int teleportTile = GetMagicTileDestination(currentTile);
-        Vector3 to = new Vector3(teleportTile.x, 0.25f, teleportTile.y);
+        Vector3 to;
+
+        if (SceneManager.GetActiveScene().name == "3DScene4" && magicDestinationsScene4.ContainsKey(currentTile))
+        {
+            Vector2 dest = magicDestinationsScene4[currentTile];
+            to = new Vector3(dest.x, 0.25f, dest.y);
+        }
+        else
+        {
+            Vector2Int teleportTile = GetMagicTileDestination(currentTile);
+            to = new Vector3(teleportTile.x, 0.25f, teleportTile.y);
+        }
 
         player.GetComponent<PlayerController>().StartCoroutine(
             player.GetComponent<PlayerController>().SmoothTeleport(from, to, 3f)
         );
 
-        // StartCoroutine(ZoomMinimap(5f));
         ShowDottedTrail(from, to, new Color(0.5f, 0f, 1f));
         player.GetComponent<PlayerController>().TriggerTemporaryMinimap();
 
-        // Color the activated magic tile
         int currentZone = tileZones[currentTile];
         GameObject magicTile = GameObject.Find("Tile " + currentTile + " - Zone " + currentZone);
         if (magicTile != null)
@@ -1105,6 +1121,7 @@ void SetupRotationSequences()
 
         StartCoroutine(ResetTeleportFlag(3f));
     }
+
 
     private IEnumerator ResetTeleportFlag(float delay)
     {

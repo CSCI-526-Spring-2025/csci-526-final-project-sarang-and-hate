@@ -388,16 +388,32 @@ public class PlayerController : MonoBehaviour
     private void CheckVictoryCondition()
     {
         Vector3 playerPos = transform.position;
-        if (Mathf.RoundToInt(playerPos.x) == 0 && Mathf.RoundToInt(playerPos.z) == 0)
+        int px = Mathf.RoundToInt(playerPos.x);
+        int pz = Mathf.RoundToInt(playerPos.z);
+
+        bool reachedDestination = false;
+
+        if (gridManager != null)
+        {
+            if (gridManager.currentMazeLevel == GridManager.MazeLevel.Level4)
+            {
+                reachedDestination = (px == 0 && pz == 9);
+            }
+            else
+            {
+                reachedDestination = (px == 0 && pz == 0);
+            }
+        }
+
+        if (reachedDestination)
         {
             TriggerWinCondition();
 
-            // Send Data to Google Forms and Spreadsheet for Analytics
             sendToGoogle sendGoogle = FindObjectOfType<sendToGoogle>();
             sendGoogle.Send();
         }
-        
     }
+
 
     public void TriggerWinCondition()
     {
