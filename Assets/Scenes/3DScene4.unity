@@ -9427,7 +9427,7 @@ MonoBehaviour:
   zoneMessageText: {fileID: 266714644}
   MapMessageText: {fileID: 1851548706}
   minimapCamera: {fileID: 166303216}
-  currentMazeLevel: 3
+  currentMazeLevel: 4
   minimapPadding: 2
 --- !u!4 &1218340808
 Transform:
