@@ -101,6 +101,9 @@ public class GridManager : MonoBehaviour
     public static int playerTrapped = 0; // track analytics for how many times player was trapped
     public static int playerMagicallyMoved = 0; // track analytics for how many times player was move forward using magic tiles
     public static string tileStr = "(0, 0)"; // track analytics for player has stuck on which tile
+    //Keep track of final destination for the trap tiles in level 3 
+    private Dictionary<Vector2Int, Vector2> trapDestinationsScene4 = new Dictionary<Vector2Int, Vector2>();
+
 
     //ENUM for levels
     public enum MazeLevel
@@ -178,16 +181,16 @@ public class GridManager : MonoBehaviour
 
     [SerializeField] private bool[,,] gridWallsLevel4 = new bool[10,10,4]
 {
-    { { false, false, false, false }, { false, true, false, false }, { true, false,true,true}, { false, false, false, false }, { false, false, false, false }, { false, false, false, false }, {true,true, false, false }, { false, false, false, false }, { false, false,true,true}, { false, false, false, false } },
+    { { false, false, false, false }, { false, true, false, false }, { true, false,true,true}, {true, false,true,true}, { false, false, false, false }, {true,true,true,true}, {true,true, false, false }, { false, false, false, false }, { false, false,true,true}, { false, false, false, false } },
     { { true,true, false, false }, { true, false, false, false }, { true, true, false, false }, { false, true, false, false }, { true, false, false, false }, { true, false, false, false }, { true, true, false, false }, { true, false, false, false }, { false, true, false, false }, {true,true, false, false } },
     { { false, true, false, false }, {true, false,true, false }, { false, false, false, false }, { true, false, false, false }, { false, true, false, false }, { false, true, false, false }, { false, false, false, false }, { false, true, false, false }, { true, false, false, false }, { false, true, false, false } },
     { {true, false, false, false }, { true, false, false, false }, { true, true, false, false }, { false, false, false, false }, { false, true, false, false }, { true, false, false, false }, { false, true, false, false }, { false, false, false, false }, { false, true, false, false }, { true, false, false, false } },
     { { true, false, false, false }, {false, true,true,true}, { false, false, false, false }, { true, true, false, false }, { true, false, false, false }, { false, true, false, false }, { true, false, false, false }, { true, true, false, false }, { true, false, false, false }, { false, true, false, false } },
     { {true, true, false, false }, { false, false, false, false }, { true, true, false, false }, { false, false, false, false }, { false, true, false, false }, { true, false, false, false }, { false, true, false, false }, { false, false, false, false }, { false, true, false, false }, { false, false, false, false } },
-    { { true, false, false, false }, { true, true, false, false }, {true, false,true, false }, { false, true, false, false }, { true, false, false, false }, { false, true, false, false }, { false, false, false, false }, { true, true, false, false }, { false, false, false, false }, { true, false, false, false } },
-    { { false, true, false, false }, {true,true,true, false }, { false, true, false, false }, { true, false, false, false }, { false, true, false, false }, { false, false, false, false }, { true, true, false, false }, { false, false, false, false }, { true, true, false, false }, { false, false, false, false } },
-    { { true,true,true, false }, { false, false, false, false }, { true, false,true, false }, { false, true, false, false }, { false, false, false, false }, { true, true, false, false }, { false, false, false, false }, { false, true, false, false }, { false, false, false, false }, { false, true, false, false } },
-    { { false, false,true,true }, {true, false,true, false }, { false, false, false, false }, {true, false,true, false }, { false, false, false, false }, { false, false, false, false }, { false, false, false, false }, { false, false, false, false }, { false, false, false, false }, { false, false, false, false } },
+    { { true, false, false, false }, { true, true, false, false }, {true, false,true, false }, { false, true, false, false }, { true, false, false, false }, { false, true, false, false }, {true, false,true, false }, { true, true, false, false }, {true, false, false, false }, { true, false,true, false } },
+    { { false, true, false, false }, {true,true,true, false }, { false, true, false, false }, { true, false, false, false }, {true, true, false, false }, {true,true,true,true}, { true,false, false, false }, {true,true,true,true }, { true, true, false, false }, { false, false, false, false } },
+    { { true,true,true, false }, { false, false, false, false }, { true, false,true, false }, { false, true, false, false }, { false, false, false, false }, { true, true, false, false }, {true, false,true, false }, { false,false, false, false }, {true, false, false, false }, {true, true, false, false } },
+    { { false, false,true,true }, {true, false,true, false }, { false, false, false, false }, {true, false,true, false }, { false, false,true,true}, { false, false, false, false }, { false, false, false, false }, {true, false,true, false }, { false, false, false, false }, { false, false, false, false } },
 };
 
     private Dictionary<int, List<GameObject>> zoneWalls = new Dictionary<int, List<GameObject>>();
@@ -306,6 +309,22 @@ public class GridManager : MonoBehaviour
                 SetTileRed(5, 1);
                 SetTileRed(4, 5);
                 SetTileRed(1, 2);
+            }
+            if (SceneManager.GetActiveScene().name == "3DScene4")
+            {
+                SetTileRed(5, 1);
+                SetTileRed(5, 6);
+                SetTileRed(1, 7);
+                SetTileRed(7, 9);
+                
+                //Set Final Destination for Trap 
+                trapDestinationsScene4 = new Dictionary<Vector2Int, Vector2>
+                {
+                    { new Vector2Int(5, 1), new Vector2(7f, 0f) },
+                    { new Vector2Int(5, 6), new Vector2(8f, 5f) },
+                    { new Vector2Int(1, 7), new Vector2(2f, 4f) },
+                    { new Vector2Int(7, 9), new Vector2(9f, 6f) }
+                };
             }
         }
 
@@ -958,6 +977,16 @@ void SetupRotationSequences()
                 HandleMagicTile(currentTile);
             }
         }
+        if (SceneManager.GetActiveScene().name == "3DScene4"){
+            if ((playerTileX == 5 && playerTileY == 1) || (playerTileX == 5 && playerTileY == 6) || (playerTileX == 1 && playerTileY == 7) || (playerTileX == 7 && playerTileY == 9))
+            {
+                HandleTrap(currentTile, playerTileX, playerTileY);
+            }
+            if ((playerTileX == 6 && playerTileY == 5) || (playerTileX == 3 && playerTileY == 6) )
+            {
+                HandleMagicTile(currentTile);
+            }
+        }
     }
 
     private IEnumerator SpawnCollectibleAtStartWithDelay(float delay)
@@ -979,7 +1008,18 @@ void SetupRotationSequences()
         playerTrapped++;
 
         Vector3 from = player.transform.position;
-        Vector3 to = new Vector3(xTile + 1, 0.25f, yTile + 2); // y is raised slightly
+        Vector3 to;
+        if (SceneManager.GetActiveScene().name == "3DScene4" && trapDestinationsScene4.ContainsKey(currentTile))
+        {
+            Vector2 dest = trapDestinationsScene4[currentTile];
+            to = new Vector3(dest.x, 0.25f, dest.y);
+        }
+        else
+        {
+            to = new Vector3(xTile + 1, 0.25f, yTile + 2); // fallback logic
+        }
+        //= new Vector3(xTile + 1, 0.25f, yTile + 2); // y is raised slightly
+
 
         isTeleporting = true;  // 🛡️ Block other triggers
         
