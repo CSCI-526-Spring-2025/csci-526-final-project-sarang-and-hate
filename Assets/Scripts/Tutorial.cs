@@ -639,7 +639,7 @@ public class TutorialScript : MonoBehaviour
     IEnumerator ShowCollectibleTutorial()
     {
         Vector3 spawnPos = new Vector3(5f, 0.25f, 1f); // Desired orb location
-        GameObject collectible = Instantiate(powerUpPrefab, spawnPos, Quaternion.identity, transform);
+        GameObject collectible = Instantiate(powerUpPrefab, spawnPos, Quaternion.Euler(270f, 0f, 0f), transform);
 
         // 🔽 Spawn the arrow above the orb
         Vector3 arrowPos = spawnPos + new Vector3(0f, 1.0f, 0f);
