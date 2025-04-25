@@ -9,6 +9,7 @@ TagManager:
   - Goal
   - Magic
   - Trap
+  - Destination
   layers:
   - Default
   - TransparentFX
