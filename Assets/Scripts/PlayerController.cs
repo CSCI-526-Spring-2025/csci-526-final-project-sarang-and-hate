@@ -44,6 +44,8 @@ public class PlayerController : MonoBehaviour
     public static int playerUsedPowerups = 0; // track analytics for how many times E key pressed
 
     public Image invisibilityBar; // drag in Inspector
+    public Image invisibilityBarBackground;   // black background object
+
     private float invisibilityDuration = 3f; // you can customize this
 
     public GameObject tutorialVictoryPanel; // Drag from Inspector
@@ -264,11 +266,16 @@ public class PlayerController : MonoBehaviour
             {
                 invisibilityBar.fillAmount = invisibilityTime / 3f; // assuming 3s duration
             }
-            if (invisibilityTime <= 0)
+            if (invisibilityTime <= 0f)
             {
+                invisibilityTime = 0f;
                 if (invisibilityBar != null)
                 {
                     invisibilityBar.gameObject.SetActive(false);
+                }
+                if (invisibilityBarBackground != null)
+                {
+                    invisibilityBarBackground.gameObject.SetActive(false);
                 }
                 if (gridManager != null)
                 {
@@ -384,8 +391,12 @@ public class PlayerController : MonoBehaviour
 
         if (invisibilityBar != null)
         {
-            invisibilityBar.fillAmount = 1f; // full bar
+            invisibilityBar.fillAmount = 1f;
             invisibilityBar.gameObject.SetActive(true);
+        }
+        if (invisibilityBarBackground != null)
+        {
+            invisibilityBarBackground.gameObject.SetActive(true);
         }
 
     }

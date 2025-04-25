@@ -2141,7 +2141,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &256007289
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2990,7 +2990,8 @@ MonoBehaviour:
   mapUsesRemaining: 5
   mapUsesUIText: {fileID: 1854075918}
   minimapDuration: 5
-  invisibilityBar: {fileID: 0}
+  invisibilityBar: {fileID: 1002326625}
+  invisibilityBarBackground: {fileID: 256007290}
   tutorialVictoryPanel: {fileID: 0}
 --- !u!54 &337768807
 Rigidbody:
