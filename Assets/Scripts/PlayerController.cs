@@ -43,7 +43,7 @@ public class PlayerController : MonoBehaviour
     public static int mapViewedNum = 0; // track analytics for M key pressed
     public static int playerUsedPowerups = 0; // track analytics for how many times E key pressed
 
-    public Slider invisibilityBar; // drag in Inspector
+    public Image invisibilityBar; // drag in Inspector
     private float invisibilityDuration = 3f; // you can customize this
 
     public GameObject tutorialVictoryPanel; // Drag from Inspector
@@ -260,8 +260,16 @@ public class PlayerController : MonoBehaviour
         if (invisibilityTime > 0)
         {
             invisibilityTime -= Time.deltaTime;
+            if (invisibilityBar != null)
+            {
+                invisibilityBar.fillAmount = invisibilityTime / 3f; // assuming 3s duration
+            }
             if (invisibilityTime <= 0)
             {
+                if (invisibilityBar != null)
+                {
+                    invisibilityBar.gameObject.SetActive(false);
+                }
                 if (gridManager != null)
                 {
                     foreach (GameObject wall in gridManager.wallList)
@@ -372,6 +380,12 @@ public class PlayerController : MonoBehaviour
                     rend.material.color = faded;
                 }
             }
+        }
+
+        if (invisibilityBar != null)
+        {
+            invisibilityBar.fillAmount = 1f; // full bar
+            invisibilityBar.gameObject.SetActive(true);
         }
 
     }
