@@ -63,4 +63,13 @@ public class LevelSelectManager : MonoBehaviour
             SceneManager.LoadScene("3DScene3");
         }
     }
+
+    public void LoadLevel4()
+    {
+        if (PlayerPrefs.GetInt("TutorialCompleted", 0) == 1)
+        {
+            Time.timeScale = 1;
+            SceneManager.LoadScene("3DScene4");
+        }
+    }
 }
