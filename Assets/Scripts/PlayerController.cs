@@ -50,6 +50,10 @@ public class PlayerController : MonoBehaviour
 
     public GameObject tutorialVictoryPanel; // Drag from Inspector
 
+    public GameObject helpPanel; // Assign in Inspector
+    private bool isPaused = false;
+
+
     void Start()
     {
         transform.rotation = Quaternion.Euler(0, 180, 0);
@@ -176,6 +180,19 @@ public class PlayerController : MonoBehaviour
             UpdatePowerUpUI();
             playerUsedPowerups++;
         }
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (!isPaused)
+            {
+                PauseGame();
+            }
+            else
+            {
+                ResumeGame();
+            }
+        }
+
 
         //Playing with E Key for Wall Rotation 
         if (Input.GetKeyDown(KeyCode.E))
@@ -561,6 +578,25 @@ public class PlayerController : MonoBehaviour
     {
         return powerUpCount;
     }
+
+    public void PauseGame()
+    {
+        if (helpPanel != null)
+            helpPanel.SetActive(true);
+
+        Time.timeScale = 0f; // Freeze game time
+        isPaused = true;
+    }
+
+    public void ResumeGame()
+    {
+        if (helpPanel != null)
+            helpPanel.SetActive(false);
+
+        Time.timeScale = 1f; // Resume game time
+        isPaused = false;
+    }
+
 
 
 }
