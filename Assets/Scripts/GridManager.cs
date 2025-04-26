@@ -479,7 +479,7 @@ public class GridManager : MonoBehaviour
                     if ((x == 5 && y == 4) ||
                         (x == 3 && y == 2))
                     {
-                        Instantiate(collectibleInvisible, new Vector3(x, 0.25f, y), Quaternion.identity, transform);
+                        Instantiate(collectibleInvisible, new Vector3(x, 0.25f, y), Quaternion.Euler(270f, 0f, 0f), transform);
                     }
                 }
                 else if (currentMazeLevel == MazeLevel.Level3)
@@ -488,7 +488,7 @@ public class GridManager : MonoBehaviour
                         (x == 6 && y == 3) ||
                         (x == 4 && y == 6))
                     {
-                        Instantiate(collectibleInvisible, new Vector3(x, 0.25f, y), Quaternion.identity, transform);
+                        Instantiate(collectibleInvisible, new Vector3(x, 0.25f, y), Quaternion.Euler(270f, 0f, 0f), transform);
                     }
                 }
 
@@ -894,7 +894,7 @@ void SetupRotationSequences()
                 Vector3 powerUpPos = new Vector3(3f, 0.25f, 2f);
                 if (collectibleInvisible != null)
                 {
-                    powerUpObject = Instantiate(collectibleInvisible, powerUpPos, Quaternion.identity, transform);
+                    powerUpObject = Instantiate(collectibleInvisible, powerUpPos, Quaternion.Euler(270f, 0f, 0f), transform);
                 }
 
                 
@@ -1005,7 +1005,7 @@ void SetupRotationSequences()
         // 2. Spawn the collectible at (0,0)
         // spawn again *every* time they trigger a trap,
         Debug.Log("Spawning collectibleInvisible now...");
-        Instantiate(collectibleInvisible, new Vector3(5f, 0.25f, 5f), Quaternion.identity, transform);
+        Instantiate(collectibleInvisible, new Vector3(5f, 0.25f, 5f), Quaternion.Euler(270f, 0f, 0f), transform);
         hasSpawnedCollectibleAtStart = true;
     }
 
