@@ -418,7 +418,12 @@ public class PlayerController : MonoBehaviour
 
         bool reachedDestination = false;
 
-        if (gridManager != null)
+        if (tutorialScript != null)
+        {
+            // In Tutorial Scene, destination is always (0, 0)
+            reachedDestination = (px == 0 && pz == 0);
+        }
+        else if (gridManager != null)
         {
             if (gridManager.currentMazeLevel == GridManager.MazeLevel.Level4)
             {

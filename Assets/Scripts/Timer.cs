@@ -32,6 +32,8 @@ public class GameTimer : MonoBehaviour
     //to change the text of the helpPanel 
     public TMP_Text helpPanelText;
 
+    public Button toggleKeysButton;  // The button beneath "Stuck?"
+    private bool keysVisible = false;
     public static bool isPlayerStuck = false; // track analytics for deadlock
     public static bool didPlayerRanOutOfTime = false; // track analytics for not completing level within stated time
     public static string currentLevelPlayed = "Level 1";
@@ -125,6 +127,12 @@ public class GameTimer : MonoBehaviour
         {
             helpButton.interactable = true; // 🔁 Reset to interactable at level start
         }
+        //Add a listener for the nav panel 
+        // if (toggleKeysButton != null)
+        // {
+        //     toggleKeysButton.onClick.AddListener(ToggleNavPanel);
+        // }
+
 
         if (exitHelpButton != null)
         {
@@ -160,14 +168,15 @@ public class GameTimer : MonoBehaviour
             // {
             //     navPanel.SetActive(false);
             // }
-            if (timeRemaining > 110)
-            {
-                navPanel.SetActive(true);
-            }
-            else
-            {
-                navPanel.SetActive(false);
-            }
+            //Allow player to do it 
+            // if (timeRemaining > 110)
+            // {
+            //     navPanel.SetActive(true);
+            // }
+            // else
+            // {
+            //     navPanel.SetActive(false);
+            // }
         }
         else
         {
@@ -335,5 +344,22 @@ public class GameTimer : MonoBehaviour
             Debug.Log("All instructions completed. Game starts now.");
         }
     }
+
+    public void ToggleNavPanel()
+    {
+        keysVisible = !keysVisible;
+        if (navPanel != null)
+            navPanel.SetActive(keysVisible);
+
+        // if (toggleKeysButton != null)
+        // {
+        //     TMP_Text btnText = toggleKeysButton.GetComponentInChildren<TMP_Text>();
+        //     if (btnText != null)
+        //     {
+        //         btnText.text = keysVisible ? "Hide Keys" : "Keys";
+        //     }
+        // }
+    }
+
 }
 
