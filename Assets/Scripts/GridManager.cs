@@ -491,6 +491,15 @@ public class GridManager : MonoBehaviour
                         Instantiate(collectibleInvisible, new Vector3(x, 0.25f, y), Quaternion.Euler(270f, 0f, 0f), transform);
                     }
                 }
+                else if (currentMazeLevel == MazeLevel.Level4)
+                {
+                    if ((x == 5 && y == 0) ||
+                        (x == 9 && y == 6) ||
+                        (x == 0 && y == 8))
+                    {
+                        Instantiate(collectibleInvisible, new Vector3(x, 0.25f, y), Quaternion.Euler(270f, 0f, 0f), transform);
+                    }
+                }
 
 
             }
