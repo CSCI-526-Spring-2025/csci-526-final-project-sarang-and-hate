@@ -324,6 +324,24 @@ public class PlayerController : MonoBehaviour
                     }
                 }
 
+                // 🖤 Also re-enable Black Walls
+                // 🖤 Also restore Black Walls (tagged BWall)
+                GameObject[] blackWalls = GameObject.FindGameObjectsWithTag("BWall");
+                foreach (GameObject bwall in blackWalls)
+                {
+                    Collider wallCollider = bwall.GetComponent<Collider>();
+                    if (wallCollider != null) wallCollider.enabled = true;
+
+                    Renderer rend = bwall.GetComponent<Renderer>();
+                    if (rend != null)
+                    {
+                        Color fullColor = rend.material.color;
+                        fullColor.a = 1f;
+                        rend.material.color = fullColor;
+                    }
+                }
+
+
                 canPassThroughWalls = false;
                 tilesMoved = 0;
             }
@@ -376,26 +394,6 @@ public class PlayerController : MonoBehaviour
                 Collider wallCollider = wall.GetComponent<Collider>();
                 if (wallCollider != null) wallCollider.enabled = false;
 
-                //Code for Making Player inivisble 
-                // Renderer playerRenderer = GetComponent<Renderer>();
-                // if (playerRenderer != null)
-                // {
-                //     Material mat = playerRenderer.material;
-                //     mat.SetFloat("_Mode", 2); // Set to transparent mode if using Standard Shader
-
-                //     // Enable transparency keywords
-                //     mat.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
-                //     mat.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
-                //     mat.SetInt("_ZWrite", 0);
-                //     mat.DisableKeyword("_ALPHATEST_ON");
-                //     mat.EnableKeyword("_ALPHABLEND_ON");
-                //     mat.DisableKeyword("_ALPHAPREMULTIPLY_ON");
-                //     mat.renderQueue = 3000;
-
-                //     Color color = mat.color;
-                //     color.a = 0.3f;  // 30% visible
-                //     mat.color = color;
-                // }
                 Renderer rend = wall.GetComponent<Renderer>();
                 if (rend != null)
                 {
@@ -403,6 +401,22 @@ public class PlayerController : MonoBehaviour
                     faded.a = 0.3f;
                     rend.material.color = faded;
                 }
+            }
+        }
+
+        // 🖤 Also fade Black Walls (tagged BWall)
+        GameObject[] blackWalls = GameObject.FindGameObjectsWithTag("BWall");
+        foreach (GameObject bwall in blackWalls)
+        {
+            Collider wallCollider = bwall.GetComponent<Collider>();
+            if (wallCollider != null) wallCollider.enabled = false;
+
+            Renderer rend = bwall.GetComponent<Renderer>();
+            if (rend != null)
+            {
+                Color faded = rend.material.color;
+                faded.a = 0.3f;
+                rend.material.color = faded;
             }
         }
 
@@ -415,8 +429,8 @@ public class PlayerController : MonoBehaviour
         {
             invisibilityBarBackground.gameObject.SetActive(true);
         }
-
     }
+
 
     private void OnCollisionEnter(Collision collision)
     {

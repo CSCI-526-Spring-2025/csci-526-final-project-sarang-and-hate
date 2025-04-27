@@ -26,6 +26,10 @@ public class TutorialScript : MonoBehaviour
 
     public GameObject wallPrefab; // WALLLL CODDEEEE
 
+    public GameObject blackWallPrefab; // 🖤 Static black wall prefab
+
+
+
     private List<GameObject> wallList = new List<GameObject>();
 
     private Vector2Int lastPlayerTile = new Vector2Int(-1, -1); // to detect tile change
@@ -41,13 +45,26 @@ public class TutorialScript : MonoBehaviour
     // Directions: 0 = North, 1 = West, 2 = East, 3 = South
     [SerializeField] private bool[,,] tutorialWallGrid = new bool[6, 4, 4]
     {
-        { { false, false, false, true }, { false, false, false, true }, { false, false, false, true }, { false, false, false, true } },
         { { false, false, false, false }, { false, false, false, false }, { false, false, false, false }, { false, false, false, false } },
-        { { true, true, false, false }, { true, false, true, false }, { false, false, false, false }, { false, false, false, false } },
-        { { false, true, false, true }, { false, false, true, true }, { false, false, false, false }, { false, false, false, false } },
         { { false, false, false, false }, { false, false, false, false }, { false, false, false, false }, { false, false, false, false } },
-        { { true, false, false, false }, {true,true, false,true}, {true, false, false,true}, {true,true, false, false } }
+        { { false, false, false, false }, { false, false, false, false }, { false, false, false, false }, { false, false, false, false } },
+        { { false, false, false, false }, { false, false, false, false }, { false, false, false, false }, { false, false, false, false } },
+        { { false, false, false, false }, { false, false, false, false }, { false, false, false, false }, { false, false, false, false } },
+        { { true , false, false, false }, { true , true , false, true  }, { true , false, false, true  }, { true , true , false, false } }
     };
+
+    // FOR BLACK WALLS !!!
+    [SerializeField] private bool[,,] blackWallGrid = new bool[6, 4, 4]
+    {
+        { { false, false, false, true  }, { false, false, false, true  }, { false, false, false, true  }, { false, false, false, true  } },
+        { { false, false, false, false }, { false, false, false, false }, { false, false, false, false }, { false, false, false, false } },
+        { { true , true , false, false }, { true , false, true , false }, { false, false, false, false }, { false, false, false, false } },
+        { { false, true , false, true  }, { false, false, true , true  }, { false, false, false, false }, { false, false, false, false } },
+        { { false, false, false, false }, { false, false, false, false }, { false, false, false, false }, { false, false, false, false } },
+        { { false, false, false, false }, { false, false, false, false }, { false, false, false, false }, { false, false, false, false } }
+    };
+
+
 
     private Dictionary<GameObject, int> tutorialWallRotationState = new Dictionary<GameObject, int>();
     private HashSet<GameObject> tutorialWallsCurrentlyRotating = new HashSet<GameObject>();
@@ -83,7 +100,15 @@ public class TutorialScript : MonoBehaviour
 
     public GameObject arrowPrefab; // drag Arrow 1 prefab into this in the Inspector
     private GameObject collectibleArrow;
-    
+
+    private List<Vector3> orbSpawnPositions = new List<Vector3>()
+    {
+         // Existing orb spawn
+        new Vector3(2f, 0.25f, 3f), // ✨ New spot
+        new Vector3(2f, 0.25f, 1f), // ✨ New spot
+        new Vector3(4f, 0.25f, 0f), // ✨ New spot
+        // Add as many as you want!
+    };
 
 
     void Start()
@@ -105,6 +130,8 @@ public class TutorialScript : MonoBehaviour
 
         magicTileDestinations[new Vector2Int(1, 2)] = new Vector2Int(0, 3);
         AdjustMinimapViewport();
+        SpawnAllCollectibles();
+
 
     }
 
@@ -141,6 +168,14 @@ public class TutorialScript : MonoBehaviour
         new Vector2Int(5, 1),
     };
 
+    // SPAWN MORE COLLECTIBLES
+    void SpawnAllCollectibles()
+    {
+        foreach (Vector3 pos in orbSpawnPositions)
+        {
+            GameObject collectible = Instantiate(powerUpPrefab, pos, Quaternion.Euler(270f, 0f, 0f), transform);
+        }
+    }
 
     void HandleTrapTile(int x, int z)
     {
@@ -345,41 +380,61 @@ public class TutorialScript : MonoBehaviour
 
         tutorialWallRotationState[wall] = 0; // track rotation state
     }
-    
+
+    //Black Walls will be added using this 
+    void AddBlackWallToTile(int tileX, int tileZ, Vector3 localPosition, Quaternion rotation)
+    {
+        if (tiles == null || tiles[tileX, tileZ] == null) return;
+
+        GameObject tile = tiles[tileX, tileZ];
+        GameObject blackWall = Instantiate(blackWallPrefab, tile.transform);
+        blackWall.transform.localPosition = localPosition;
+        blackWall.transform.localRotation = rotation;
+        blackWall.name = $"BlackWall_{tileX}_{tileZ}";
+
+        // ❌ NO rotation tracking needed for black walls
+    }
+
+
 
     void GenerateWallsFromGrid()
-{
-    float wallY = 2.5f;
+    {
+        float wallY = 2.5f;
 
-    // Directions: 0 = North, 1 = West, 2 = East, 3 = South
-    Vector3[] wallOffsets = {
+        // Directions: 0 = North, 1 = West, 2 = East, 3 = South
+        Vector3[] wallOffsets = {
         new Vector3(-0.5f, wallY,0f),  // North
         new Vector3(0f, wallY, -0.5f),  // West
         new Vector3(0f, wallY,0.5f),   // East
         new Vector3(0.5f, wallY,0f)    // South
-    };
+        };
 
-    Quaternion[] wallRotations = {
+        Quaternion[] wallRotations = {
         Quaternion.identity,              // North
         Quaternion.Euler(0, 90, 0),       // West
         Quaternion.Euler(0, 90, 0),       // East
         Quaternion.identity               // South
-    };
+        };
 
-    for (int x = 0; x < width; x++)
-    {
-        for (int z = 0; z < height; z++)
+        for (int x = 0; x < width; x++)
         {
-            for (int dir = 0; dir < 4; dir++)
+            for (int z = 0; z < height; z++)
             {
-                if (tutorialWallGrid[x, z, dir])
+                for (int dir = 0; dir < 4; dir++)
                 {
-                    AddWallToTile(x, z, wallOffsets[dir], wallRotations[dir]);
+                    if (tutorialWallGrid[x, z, dir])
+                    {
+                        AddWallToTile(x, z, wallOffsets[dir], wallRotations[dir]);
+                    }
+                    if (blackWallGrid[x, z, dir])
+                    {
+                        AddBlackWallToTile(x, z, wallOffsets[dir], wallRotations[dir]);
+                    }
+
                 }
             }
         }
     }
-}
 
     
 

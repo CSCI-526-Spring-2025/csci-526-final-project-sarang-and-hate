@@ -10,6 +10,7 @@ TagManager:
   - Magic
   - Trap
   - Destination
+  - BWall
   layers:
   - Default
   - TransparentFX

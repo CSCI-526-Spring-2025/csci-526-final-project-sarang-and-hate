@@ -162,6 +162,7 @@ MonoBehaviour:
   minZ: 0
   maxZ: 0
   wallPrefab: {fileID: 5233444293985566254, guid: 07ba3b151072cb64096f9ce6363cdaaa, type: 3}
+  blackWallPrefab: {fileID: 5233444293985566254, guid: 80521cdccbc1e4f43b060a086d037975, type: 3}
   minimapCamera: {fileID: 215227078}
   powerUpPrefab: {fileID: 2501585152944206765, guid: e2248bf5047ab4e54a3996f17624c069, type: 3}
   tutorialText: {fileID: 840550755}
@@ -5063,6 +5064,7 @@ MonoBehaviour:
   invisibilityBar: {fileID: 588891729}
   invisibilityBarBackground: {fileID: 861595925}
   tutorialVictoryPanel: {fileID: 2121461874}
+  helpPanel: {fileID: 0}
 --- !u!54 &592577027
 Rigidbody:
   m_ObjectHideFlags: 0
