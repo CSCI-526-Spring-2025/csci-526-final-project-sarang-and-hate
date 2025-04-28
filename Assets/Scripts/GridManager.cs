@@ -143,8 +143,8 @@ public class GridManager : MonoBehaviour
         { { false, false, false,false}, { false, true, false, true }, { false, false, true, true}, { false, false, false,false }, {true,true,false, false }, { false,false, false,false } },
         { { false, true, false, true }, { false, false, false, false }, { false, false, false, false }, {false, false, true, true}, { false,false, false,false }, {true, true, false, false } },
         { { false, false, false, false }, { true, false,true,false}, { false, false, false, false }, { false, true, false, true }, { false, false, false, false }, {true, false, true,false } },
-        { { true,false,true,false}, { false, false, false,true }, { false,true, false,true }, { false, false,false,false }, {true,false,true, false }, {false,false, false,false } },
-        { {false,false,true,true}, { false, true,false, false },  {false,true,false, false }, { true,false,true,false}, { false, false, false,false}, {true,false,true,false} },
+        { { true,false,true,false}, { false, false, false,false}, { false,true, false,true }, { false, false,false,false }, {true,false,true, false }, {false,false, false,false } },
+        { {false,true,false,true}, {true, true,false, false },  {false,true,false, false }, { true,false,true,false}, { false, false, false,false}, {true,false,true,false} },
         { {false, false,false, false }, {false,false,true,true}, { true,false,true,false}, { false, false, false, false }, {false,false,false,false}, {true,true, false, false} }
     };
 
@@ -232,6 +232,7 @@ public class GridManager : MonoBehaviour
                 break;
             case MazeLevel.Level4:
                 gridSize = 10;
+                maxRotations = 10;
                 gridWalls = gridWallsLevel4;
 
                 //Set position to 9,0 to bottom left of the grid 
@@ -1423,6 +1424,17 @@ IEnumerator HideMapMessageTextAfterDelay(float delay)
     // }
     public void TryPlayerRotateMaze(Vector3 playerPosition)
     {
+        if (rotationsUsed >= maxRotations)
+        {
+            Debug.Log("No rotations remaining.");
+            if (zoneMessageText != null)
+            {
+                zoneMessageText.text = "No rotations left!";
+                zoneMessageText.gameObject.SetActive(true);
+                StartCoroutine(HideZoneMessageAfterDelay(2f));
+            }
+            return;  // 🔴 IMPORTANT: Stop function early
+        }
         Vector2Int tilePos = new Vector2Int(Mathf.RoundToInt(playerPosition.x), Mathf.RoundToInt(playerPosition.z));
 
         if (tilePos.x < 0 || tilePos.x >= gridSize || tilePos.y < 0 || tilePos.y >= gridSize)
