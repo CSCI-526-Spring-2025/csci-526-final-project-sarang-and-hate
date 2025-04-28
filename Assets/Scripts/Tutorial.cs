@@ -335,7 +335,8 @@ public class TutorialScript : MonoBehaviour
                 }
                 else if ((x == 1 && z == 2))  // Magic tiles
                 {
-                    Color neonPink = new Color(1f, 0.1f, 0.9f); // Neon pink/purple
+                    // Color neonPink = new Color(1f, 0.1f, 0.9f); // Neon pink/purple
+                    Color neonPink = new Color(0.5f, 0f, 1f); // Purple glow
                     tileComp.tileRenderer.material.color = neonPink;
                     tileComp.originalColor = neonPink;
                     tile.tag = "Magic";
