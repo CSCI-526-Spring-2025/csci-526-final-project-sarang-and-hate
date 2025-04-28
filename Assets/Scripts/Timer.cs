@@ -66,8 +66,8 @@ public class GameTimer : MonoBehaviour
                 timerText.gameObject.SetActive(false); // hide the timer UI
             return; // skip timer logic entirely
         }
-        //Ensures that each level will have 3 resets remaining
-         GameSession.helpUsesRemaining = 3; // Reset Help for each level
+        //Ensures that each level will have 100 resets remaining
+        //GameSession.helpUsesRemaining = 100; // Reset Help for each level
         //Stop the timer initially
         timerIsRunning = false;
 
@@ -263,49 +263,27 @@ public class GameTimer : MonoBehaviour
     public void OpenHelp()
     {
         isPlayerStuck = true;
-        if (GameSession.helpUsesRemaining > 0)
+
+        if (helpPanel != null)
         {
-            GameSession.helpUsesRemaining--;
+            helpPanelText.color = Color.black;
+            helpPanel.SetActive(true);
+        }
 
-            Debug.Log("Help used. Remaining: " + GameSession.helpUsesRemaining);
-
-            if (helpPanel != null)
-            {
-                helpPanelText.color = Color.black;
-                helpPanel.SetActive(true);
-            }
-
-            // Send Data to Google Forms and Spreadsheet for Analytics
-            sendToGoogle sendGoogle = FindObjectOfType<sendToGoogle>();
+        // Send Data to Google Forms and Spreadsheet for Analytics
+        sendToGoogle sendGoogle = FindObjectOfType<sendToGoogle>();
+        if (sendGoogle != null)
+        {
             sendGoogle.Send();
         }
-        else
-        {
-            Debug.Log("No Help uses remaining!");
-            helpButton.interactable = false;
-
-            // Show a warning popup
-            if (instructionText != null)
-            {
-                instructionPanel.SetActive(true);
-                instructionText.text = "You've used all your Help attempts!";
-                nextInstructionButton.gameObject.SetActive(false); // Hide continue if needed
-                Time.timeScale = 0;
-            }
-        }
     }
+
 
 
     public void ExitToLoadingScene()
     {
         Debug.Log("Switching to Menu Screen...");
         Time.timeScale = 1;
-
-        // Optional: Re-enable if user hasn't used all 3
-        if (GameSession.helpUsesRemaining > 0)
-        {
-            helpButton.interactable = true;
-        }
 
         SceneManager.LoadScene("Menu");
     }
