@@ -376,12 +376,12 @@ public class GridManager : MonoBehaviour
             tilesToFlash.Add(tile);
         }
 
-        if (zoneMessageText != null)
-        {
-            zoneMessageText.text = "Purple tiles boost you forward!";
-            zoneMessageText.gameObject.SetActive(true);
-            zoneMessageText.color = Color.white;
-        }
+        // if (zoneMessageText != null)
+        // {
+        //     zoneMessageText.text = "Purple tiles boost you forward!";
+        //     zoneMessageText.gameObject.SetActive(true);
+        //     zoneMessageText.color = Color.white;
+        // }
 
         yield return new WaitForSeconds(5f);
 
