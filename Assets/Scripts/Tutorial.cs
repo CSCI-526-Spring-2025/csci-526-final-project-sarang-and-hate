@@ -8,6 +8,8 @@ using TMPro;
 public class TutorialScript : MonoBehaviour
 {
     [Header("Tile Grid Settings")]
+    [Header("Navigation Panel")]
+    public GameObject navPanel; // Reference to NavPanel that holds all keys
     public GameObject tilePrefab;       // Assign in Inspector
     public int width = 6;
     public int height = 4;
@@ -121,6 +123,7 @@ public class TutorialScript : MonoBehaviour
         //Manually Added Walls
         GenerateWallsFromGrid();
         StartCoroutine(ShowWallRotationTutorial());
+        StartCoroutine(HideNavPanelAfterDelay(15f));
 
         // Trap: send player to tile (5, 3) — the green start tile
         trapTileDestinations[new Vector2Int(1, 0)] = new Vector2Int(5, 3);
@@ -167,6 +170,26 @@ public class TutorialScript : MonoBehaviour
         new Vector2Int(3, 0),
         new Vector2Int(5, 1),
     };
+
+    private IEnumerator HideNavPanelAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+
+        if (navPanel != null)
+        {
+            navPanel.SetActive(false);
+        }
+    }
+
+    // This will toggle navPanel visibility each time the button is clicked
+    public void ToggleNavPanel()
+    {
+        if (navPanel != null)
+        {
+            bool isCurrentlyActive = navPanel.activeSelf; // Check if panel is currently visible
+            navPanel.SetActive(!isCurrentlyActive);        // Toggle it: if on → turn off, if off → turn on
+        }
+    }
 
     // SPAWN MORE COLLECTIBLES
     void SpawnAllCollectibles()
