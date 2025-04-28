@@ -99,6 +99,7 @@ public class PlayerController : MonoBehaviour
             maxX = tutorialScript.maxX;
             minZ = tutorialScript.minZ;
             maxZ = tutorialScript.maxZ;
+            minimapDuration = 5f;
 
         }
 
@@ -235,10 +236,21 @@ public class PlayerController : MonoBehaviour
 
     IEnumerator HideMinimapAfterSeconds(float seconds)
     {
+        Debug.Log($"HideMinimap coroutine started, waiting {seconds} seconds.");
         yield return new WaitForSeconds(seconds);
-        minimapCamera.SetActive(false);
-        isMinimapActive = false;
+
+        if (isMinimapActive)
+        {
+            Debug.Log("Hide MiniMap");
+            minimapCamera.SetActive(false);
+            isMinimapActive = false;
+        }
+        else
+        {
+            Debug.Log("MiniMap already inactive, nothing to hide.");
+        }
     }
+
 
 
 
