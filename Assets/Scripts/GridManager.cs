@@ -15,6 +15,9 @@ public class GridManager : MonoBehaviour
 
     public GameObject wallPrefab;  // Assign in Inspector
 
+    public GameObject blackWallPrefab; // 🖤 Assign in Inspector
+
+
     private Tile[,] tiles;
     private Dictionary<Vector2Int, int> tileZones = new Dictionary<Vector2Int, int>(); // NEW: Store tile zone mapping
     
@@ -126,6 +129,18 @@ public class GridManager : MonoBehaviour
         { {false, false,false, false }, {true,true, false, false }, { false, true, false,true }, { false, false, false, false }, { false,true, false,true }, { false,false, false, false } }
     };
 
+
+    // 🖤 Black Walls for each level (initialized as all false)
+    [SerializeField] private bool[,,] blackWallGridLevel1 = new bool[6, 6, 4]
+    {
+    { { false, false, false, false }, { false, false, false, false }, { false, false, false, false }, { false, false, false, false }, { false, false, false, false }, { false, false, false, false } },
+    { { false, false, false, false }, { false, false, false, false }, { false, false, false, false }, { false, false, false, false }, { false, false, false, false }, { false, false, false, false } },
+    { { false, false, false, false }, { false, false, false, false }, { false, false, false, false }, { false, false, false, false }, { false, false, false, false }, { false, false, false, false } },
+    { { false, false, false, false }, { false, false, false, false }, { false, false, false, false }, { false, false, false, false }, { false, false, false, false }, { false, false, false, false } },
+    { { false, false, false, false }, { false, false, false, false }, { false, false, false, false }, { false, false, false, false }, { false, false, false, false }, { false, false, false, false } },
+    { { false, false, false, false }, { false, false, false, false }, { false, false, false, false }, { false, false, false, false }, { false, false, false, false }, { false, false, false, false } }
+    };
+
     //N, W, E, S
     // [SerializeField] private bool[,,] gridWallsLevel2 = new bool[6,6,4]
     // {
@@ -138,7 +153,7 @@ public class GridManager : MonoBehaviour
     // };
 
     //Working on cleaning up tile walls rotation
-        [SerializeField] private bool[,,] gridWallsLevel2 = new bool[6,6,4]
+    [SerializeField] private bool[,,] gridWallsLevel2 = new bool[6,6,4]
     {
         { { false, false, false,false}, { false, true, false, true }, { false, false, true, true}, { false, false, false,false }, {true,true,false, false }, { false,false, false,false } },
         { { false, true, false, true }, { false, false, false, false }, { false, false, false, false }, {false, false, true, true}, { false,false, false,false }, {true, true, false, false } },
@@ -146,6 +161,16 @@ public class GridManager : MonoBehaviour
         { { true,false,true,false}, { false, false, false,false}, { false,true, false,true }, { false, false,false,false }, {true,false,true, false }, {false,false, false,false } },
         { {false,true,false,true}, {true, true,false, false },  {false,true,false, false }, { true,false,true,false}, { false, false, false,false}, {true,false,true,false} },
         { {false, false,false, false }, {false,false,true,true}, { true,false,true,false}, { false, false, false, false }, {false,false,false,false}, {true,true, false, false} }
+    };
+
+    [SerializeField] private bool[,,] blackWallGridLevel2 = new bool[6, 6, 4]
+    {
+    { { false, false, false, false }, { false, false, false, false }, { false, false, false, false }, { false, true , false, false }, { false, false, false, false }, { false, false, false, false } },
+    { { false, false, false, false }, { false, false, false, false }, { false, false, false, false }, { false, true , false, false }, { false, false, false, false }, { false, false, false, false } },
+    { { false, false, false, false }, { false, false, false, false }, { false, false, false, false }, { false, true , false, false }, { false, false, false, false }, { false, false, false, false } },
+    { { false, false, false, true  }, { false, false, false, true  }, { false, false, false, true  }, { false, true , false, true  }, { false, false, false, false }, { false, false, false, false } },
+    { { false, false, false, false }, { false, false, false, false }, { false, false, false, false }, { false, false, false, false }, { false, false, false, false }, { false, false, false, false } },
+    { { false, false, false, false }, { false, false, false, false }, { false, false, false, false }, { false, false, false, false }, { false, false, false, false }, { false, false, false, false } }
     };
 
     // N W E S 
@@ -176,6 +201,34 @@ public class GridManager : MonoBehaviour
         {true, false,true, false }, { false, false, false, false }, {true, false,true, false }, { false, false, false, false } }
     };
 
+
+    [SerializeField] private bool[,,] blackWallGridLevel3 = new bool[8, 8, 4]
+    {
+    { { false, false, false, false }, { false, false, false, false }, { false, false, false, false }, { false, false, false, false },
+      { false, false, true , false }, { false, false, false, false }, { false, false, false, false }, { false, false, false, false } },
+
+    { { false, false, false, false }, { false, false, false, false }, { false, false, false, false }, { false, false, false, false },
+      { false, false, true , false }, { false, false, false, false }, { false, false, false, false }, { false, false, false, false } },
+
+    { { false, false, false, false }, { false, false, false, false }, { false, false, false, false }, { false, false, false, false },
+      { false, false , true , false }, { false, false, false, false }, { false, false, false, false }, { false, false, false, false } },
+
+    { { false, false, false, false }, { false, false, false, false }, { false, false, false, false }, { false, false, false, false },
+      { false, false, true , false }, { false, false, false, false }, { false, false, false, false }, { false, false, false, false } },
+
+    { { false, false, false, true  }, { false, false, false, true  }, { false, false, false, true  }, { false, false, false, true  },
+      { false, false, true , true  }, { false, false, false, false }, { false, false, false, false }, { false, false, false, false } },
+
+    { { false, false, false, false }, { false, false, false, false }, { false, false, false, false }, { false, false, false, false },
+      { false, false, false, false }, { false, false, false, false }, { false, false, false, false }, { false, false, false, false } },
+
+    { { false, false, false, false }, { false, false, false, false }, { false, false, false, false }, { false, false, false, false },
+      { false, false, false, false }, { false, false, false, false }, { false, false, false, false }, { false, false, false, false } },
+
+    { { false, false, false, false }, { false, false, false, false }, { false, false, false, false }, { false, false, false, false },
+      { false, false, false, false }, { false, false, false, false }, { false, false, false, false }, { false, false, false, false } }
+    };
+
     //store walls to each zone 
 
     // N WE S for Level 3/4 
@@ -194,11 +247,29 @@ public class GridManager : MonoBehaviour
     { { false, false,true,true }, {true, false,true, false }, { false, false, false, false }, {true, false,true, false }, { false, false,true,true}, { false, false, false, false }, { false, false, false, false }, {true, false,true, false }, { false, false, false, false }, { false, false, false, false } },
 };
 
+
+    [SerializeField] private bool[,,] blackWallGridLevel4 = new bool[10, 10, 4]
+    {
+    { { false, false, false, false }, { false, false, false, false }, { false, false, false, false }, { false, false, false, false }, { false, false, true , false }, { false, false, false, false }, { false, false, false, false }, { false, false, false, false }, { false, false, false, false }, { false, false, false, false } },
+    { { false, false, false, false }, { false, false, false, false }, { false, false, false, false }, { false, false, false, false }, { false, false, true , false }, { false, false, false, false }, { false, false, false, false }, { false, false, false, false }, { false, false, false, false }, { false, false, false, false } },
+    { { false, false, false, false }, { false, false, false, false }, { false, false, false, false }, { false, false, false, false }, { false, false, true , false }, { false, false, false, false }, { false, false, false, false }, { false, false, false, false }, { false, false, false, false }, { false, false, false, false } },
+    { { false, false, false, false }, { false, false, false, false }, { false, false, false, false }, { false, false, false, false }, { false, false, true , false }, { false, false, false, false }, { false, false, false, false }, { false, false, false, false }, { false, false, false, false }, { false, false, false, false } },
+    { { false, false, false, true  }, { false, false, false, true  }, { false, false, false, true  }, { false, false, false, true  }, { false, false, true , true  }, { false, false, false, true  }, { false, false, false, true  }, { false, false, false, true  }, { false, false, false, true  }, { false, false, false, true  } },
+    { { false, false, false, false }, { false, false, false, false }, { false, false, false, false }, { false, false, false, false }, { false, false, true , false }, { false, false, false, false }, { false, false, false, false }, { false, false, false, false }, { false, false, false, false }, { false, false, false, false } },
+    { { false, false, false, false }, { false, false, false, false }, { false, false, false, false }, { false, false, false, false }, { false, false, true , false }, { false, false, false, false }, { false, false, false, false }, { false, false, false, false }, { false, false, false, false }, { false, false, false, false } },
+    { { false, false, false, false }, { false, false, false, false }, { false, false, false, false }, { false, false, false, false }, { false, false, true , false }, { false, false, false, false }, { false, false, false, false }, { false, false, false, false }, { false, false, false, false }, { false, false, false, false } },
+    { { false, false, false, false }, { false, false, false, false }, { false, false, false, false }, { false, false, false, false }, { false, false, true , false }, { false, false, false, false }, { false, false, false, false }, { false, false, false, false }, { false, false, false, false }, { false, false, false, false } },
+    { { false, false, false, false }, { false, false, false, false }, { false, false, false, false }, { false, false, false, false }, { false, false, true , false }, { false, false, false, false }, { false, false, false, false }, { false, false, false, false }, { false, false, false, false }, { false, false, false, false } }
+    }; 
+
     private Dictionary<int, List<GameObject>> zoneWalls = new Dictionary<int, List<GameObject>>();
 
 
 
     private bool[,,] gridWalls; // this was your internal “active” array
+
+    private bool[,,] blackWallGrid; // Active Black Wall grid
+
 
     // Maze layout: Specifies which walls exist for each tile.
     // N, W, E, S
@@ -218,28 +289,27 @@ public class GridManager : MonoBehaviour
         {
             case MazeLevel.Level1:
                 gridWalls = gridWallsLevel1;
+                blackWallGrid = blackWallGridLevel1;
                 break;
             case MazeLevel.Level2:
                 gridWalls = gridWallsLevel2;
+                blackWallGrid = blackWallGridLevel2;
                 break;
             case MazeLevel.Level3:
                 gridSize = 8;
                 gridWalls = gridWallsLevel3;
-
-                //Set position to 7,0,0 to bottom right of the grid
+                blackWallGrid = blackWallGridLevel3;
                 player.transform.position = new Vector3(7f, 0f, 7f);
-
                 break;
             case MazeLevel.Level4:
                 gridSize = 10;
                 maxRotations = 10;
                 gridWalls = gridWallsLevel4;
-
-                //Set position to 9,0 to bottom left of the grid 
-                //Set position to 7,0,0 to bottom right of the grid
+                blackWallGrid = blackWallGridLevel4;
                 player.transform.position = new Vector3(9f, 0f, 0f);
                 break;
         }
+
         GenerateGrid();
         if (currentMazeLevel == MazeLevel.Level3)
         {
@@ -467,10 +537,20 @@ public class GridManager : MonoBehaviour
                 tiles[x, y] = tile;
 
                 // Add walls based on gridWalls array
+                // Normal walls
                 if (gridWalls[x, y, 0]) AddWall(tileGO, new Vector3(-0.5f, 2.5f, 0), Quaternion.identity);
                 if (gridWalls[x, y, 3]) AddWall(tileGO, new Vector3(0.5f, 2.5f, 0), Quaternion.identity);
                 if (gridWalls[x, y, 1]) AddWall(tileGO, new Vector3(0, 2.5f, -0.5f), Quaternion.Euler(0, 90, 0));
                 if (gridWalls[x, y, 2]) AddWall(tileGO, new Vector3(0, 2.5f, 0.5f), Quaternion.Euler(0, 90, 0));
+
+                // Black walls
+                if (blackWallGrid[x, y, 0]) AddBlackWall(tileGO, new Vector3(-0.5f, 2.5f, 0), Quaternion.identity);
+                if (blackWallGrid[x, y, 3]) AddBlackWall(tileGO, new Vector3(0.5f, 2.5f, 0), Quaternion.identity);
+                if (blackWallGrid[x, y, 1]) AddBlackWall(tileGO, new Vector3(0, 2.5f, -0.5f), Quaternion.Euler(0, 90, 0));
+                if (blackWallGrid[x, y, 2]) AddBlackWall(tileGO, new Vector3(0, 2.5f, 0.5f), Quaternion.Euler(0, 90, 0));
+
+
+
 
                 // For Level 2, add the collectible at a specific tile location (3,3)
                 if (currentMazeLevel == MazeLevel.Level2)
@@ -590,7 +670,17 @@ public class GridManager : MonoBehaviour
         Debug.Log($"Created {wall.name} at {wall.transform.position}");
     }
 
-void SetupRotationSequences()
+    void AddBlackWall(GameObject parent, Vector3 localPosition, Quaternion rotation)
+    {
+        GameObject blackWall = Instantiate(blackWallPrefab, parent.transform);
+        blackWall.transform.localPosition = localPosition;
+        blackWall.transform.localRotation = rotation;
+        blackWall.name = $"BlackWall_{parent.name}";
+        blackWall.tag = "BWall"; // 🖤 Important to set tag
+    }
+
+
+    void SetupRotationSequences()
     {
         rotationSequencesDict = new Dictionary<int, List<string>>();
 
