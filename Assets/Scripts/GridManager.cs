@@ -319,9 +319,11 @@ public class GridManager : MonoBehaviour
         GenerateGrid();
         if (currentMazeLevel == MazeLevel.Level3)
         {
+            tutorialCompleted = true;
             StartCoroutine(ShowMagicTileTutorial()); // ✅ Show tutorial on start
         }
         else if (currentMazeLevel == MazeLevel.Level4){
+            tutorialCompleted = true;
             StartCoroutine(ShowMagicTileTutorialScene4());
         }
         else
@@ -939,6 +941,7 @@ public class GridManager : MonoBehaviour
     }
     void CheckPlayerZone()
     {
+        
         Vector3 playerPos = player.transform.position;
         int playerTileX = Mathf.RoundToInt(playerPos.x);
         int playerTileY = Mathf.RoundToInt(playerPos.z);
@@ -1140,6 +1143,7 @@ public class GridManager : MonoBehaviour
             }
         }
         if (SceneManager.GetActiveScene().name == "3DScene4"){
+            Debug.Log($"Player is at ({playerTileX},{playerTileY}) in scene {SceneManager.GetActiveScene().name}");
             if ((playerTileX == 5 && playerTileY == 1) || (playerTileX == 5 && playerTileY == 6) || (playerTileX == 1 && playerTileY == 7) || (playerTileX == 7 && playerTileY == 9))
             {
                 HandleTrap(currentTile, playerTileX, playerTileY);
@@ -1180,6 +1184,7 @@ public class GridManager : MonoBehaviour
 
     private void HandleTrap(Vector2Int currentTile, int xTile, int yTile)
     {
+        Debug.Log($"HandleTrap triggered at ({xTile},{yTile})");
         if (isTeleporting) return;
         playerTrapped++;
 
