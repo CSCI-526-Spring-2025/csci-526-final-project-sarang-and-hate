@@ -47,6 +47,7 @@ public class TutorialScript : MonoBehaviour
     public Camera minimapCamera; // Assign in Inspector
 
     private bool isTeleporting = false; // 🛡️ Prevents multiple tile triggers
+    public Material goldenTileMaterial;
 
 
     // Directions: 0 = North, 1 = West, 2 = East, 3 = South
@@ -386,6 +387,10 @@ public class TutorialScript : MonoBehaviour
                     else if (IsGoalTile(x, z))
                     {
                         rend.material.color = Color.blue;
+                        // if (goldenTileMaterial != null)
+                        // {
+                        //     rend.material = goldenTileMaterial;
+                        // }
                         tile.tag = "Goal";
                     }
                 }
