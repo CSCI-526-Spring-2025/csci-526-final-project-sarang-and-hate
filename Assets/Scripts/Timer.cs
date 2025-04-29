@@ -91,7 +91,7 @@ public class GameTimer : MonoBehaviour
         }
         else
         {
-            instructions = new string[] { "Goal: Reach the Blue Tile!" }; // Fallback
+            instructions = new string[] { "Goal: Reach the Golden Tile! Follow the Beam" }; // Fallback
             if (sceneName == "3DScene2")
             {
                 currentLevelPlayed = "Level 1";

@@ -320,6 +320,9 @@ public class GridManager : MonoBehaviour
         {
             StartCoroutine(ShowMagicTileTutorial()); // ✅ Show tutorial on start
         }
+        else if (currentMazeLevel == MazeLevel.Level4){
+            StartCoroutine(ShowMagicTileTutorialScene4());
+        }
         else
         {
             tutorialCompleted = true; // ✅ For other levels, start immediately
@@ -477,6 +480,40 @@ public class GridManager : MonoBehaviour
 
         tutorialCompleted = true;
     }
+
+    //Show Magic Tiles for Level 3 
+    IEnumerator ShowMagicTileTutorialScene4()
+    {
+        List<Vector2Int> magicTiles = new List<Vector2Int>
+        {
+            new Vector2Int(2, 3),
+            new Vector2Int(7, 2),
+            new Vector2Int(8, 6)
+        };
+
+        List<Tile> tilesToFlash = new List<Tile>();
+
+        foreach (var pos in magicTiles)
+        {
+            if (pos.x >= 0 && pos.x < gridSize && pos.y >= 0 && pos.y < gridSize)
+            {
+                Tile tile = tiles[pos.x, pos.y];
+                tile.tileRenderer.material.color = new Color(0.5f, 0f, 1f); // Purple glow
+                tilesToFlash.Add(tile);
+            }
+        }
+
+        yield return new WaitForSeconds(5f);
+
+        // Reset tile colors
+        foreach (Tile tile in tilesToFlash)
+        {
+                tile.tileRenderer.material = new Material(defaultTileMaterial);
+                tile.originalColor = defaultTileMaterial.color;
+        }
+
+    }
+
 
     /// <summary>
     /// Generates a grid of tiles and places walls based on the predefined gridWalls array.
