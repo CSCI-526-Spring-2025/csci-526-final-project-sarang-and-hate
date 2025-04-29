@@ -110,6 +110,8 @@ public class GridManager : MonoBehaviour
     //Keep track of final destination for the trap tiles in level 3 
     private Dictionary<Vector2Int, Vector2> trapDestinationsScene4 = new Dictionary<Vector2Int, Vector2>();
     private Dictionary<Vector2Int, Vector2> magicDestinationsScene4 = new Dictionary<Vector2Int, Vector2>();
+    public Material goldenTileMaterial;
+
 
 
     //ENUM for levels
@@ -510,7 +512,10 @@ public class GridManager : MonoBehaviour
                     {
                         if (x == 0 && y == 9)
                         {
-                            renderer.material.color = Color.blue; // Destination
+                            if (goldenTileMaterial != null)
+                            {
+                                renderer.material = goldenTileMaterial;
+                            }
                             tileGO.tag = "Destination";
                         }
                         else if (x == 9 && y == 0)
@@ -524,7 +529,10 @@ public class GridManager : MonoBehaviour
                         // Default logic for Levels 1–3
                         if (x == 0 && y == 0)
                         {
-                            renderer.material.color = Color.blue; // Destination
+                            if (goldenTileMaterial != null)
+                            {
+                                renderer.material = goldenTileMaterial;
+                            }
                             tileGO.tag = "Destination";
                         }
                         else if (x == gridSize - 1 && y == gridSize - 1)
