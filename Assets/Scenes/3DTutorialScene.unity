@@ -156,6 +156,9 @@ MonoBehaviour:
   width: 6
   height: 4
   tileSize: 1
+  rotationsRemainingText: {fileID: 1227176900}
+  powerUpsRemainingText: {fileID: 2022995983}
+  mapUsesLeftText: {fileID: 1319568340}
   player: {fileID: 592577021}
   boundaryPrefab: {fileID: 0}
   minX: 0
@@ -14028,7 +14031,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1611343522
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14041,9 +14044,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d1921b13f39a39c4ebf1801ec9f03765, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  powerUpText: {fileID: 0}
-  rotationsLeftText: {fileID: 0}
-  mapUsesLeftText: {fileID: 0}
+  powerUpText: {fileID: 2022995983}
+  rotationsLeftText: {fileID: 1227176900}
+  mapUsesLeftText: {fileID: 1319568340}
   tilePrefab: {fileID: 613115640612862635, guid: 2b1611565e00286409cdc73ddcd95af8, type: 3}
   gridSize: 6
   tileSize: 1.1

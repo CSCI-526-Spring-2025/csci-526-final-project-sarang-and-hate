@@ -180,7 +180,15 @@ public class PlayerController : MonoBehaviour
             powerUpCount--;
             UpdatePowerUpUI();
             playerUsedPowerups++;
-            StartCoroutine(gridManager.GlowUIText(gridManager.powerUpText));
+            // StartCoroutine(gridManager.GlowUIText(gridManager.powerUpText));
+            if (gridManager != null)
+            {
+                StartCoroutine(gridManager.GlowUIText(gridManager.powerUpText));
+            }
+            else if (tutorialScript != null)
+            {
+                StartCoroutine(tutorialScript.GlowUIText(tutorialScript.powerUpsRemainingText));
+            }
         }
 
         if (Input.GetKeyDown(KeyCode.Escape))
@@ -207,7 +215,7 @@ public class PlayerController : MonoBehaviour
             else if (tutorialScript != null)  // For Tutorial Scene 
             {
                 tutorialScript.TryPlayerRotateMaze(transform.position);
-                StartCoroutine(gridManager.GlowUIText(gridManager.rotationsLeftText));
+                StartCoroutine(tutorialScript.GlowUIText(tutorialScript.rotationsRemainingText));
             }
 
             hasPlayerRotatedWalls = true;
@@ -233,7 +241,16 @@ public class PlayerController : MonoBehaviour
             hasPlayerOpenedMap = true;
             mapViewedNum++;
             UpdateMapUsesUI();
-            StartCoroutine(gridManager.GlowUIText(gridManager.mapUsesLeftText));
+            // StartCoroutine(gridManager.GlowUIText(gridManager.mapUsesLeftText));
+            if (gridManager != null)
+            {
+                StartCoroutine(gridManager.GlowUIText(gridManager.mapUsesLeftText));
+            }
+            else if (tutorialScript != null)
+            {
+                StartCoroutine(tutorialScript.GlowUIText(tutorialScript.mapUsesLeftText));
+            }
+
         }
 
     }

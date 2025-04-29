@@ -15,6 +15,11 @@ public class TutorialScript : MonoBehaviour
     public int height = 4;
     public float tileSize = 1.0f;
 
+    [Header("Glow Effect for UI Texts")]
+    public TMP_Text rotationsRemainingText;
+    public TMP_Text powerUpsRemainingText;
+    public TMP_Text mapUsesLeftText;
+
     private GameObject[,] tiles;
 
     [Header("Player Setup")]
@@ -243,6 +248,19 @@ public class TutorialScript : MonoBehaviour
 
 
 
+
+    public IEnumerator GlowUIText(TMP_Text textToGlow, float glowDuration = 2f)
+    {
+        if (textToGlow == null) yield break;
+
+        textToGlow.fontMaterial.EnableKeyword("_OUTLINE_ON");
+        textToGlow.outlineColor = Color.cyan;
+        textToGlow.outlineWidth = 0.3f; // visibly thick
+
+        yield return new WaitForSeconds(glowDuration);
+
+        textToGlow.outlineWidth = 0f; // remove outline
+    }
 
     void HandleMagicTile(int x, int z)
     {
@@ -595,6 +613,11 @@ public class TutorialScript : MonoBehaviour
             hasRotatedOnce = true;
             ShowTutorialText("Great! Now pick up the powerup to go invisible!");
             //SpawnCollectible(new Vector3(5f, 0.3f, 1f)); // Place collectible logically near player
+        }
+
+        if (rotationsRemainingText != null)
+        {
+            StartCoroutine(GlowUIText(rotationsRemainingText));
         }
     }
 
