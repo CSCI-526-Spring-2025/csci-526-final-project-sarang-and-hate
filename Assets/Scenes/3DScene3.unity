@@ -9856,6 +9856,7 @@ MonoBehaviour:
   zoneMessageText: {fileID: 266714644}
   MapMessageText: {fileID: 1851548706}
   minimapCamera: {fileID: 166303216}
+  goldenTileMaterial: {fileID: 2100000, guid: c15cc31c86b9843e99b442984c0a4d9f, type: 2}
   currentMazeLevel: 3
   minimapPadding: 2
 --- !u!4 &1218340808
