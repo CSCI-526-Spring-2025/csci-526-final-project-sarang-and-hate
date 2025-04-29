@@ -273,7 +273,7 @@ public class TutorialScript : MonoBehaviour
         {
             if (tutorialText != null)
             {
-                tutorialText.text = "Complete all tutorial checkpoints before using this!";
+                tutorialText.text = "Complete all tutorial checkpoints before this!";
                 tutorialText.gameObject.SetActive(true);
                 StartCoroutine(HideTutorialTextAfterSeconds(2.5f));
             }
@@ -315,7 +315,7 @@ public class TutorialScript : MonoBehaviour
 
         if (tutorialText != null)
         {
-            tutorialText.text = "Magic tile activated! Zoom!";
+            tutorialText.text = "Magic tile activated! Boost you forward!";
             tutorialText.gameObject.SetActive(true);
             StartCoroutine(HideTutorialTextAfterSeconds(2f));
         }
