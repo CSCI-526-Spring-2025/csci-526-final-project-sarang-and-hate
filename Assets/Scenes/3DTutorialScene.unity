@@ -152,7 +152,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   navPanel: {fileID: 2112856369}
-  tilePrefab: {fileID: 613115640612862635, guid: e76a04cbde80c1247a700d5faa1f3111, type: 3}
+  tilePrefab: {fileID: 613115640612862635, guid: 2b1611565e00286409cdc73ddcd95af8, type: 3}
   width: 6
   height: 4
   tileSize: 1
@@ -168,7 +168,7 @@ MonoBehaviour:
   wallPrefab: {fileID: 5233444293985566254, guid: 07ba3b151072cb64096f9ce6363cdaaa, type: 3}
   blackWallPrefab: {fileID: 5233444293985566254, guid: 80521cdccbc1e4f43b060a086d037975, type: 3}
   minimapCamera: {fileID: 215227078}
-  goldenTileMaterial: {fileID: 0}
+  goldenTileMaterial: {fileID: 2100000, guid: c15cc31c86b9843e99b442984c0a4d9f, type: 2}
   powerUpPrefab: {fileID: 2501585152944206765, guid: e2248bf5047ab4e54a3996f17624c069, type: 3}
   tutorialText: {fileID: 840550755}
   arrowPrefab: {fileID: 464750281498380233, guid: b7c2ee61a846388458b1f849d8f1f9ba, type: 3}
