@@ -237,8 +237,10 @@ MonoBehaviour:
   tutorialButton: {fileID: 1819478712}
   level2Button: {fileID: 1801408002}
   level3Button: {fileID: 821448458}
+  level4Button: {fileID: 232545884}
   level2Text: {fileID: 1282493678}
   level3Text: {fileID: 937838695}
+  level4Text: {fileID: 1777726566}
 --- !u!1 &232545882
 GameObject:
   m_ObjectHideFlags: 0
