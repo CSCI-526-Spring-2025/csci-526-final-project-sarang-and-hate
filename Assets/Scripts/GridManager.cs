@@ -1113,17 +1113,6 @@ public class GridManager : MonoBehaviour
         hasSpawnedCollectibleAtStart = true;
     }
 
-    // IEnumerator FlashUIText(TMP_Text textToFlash, Color flashColor, float duration = 2f)
-    // {
-    //     if (textToFlash == null) yield break;
-
-    //     Color originalColor = textToFlash.color;
-    //     textToFlash.color = flashColor;
-
-    //     yield return new WaitForSeconds(duration);
-
-    //     textToFlash.color = originalColor;
-    // }
 
     public IEnumerator GlowUIText(TMP_Text textToGlow, float glowDuration = 2f)
     {
