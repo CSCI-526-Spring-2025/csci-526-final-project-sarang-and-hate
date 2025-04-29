@@ -308,6 +308,12 @@ public class GameTimer : MonoBehaviour
         SceneManager.LoadScene("3DScene3"); // Ensure this scene name is correct
     }
 
+    public void PromoteToLevelFour()
+    {
+        Time.timeScale = 1;
+        SceneManager.LoadScene("3DScene4"); // Ensure this scene name is correct
+    }
+
     // Show Next Instruction When "Continue" is Clicked
     public void ShowNextInstruction()
     {
