@@ -180,6 +180,7 @@ public class PlayerController : MonoBehaviour
             powerUpCount--;
             UpdatePowerUpUI();
             playerUsedPowerups++;
+            StartCoroutine(gridManager.GlowUIText(gridManager.powerUpText));
         }
 
         if (Input.GetKeyDown(KeyCode.Escape))
@@ -201,10 +202,12 @@ public class PlayerController : MonoBehaviour
             if (gridManager != null)
             {
                 gridManager.TryPlayerRotateMaze(transform.position);
+                StartCoroutine(gridManager.GlowUIText(gridManager.rotationsLeftText));
             }
             else if (tutorialScript != null)  // For Tutorial Scene 
             {
                 tutorialScript.TryPlayerRotateMaze(transform.position);
+                StartCoroutine(gridManager.GlowUIText(gridManager.rotationsLeftText));
             }
 
             hasPlayerRotatedWalls = true;
@@ -230,6 +233,7 @@ public class PlayerController : MonoBehaviour
             hasPlayerOpenedMap = true;
             mapViewedNum++;
             UpdateMapUsesUI();
+            StartCoroutine(gridManager.GlowUIText(gridManager.mapUsesLeftText));
         }
 
     }

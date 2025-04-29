@@ -7,6 +7,9 @@ using TMPro;
 
 public class GridManager : MonoBehaviour
 {
+    public TMP_Text powerUpText; // Assign in Inspector
+    public TMP_Text rotationsLeftText; // Assign in Inspector
+    public TMP_Text mapUsesLeftText; // Assign in Inspector
     private bool isTeleporting = false;
     private bool tutorialCompleted = false; // ✅ Track magic tile tutorial
     public GameObject tilePrefab; // Assign a basic cube in Unity
@@ -933,6 +936,7 @@ void SetupRotationSequences()
                    
                 // ✅ Actually grant the power-up to the player
                 player.GetComponent<PlayerController>().CollectPowerUp();
+                // StartCoroutine(FlashUIText(powerUpText, Color.red));
 
                 //Display the green arrow towards the final destination
 
@@ -1017,6 +1021,31 @@ void SetupRotationSequences()
         Debug.Log("Spawning collectibleInvisible now...");
         Instantiate(collectibleInvisible, new Vector3(5f, 0.25f, 5f), Quaternion.Euler(270f, 0f, 0f), transform);
         hasSpawnedCollectibleAtStart = true;
+    }
+
+    // IEnumerator FlashUIText(TMP_Text textToFlash, Color flashColor, float duration = 2f)
+    // {
+    //     if (textToFlash == null) yield break;
+
+    //     Color originalColor = textToFlash.color;
+    //     textToFlash.color = flashColor;
+
+    //     yield return new WaitForSeconds(duration);
+
+    //     textToFlash.color = originalColor;
+    // }
+
+    public IEnumerator GlowUIText(TMP_Text textToGlow, float glowDuration = 2f)
+    {
+        if (textToGlow == null) yield break;
+
+        textToGlow.fontMaterial.EnableKeyword("_OUTLINE_ON");
+        textToGlow.outlineColor = Color.cyan;
+        textToGlow.outlineWidth = 0.3f; // visibly thick
+
+        yield return new WaitForSeconds(glowDuration);
+
+        textToGlow.outlineWidth = 0f; // remove outline
     }
 
 
@@ -1494,6 +1523,8 @@ IEnumerator HideMapMessageTextAfterDelay(float delay)
         }
 
         rotationsUsed++;
+        // StartCoroutine(FlashUIText(rotationsLeftText, Color.red));
+        StartCoroutine(GlowUIText(rotationsLeftText));
         Debug.Log($"Rotated walls on tile ({tilePos.x}, {tilePos.y})");
 
         // 🔒 Comment out zone-based logic (retain for future reversion)
