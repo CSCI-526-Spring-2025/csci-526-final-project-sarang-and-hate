@@ -794,7 +794,8 @@ public class TutorialScript : MonoBehaviour
 
 
         //Place New Arrow in the 3rd checkpoint 
-            // Wait for player to reach second checkpoint
+        // Wait for player to reach second checkpoint
+        // Wait for player to reach second checkpoint
         while (true)
         {
             Vector2Int tile = new Vector2Int(Mathf.RoundToInt(player.transform.position.x), Mathf.RoundToInt(player.transform.position.z));
@@ -802,10 +803,36 @@ public class TutorialScript : MonoBehaviour
             {
                 Destroy(collectibleArrow);
 
-                // Now show arrow to final checkpoint (0, 0)
-                Vector3 finalPos = new Vector3(0f, 0.25f, 0f);
-                GameObject finalArrow = Instantiate(arrowPrefab, finalPos + new Vector3(0, 1f, 0), Quaternion.identity, transform);
-                StartCoroutine(BounceArrow(finalArrow));
+                // 🟰 Now instead of final destination, first show arrow at (2,1)
+                Vector3 powerUpPos = new Vector3(2f, 0.25f, 1f);
+                GameObject powerUpArrow = Instantiate(arrowPrefab, powerUpPos + new Vector3(0, 1f, 0), Quaternion.identity, transform);
+                StartCoroutine(BounceArrow(powerUpArrow));
+
+                // Wait for player to reach (2,1)
+                while (true)
+                {
+                    Vector2Int subTile = new Vector2Int(Mathf.RoundToInt(player.transform.position.x), Mathf.RoundToInt(player.transform.position.z));
+                    if (subTile == new Vector2Int(2, 1))
+                    {
+                        Destroy(powerUpArrow);
+
+                        // ✨ Now show the tutorial text when reaching (2,1)
+                        if (tutorialText != null)
+                        {
+                            tutorialText.text = "Black tiles cannot be rotated! Use PowerUp!";
+                            tutorialText.gameObject.SetActive(true);
+                            StartCoroutine(HideTutorialTextAfterSeconds(4f)); // Show it for 4 seconds
+                        }
+
+                        // ➡️ After message, show arrow to final destination (0,0)
+                        Vector3 finalPos = new Vector3(0f, 0.25f, 0f);
+                        GameObject finalArrow = Instantiate(arrowPrefab, finalPos + new Vector3(0, 1f, 0), Quaternion.identity, transform);
+                        StartCoroutine(BounceArrow(finalArrow));
+
+                        break;
+                    }
+                    yield return null;
+                }
                 break;
             }
             yield return null;
