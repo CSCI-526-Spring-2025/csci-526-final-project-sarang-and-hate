@@ -59,6 +59,13 @@ public class GameTimer : MonoBehaviour
     void Start()
     {
         string sceneName1 = SceneManager.GetActiveScene().name;
+        //If its level 4 
+        // Set different timeRemaining for specific level
+        
+        if (sceneName1 == "3DScene4") 
+        {
+            timeRemaining = 150f;
+        }
         // Skip timer entirely for Tutorial
         if (sceneName1 == "3DTutorialScene")
         {

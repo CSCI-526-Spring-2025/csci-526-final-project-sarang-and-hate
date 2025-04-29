@@ -80,6 +80,11 @@ public class PlayerController : MonoBehaviour
         {
             StartCoroutine(TemporarilyShowMinimap());
         }
+        if (gridManager != null && gridManager.currentMazeLevel == GridManager.MazeLevel.Level4)
+        {
+            StartCoroutine(TemporarilyShowMinimap());
+            transform.rotation = Quaternion.Euler(0,270,0);
+        }
 
         //Tutorial new implementation
         tutorialScript = FindObjectOfType<TutorialScript>();
