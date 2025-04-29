@@ -248,7 +248,7 @@ public class GridManager : MonoBehaviour
     { {true, true, false, false }, { false, false, false, false }, { true, true, false, false }, { false, false, false, false }, { false, true, false, false }, { true, false, false, false }, { false, true, false, false }, { false, false, false, false }, { false, true, false, false }, { false, false, false, false } },
     { { true, false, false, false }, { true, true, false, false }, {true, false,true, false }, { false, true, false, false }, { true, false, false, false }, { false, true, false, false }, {true, false,true, false }, { true, true, false, false }, {true, false, false, false }, { true, false,true, false } },
     { { false, true, false, false }, {true,true,true, false }, { false, true, false, false }, { true, false, false, false }, {true, true, false, false }, {true,true,true,true}, { true,false, false, false }, {true,true,true,true }, { true, true, false, false }, { false, false, false, false } },
-    { { true,true,true, false }, { false, false, false, false }, { true, false,true, false }, { false, true, false, false }, { false, false, false, false }, { true, true, false, false }, {true, false,true, false }, { false,false, false, false }, {true, false, false, false }, {true, true, false, false } },
+    { { false,true,true, false }, { false, false, false, false }, { true, false,true, false }, { false, true, false, false }, { false, false, false, false }, { true, true, false, false }, {true, false,true, false }, { false,false, false, false }, {true, false, false, false }, {true, true, false, false } },
     { { false, false,true,true }, {true, false,true, false }, { false, false, false, false }, {true, false,true, false }, { false, false,true,true}, { false, false, false, false }, { false, false, false, false }, {true, false,true, false }, { false, false, false, false }, { false, false, false, false } },
 };
 
@@ -587,7 +587,11 @@ public class GridManager : MonoBehaviour
                 {
                     if ((x == 5 && y == 0) ||
                         (x == 9 && y == 6) ||
-                        (x == 0 && y == 8))
+                        (x == 0 && y == 8) ||
+                        (x == 6 && y == 4) ||
+                        (x == 8 && y == 2) || 
+                        (x == 1 && y == 1) ||
+                        (x == 3 && y == 6))
                     {
                         Instantiate(collectibleInvisible, new Vector3(x, 0.25f, y), Quaternion.Euler(270f, 0f, 0f), transform);
                     }
