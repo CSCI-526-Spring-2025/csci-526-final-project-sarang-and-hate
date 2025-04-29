@@ -14,6 +14,7 @@ public class TutorialScript : MonoBehaviour
     public int width = 6;
     public int height = 4;
     public float tileSize = 1.0f;
+    private bool checkpoint2_1Reached = false;
 
     [Header("Glow Effect for UI Texts")]
     public TMP_Text rotationsRemainingText;
@@ -266,6 +267,18 @@ public class TutorialScript : MonoBehaviour
     void HandleMagicTile(int x, int z)
     {
         if (isTeleporting) return;
+        
+        // Block early teleport from (1,2) unless player has visited (2,1)
+        if (x == 1 && z == 2 && !checkpoint2_1Reached)
+        {
+            if (tutorialText != null)
+            {
+                tutorialText.text = "Complete all tutorial checkpoints before this!";
+                tutorialText.gameObject.SetActive(true);
+                StartCoroutine(HideTutorialTextAfterSeconds(2.5f));
+            }
+            return;
+        }
 
         isTeleporting = true;
         playerMagicallyMoved++;
@@ -302,7 +315,7 @@ public class TutorialScript : MonoBehaviour
 
         if (tutorialText != null)
         {
-            tutorialText.text = "Magic tile activated! Zoom!";
+            tutorialText.text = "Magic tile activated! Boost you forward!";
             tutorialText.gameObject.SetActive(true);
             StartCoroutine(HideTutorialTextAfterSeconds(2f));
         }
@@ -819,11 +832,11 @@ public class TutorialScript : MonoBehaviour
                         // ✨ Now show the tutorial text when reaching (2,1)
                         if (tutorialText != null)
                         {
-                            tutorialText.text = "Black tiles cannot be rotated! Use PowerUp!";
+                            tutorialText.text = "Black tiles cannot be rotated!\nUse PowerUp!";
                             tutorialText.gameObject.SetActive(true);
                             StartCoroutine(HideTutorialTextAfterSeconds(4f)); // Show it for 4 seconds
                         }
-
+                        checkpoint2_1Reached = true; 
                         // ➡️ After message, show arrow to final destination (0,0)
                         Vector3 finalPos = new Vector3(0f, 0.25f, 0f);
                         GameObject finalArrow = Instantiate(arrowPrefab, finalPos + new Vector3(0, 1f, 0), Quaternion.identity, transform);
