@@ -1655,22 +1655,6 @@ IEnumerator HideMapMessageTextAfterDelay(float delay)
         StartCoroutine(GlowUIText(rotationsLeftText));
         Debug.Log($"Rotated walls on tile ({tilePos.x}, {tilePos.y})");
 
-        // 🔒 Comment out zone-based logic (retain for future reversion)
-        /*
-        if (tileZones.TryGetValue(tilePos, out int zoneId))
-        {
-            if (zoneWalls.ContainsKey(zoneId))
-            {
-                foreach (var wall in zoneWalls[zoneId])
-                {
-                    RotateAndMoveWall(wall);
-                }
-                HighlightZoneTiles(zoneId, new Color(1f, 1f, 0.6f)); // Light yellow flash
-                zonesPlayerRotated.Add(zoneId);
-                Debug.Log($"(ZONE MODE) Player manually rotated walls in Zone {zoneId}");
-            }
-        }
-        */
     }
 
     IEnumerator RemoveWallHighlightAfterDelay(Material mat, float delay)
