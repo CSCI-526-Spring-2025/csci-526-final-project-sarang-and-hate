@@ -181,35 +181,35 @@ public class GridManager : MonoBehaviour
     // N W E S 
     [SerializeField] private bool[,,] gridWallsLevel3 = new bool[8,8,4]
     {
-        { { false, false, true, true }, { false, false, false, false }, { false, false, false, false }, { false, true, false,true},
+        { { false, false,false,false}, { false, false, false, false }, { false, false, false, false }, { false, true, false,true},
         {true,true, false, false }, { false, false, false, false }, { false, true, false,true}, { false, false, false, false } },
         
         { { false, false, false, false }, { false, false, true, true }, { false, true, false,true}, { false, false, false, false },
-        { false, false, false, false }, { true,true, false, false }, { false, false, false, false }, { false,true, false,true} },
+        { false, false, false, false }, { true,false, false, false }, { false, false, false, false }, { false,true, false,true} },
 
-        { {true,true, false, false }, { false, false, false, false }, { false,true, false,true}, { false, false, false, false },
+        { {true,true, false, false }, { false, false, false, false }, { false,true, false,true}, {true, false,true, false },
         { false, false, false, false }, {true, false,true, false }, {false, false,true,true}, { false, false, false, false } },
 
-        { { false, false, false, false }, {true,true, false, false }, { false, false, false, false }, { false,true, false,true},
+        { { false, false, false, false }, {true,true, false, false }, { false, false, false, false }, { false,false, false,false},
         {true, false,true, false }, { false, false, false, false }, { false, false, false, false }, { false, false,true,true} },
 
-        { { false, false, false, false }, { false,true, false,true}, {true, false,true, false }, { false, false, false, false },
+        { { false, false, false, false }, { false,true, false,true}, {true, false,true, false }, {true, false, false, false },
         { false, false, false, false }, {true, false,true, false }, { false,true, false,true}, { false, false, false, false } },
 
         { { false,true, false,true}, { false, false, false, false }, { false, false, false, false }, {true, false,true, false },
-        { true, false,true, false }, { false, false, false, false }, { false, false, false, false }, { false,true, false,true } },
+        { true, false,true, false }, { false, false, false, false }, { false, false, false, false }, { false,true, false,false} },
 
         { {true, false,true, false }, { false, false, false, false }, { false, false,true,true}, { false, false, false, false },
-        { false, false, false, false }, {true, false,true, false }, {true, false, false, false }, {true, false,true, false } },
+        { false, false, false, false }, {true, false,false, false }, {true,true, false,false}, {true, false,true, false } },
 
         { { false, false, false, false }, {true, false,true, false }, { false, false, false, false }, { false, false,true,true },
-        {true, false,true, false }, { false, false, false, false }, {true, false,true, false }, { false, false, false, false } }
+        {true, false,true, false }, { false, false, false, false }, {true, false,false, false }, { false,true, false, false } }
     };
 
 
     [SerializeField] private bool[,,] blackWallGridLevel3 = new bool[8, 8, 4]
     {
-    { { false, false, false, false }, { false, false, false, false }, { false, false, false, false }, { false, false, false, false },
+    { { false, false,true,true }, { false, false, false, false }, { false, false, false, false }, { false, false, false, false },
       { false, false, true , false }, { false, false, false, false }, { false, false, false, false }, { false, false, false, false } },
 
     { { false, false, false, false }, { false, false, false, false }, { false, false, false, false }, { false, false, false, false },
@@ -302,13 +302,14 @@ public class GridManager : MonoBehaviour
                 break;
             case MazeLevel.Level3:
                 gridSize = 8;
+                maxRotations = 10;
                 gridWalls = gridWallsLevel3;
                 blackWallGrid = blackWallGridLevel3;
                 player.transform.position = new Vector3(7f, 0f, 7f);
                 break;
             case MazeLevel.Level4:
                 gridSize = 10;
-                maxRotations = 10;
+                maxRotations = 15;
                 gridWalls = gridWallsLevel4;
                 blackWallGrid = blackWallGridLevel4;
                 player.transform.position = new Vector3(9f, 0f, 0f);
@@ -441,8 +442,7 @@ public class GridManager : MonoBehaviour
         List<Vector2Int> magicTiles = new List<Vector2Int>
         {
             new Vector2Int(6, 5),
-            new Vector2Int(3, 6),
-            new Vector2Int(2, 2)
+            new Vector2Int(3, 6)
         };
 
         List<Tile> tilesToFlash = new List<Tile>();
@@ -615,6 +615,7 @@ public class GridManager : MonoBehaviour
                 {
                     if ((x == 1 && y == 6) ||
                         (x == 6 && y == 3) ||
+                        (x == 2 && y == 0) ||
                         (x == 4 && y == 6))
                     {
                         Instantiate(collectibleInvisible, new Vector3(x, 0.25f, y), Quaternion.Euler(270f, 0f, 0f), transform);
