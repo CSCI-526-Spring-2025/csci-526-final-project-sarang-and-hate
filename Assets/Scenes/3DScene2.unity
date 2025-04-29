@@ -10372,6 +10372,7 @@ MonoBehaviour:
   gridSize: 6
   tileSize: 1.1
   wallPrefab: {fileID: 5233444293985566254, guid: 07ba3b151072cb64096f9ce6363cdaaa, type: 3}
+  blackWallPrefab: {fileID: 5233444293985566254, guid: 80521cdccbc1e4f43b060a086d037975, type: 3}
   player: {fileID: 337768805}
   startingMaterial: {fileID: 2100000, guid: 9d43d39803eba0b4283a5bae17b16726, type: 2}
   destinationMaterial: {fileID: 2100000, guid: 9bb855fa6e15ec94dbc49cd300815590, type: 2}
