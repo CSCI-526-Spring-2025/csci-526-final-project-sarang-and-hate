@@ -386,11 +386,11 @@ public class TutorialScript : MonoBehaviour
                     // Goal tile
                     else if (IsGoalTile(x, z))
                     {
-                        rend.material.color = Color.blue;
-                        // if (goldenTileMaterial != null)
-                        // {
-                        //     rend.material = goldenTileMaterial;
-                        // }
+                        // rend.material.color = Color.blue;
+                        if (goldenTileMaterial != null)
+                        {
+                            rend.material = goldenTileMaterial;
+                        }
                         tile.tag = "Goal";
                     }
                 }
