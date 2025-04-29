@@ -768,7 +768,7 @@ public class TutorialScript : MonoBehaviour
 
         if (tutorialText != null)
         {
-            tutorialText.text = "Now pick up the glowing orb!";
+            tutorialText.text = "Now pick up the glowing star!";
             tutorialText.gameObject.SetActive(true);
         }
 
