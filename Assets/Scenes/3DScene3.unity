@@ -9838,6 +9838,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d1921b13f39a39c4ebf1801ec9f03765, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  powerUpText: {fileID: 69546276}
+  rotationsLeftText: {fileID: 495171024}
+  mapUsesLeftText: {fileID: 794659721}
   tilePrefab: {fileID: 613115640612862635, guid: 2b1611565e00286409cdc73ddcd95af8, type: 3}
   gridSize: 6
   tileSize: 1.1
